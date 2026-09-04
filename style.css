@@ -108,7 +108,6 @@ body {
     display: inline-block;
     padding: 4px 8px;
     
-    /* Text Selection / Copy Prevention */
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -295,6 +294,9 @@ body {
     font-size: 0.85rem;
     word-break: break-all;
     border: 1px dashed var(--border-color);
+    min-height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .btn-action {
@@ -334,91 +336,103 @@ body {
     font-size: 0.85rem;
     box-shadow: 0 0 15px var(--neon-cyan);
     transition: transform 0.3s ease;
-    z-index: 1000;
+    z-index: 3000;
 }
 
 .toast.show {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Admin Modal */
+/* Admin Modal - Fullscreen Mobile View */
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
+    top: 0; 
+    left: 0; 
+    width: 100vw; 
+    height: 100vh;
+    background: rgba(10, 12, 20, 0.98);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    padding: 15px;
+    padding: 0;
 }
 
 .modal-card {
     background: #121624;
-    border: 1px solid var(--neon-purple);
-    border-radius: 18px;
-    width: 100%;
-    max-width: 450px;
-    max-height: 90vh;
+    border: none;
+    border-radius: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
 .modal-header {
-    padding: 15px;
+    padding: 18px 20px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #0a0c14;
 }
 
-.modal-header h2 { font-size: 1.1rem; color: var(--neon-purple); }
-.close-modal-btn { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+.modal-header h2 { font-size: 1.2rem; color: var(--neon-purple); }
+.close-modal-btn { background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
 
 .modal-body {
-    padding: 15px;
+    padding: 20px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
+    flex-grow: 1;
 }
 
 .analytics-box {
     background: rgba(0, 243, 255, 0.1);
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid var(--neon-cyan);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
-.admin-tabs { display: flex; gap: 5px; }
+.admin-tabs { display: flex; gap: 8px; }
 .tab-btn {
-    flex: 1; padding: 8px; background: rgba(255,255,255,0.05);
-    border: none; color: #fff; font-size: 0.75rem; border-radius: 8px; cursor: pointer;
+    flex: 1; padding: 10px; background: rgba(255,255,255,0.05);
+    border: none; color: #fff; font-size: 0.8rem; border-radius: 8px; cursor: pointer;
 }
-.tab-btn.active { background: var(--neon-purple); }
+.tab-btn.active { background: var(--neon-purple); font-weight: bold; }
 
-.tab-content { display: none; flex-direction: column; gap: 10px; }
+.tab-content { display: none; flex-direction: column; gap: 12px; }
 .tab-content.active { display: flex; }
 
-.form-group { display: flex; flex-direction: column; gap: 4px; }
-.form-group label { font-size: 0.75rem; color: var(--text-muted); }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 0.8rem; color: var(--text-muted); }
 .form-group input, .form-group textarea {
-    padding: 8px; background: #000; border: 1px solid var(--border-color);
-    color: #fff; border-radius: 6px; font-size: 0.85rem;
+    padding: 10px; background: #000; border: 1px solid var(--border-color);
+    color: #fff; border-radius: 8px; font-size: 0.9rem;
 }
 
 .admin-btn-row {
-    background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;
-    display: flex; flex-direction: column; gap: 6px; position: relative;
+    background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px;
+    display: flex; flex-direction: column; gap: 8px; position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .btn-delete {
-    position: absolute; top: 5px; right: 5px; background: #ff4d4d;
-    border: none; color: #fff; border-radius: 4px; padding: 2px 6px; cursor: pointer;
+    position: absolute; top: 8px; right: 8px; background: #ff4d4d;
+    border: none; color: #fff; border-radius: 4px; padding: 4px 8px; cursor: pointer;
 }
 
-.btn-add { background: var(--neon-cyan); color: #000; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-.modal-footer { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
-.btn-save { width: 100%; background: var(--neon-purple); border: none; padding: 10px; color: #fff; font-weight: bold; border-radius: 10px; cursor: pointer; }
+.btn-add { background: var(--neon-cyan); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.modal-footer { padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0a0c14; }
+.btn-save { width: 100%; background: var(--neon-purple); border: none; padding: 12px; color: #fff; font-weight: bold; border-radius: 10px; cursor: pointer; font-size: 0.95rem; }
+
+.divider { border: 0; height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0; }
+.backup-actions { display: flex; gap: 10px; }
+.btn-backup { flex: 1; text-align: center; background: rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.8rem; }
+.file-label { display: block; }
