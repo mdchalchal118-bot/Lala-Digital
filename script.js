@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Render Main UI Components
 function renderSiteUI() {
-    // Dynamic Brand Title Rendering
     const titleText = appData.siteTitle || "Lala Digital";
     const parts = titleText.split(' ');
     
@@ -105,7 +104,7 @@ function startBDClock() {
     }, 1000);
 }
 
-// Copy & Toast Utility
+// Toast Notification
 function showToast(msg) {
     const toast = document.getElementById('toast');
     toast.textContent = msg;
@@ -121,15 +120,42 @@ function copyAndOpenGame(val) {
     }, 1000);
 }
 
-// Bio Generator Tool Logic
+// Fixed Bio Generator Tool Logic (Cursor Insertion + Multi-Color Preview)
 function updateBioPreview() {
-    const input = document.getElementById('bioInput').value;
-    document.getElementById('bioPreviewText').textContent = input ? input : 'Preview: [FF0000]Your Text';
+    const inputVal = document.getElementById('bioInput').value;
+    const previewContainer = document.getElementById('bioPreviewText');
+
+    if (!inputVal) {
+        previewContainer.innerHTML = 'Preview: <span style="color:#ff0000">Your Text</span>';
+        return;
+    }
+
+    // Parse bracketed hex codes [RRGGBB] into styled html spans
+    let formattedText = inputVal.replace(/\[([0-9A-Fa-f]{6})\]([^\[]*)/g, (match, hex, text) => {
+        return `<span style="color:#${hex}">${text}</span>`;
+    });
+
+    if (!inputVal.includes('[')) {
+        formattedText = `<span>${inputVal}</span>`;
+    }
+
+    previewContainer.innerHTML = `Preview: ${formattedText}`;
 }
 
 function applyColor(code) {
     const input = document.getElementById('bioInput');
-    input.value = `${code}${input.value}`;
+    const startPos = input.selectionStart;
+    const endPos = input.selectionEnd;
+    const currentText = input.value;
+
+    // Insert code right at the cursor position
+    input.value = currentText.substring(0, startPos) + code + currentText.substring(endPos);
+    
+    // Move cursor after the inserted code
+    input.focus();
+    input.selectionStart = startPos + code.length;
+    input.selectionEnd = startPos + code.length;
+
     updateBioPreview();
 }
 
@@ -140,7 +166,7 @@ function copyBioCode() {
     showToast('FF Bio Code Copied!');
 }
 
-// Secret Admin Panel Activation (Click Title 4 Times)
+// Secret Admin Panel Activation
 function handleTitleClick() {
     titleClickCount++;
     clearTimeout(titleClickTimer);
@@ -181,7 +207,7 @@ function switchAdminTab(tabId, btn) {
     btn.classList.add('active');
 }
 
-// Dynamic Admin Button Editing
+// Dynamic Admin Buttons Manager
 function renderAdminButtons() {
     const list = document.getElementById('adminButtonsList');
     list.innerHTML = '';
@@ -226,11 +252,37 @@ function saveAdminSettings() {
     showToast('Settings Saved Successfully!');
 }
 
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "lala_digital_config.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+function importData(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(e) {
+        try {
+            appData = JSON.parse(e.target.result);
+            saveConfig();
+            renderSiteUI();
+            openAdminPanel();
+            showToast('Settings Imported!');
+        } catch (err) {
+            alert('Invalid JSON File!');
+        }
+    };
+    fileReader.readAsText(event.target.files[0]);
+}
+
 function saveConfig() {
     localStorage.setItem('lala_app_config', JSON.stringify(appData));
 }
 
-// Background Particle Canvas Logic
+// Particle Canvas Animation
 function initParticles() {
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
