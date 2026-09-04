@@ -1,324 +1,276 @@
-const defaultSiteData = {
-    title: "Lala Digital",
-    bio: "Official VIP Hub & Digital Services",
-    notice: "📢 অফিশিয়াল চ্যানেল ও সাপোর্টের জন্য নীচের বাটনগুলোতে যুক্ত থাকুন!",
-    logo: "https://via.placeholder.com/150/00f3ff/8000ff?text=LALA",
-    banner: "https://via.placeholder.com/600x200/111827/00f3ff?text=LALA+DIGITAL",
-    password: "lala999",
-    visitors: 0,
+// Default Configuration Data Structure
+const defaultConfig = {
+    siteTitle: "Lala Digital",
+    siteSubtitle: "Official VIP Hub & Digital Services",
+    logoUrl: "https://dummyimage.com/500x500/0a0c14/00f3ff.png&text=LALA+DIGITAL",
+    bannerUrl: "https://dummyimage.com/1200x400/0a0c14/bc13fe.png&text=LALA+DIGITAL+VIP+HUB",
+    noticeText: "অফিশিয়াল চ্যানেল ও সাপোর্টের জন্য নিচের বাটনগুলোতে যুক্ত থাকুন!",
+    bgMusicUrl: "",
+    adminPassword: "lala999",
+    visitorCount: 128,
     buttons: [
-        { title: "Official Telegram Channel", desc: "সব ধরণের আপডেট ও অফার পেতে জয়েন করুন", link: "https://t.me", type: "telegram" },
-        { title: "WhatsApp Direct Chat", desc: "সরাসরি ২৪/৭ সাপোর্ট ও মেসেজিং", link: "https://wa.me/", type: "whatsapp" },
-        { title: "TikTok Official Page", desc: "ভিডিও আপডেট দেখতে ফলো করুন", link: "https://tiktok.com", type: "tiktok" },
-        { title: "Free Fire Main UID", desc: "UID: 123456789 (কপি করে গেম ওপেন হবে)", link: "123456789", type: "uid" }
+        {
+            type: "ff_guild",
+            title: "Free Fire Guild ID",
+            sub: "Guild ID: 987654321 (কপি করে গেম খুলুন)",
+            value: "987654321",
+            icon: "fas fa-shield-alt"
+        },
+        {
+            type: "telegram",
+            title: "Join Telegram Channel",
+            sub: "অফিশিয়াল আপডেট পেতে যুক্ত থাকুন",
+            url: "https://t.me",
+            icon: "fab fa-telegram-plane"
+        },
+        {
+            type: "youtube",
+            title: "Subscribe YouTube",
+            sub: "নতুন ভিডিও দেখতে সাবস্ক্রাইব করুন",
+            url: "https://youtube.com",
+            icon: "fab fa-youtube"
+        }
     ]
 };
 
-let currentData = {};
-let tempAdminButtons = [];
-let clickAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+// Global App State
+let appData = JSON.parse(localStorage.getItem('lala_app_config')) || defaultConfig;
+let titleClickCount = 0;
+let titleClickTimer = null;
+let audioPlayer = new Audio();
 
-function initSite() {
-    currentData = JSON.parse(localStorage.getItem('lala_vip_site_data')) || defaultSiteData;
-    currentData.visitors = (currentData.visitors || 0) + 1;
-    localStorage.setItem('lala_vip_site_data', JSON.stringify(currentData));
-
-    renderUI();
+// Initialize Website Features
+document.addEventListener('DOMContentLoaded', () => {
     initParticles();
-    startClock();
-}
-
-function renderUI() {
-    document.getElementById('page-title').innerText = currentData.title + " - VIP Hub";
-    document.getElementById('site-title').innerText = currentData.title;
-    document.getElementById('display-bio').innerText = currentData.bio;
+    renderSiteUI();
+    startBDClock();
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
     
-    document.getElementById('display-logo').src = currentData.logo;
-    document.getElementById('title-icon').src = currentData.logo;
-    document.getElementById('favicon').href = currentData.logo;
-    document.getElementById('display-banner').src = currentData.banner;
+    // Visitor counter logic
+    appData.visitorCount = (appData.visitorCount || 0) + 1;
+    saveConfig();
+});
 
-    const noticeEl = document.getElementById('display-notice');
-    if (currentData.notice && currentData.notice.trim() !== "") {
-        noticeEl.innerText = currentData.notice;
-        noticeEl.style.display = "block";
+// Render Main UI Components
+function renderSiteUI() {
+    // Dynamic Brand Title Rendering
+    const titleText = appData.siteTitle || "Lala Digital";
+    const parts = titleText.split(' ');
+    
+    if (parts.length >= 2) {
+        document.getElementById('siteTitle').innerHTML = `
+            <span class="brand-first">${parts[0]}</span> 
+            <span class="brand-second">${parts.slice(1).join(' ')}</span>
+        `;
     } else {
-        noticeEl.style.display = "none";
+        document.getElementById('siteTitle').innerHTML = `<span class="brand-first">${titleText}</span>`;
     }
 
-    const btnContainer = document.getElementById('buttons-container');
-    btnContainer.innerHTML = "";
+    document.getElementById('siteSubtitle').textContent = appData.siteSubtitle;
+    document.getElementById('logoImg').src = appData.logoUrl;
+    document.getElementById('bannerImg').src = appData.bannerUrl;
+    document.getElementById('noticeText').textContent = appData.noticeText;
 
-    if (currentData.buttons && currentData.buttons.length > 0) {
-        currentData.buttons.forEach((btn) => {
-            const card = document.createElement('div');
-            
-            // Icon & Color Logic based on Type
-            let iconClass = "fa-solid fa-link";
-            let brandClass = "";
+    const container = document.getElementById('buttonsContainer');
+    container.innerHTML = '';
 
-            if(btn.type === 'whatsapp') { iconClass = "fa-brands fa-whatsapp"; brandClass = "whatsapp"; }
-            else if(btn.type === 'telegram') { iconClass = "fa-brands fa-telegram"; brandClass = "telegram"; }
-            else if(btn.type === 'tiktok') { iconClass = "fa-brands fa-tiktok"; brandClass = "tiktok"; }
-            else if(btn.type === 'youtube') { iconClass = "fa-brands fa-youtube"; brandClass = "youtube"; }
-            else if(btn.type === 'uid' || btn.type === 'guild') { iconClass = "fa-solid fa-gamepad"; brandClass = "freefire"; }
+    appData.buttons.forEach((btn) => {
+        const card = document.createElement('div');
+        card.className = 'custom-btn-card';
 
-            card.className = `vip-card-btn ${brandClass}`;
-            card.onclick = () => handleButtonClick(btn);
+        if (btn.type === 'ff_uid' || btn.type === 'ff_guild') {
+            card.onclick = () => copyAndOpenGame(btn.value);
+        } else {
+            card.onclick = () => window.open(btn.url, '_blank');
+        }
 
-            card.innerHTML = `
-                <div class="btn-icon-box"><i class="${iconClass}"></i></div>
-                <div class="card-text-content">
-                    <div class="card-title">${btn.title}</div>
-                    <div class="card-desc">${btn.desc || ''}</div>
-                </div>
-            `;
-            btnContainer.appendChild(card);
-        });
-    }
+        card.innerHTML = `
+            <div class="btn-icon-wrapper"><i class="${btn.icon || 'fas fa-link'}"></i></div>
+            <div class="btn-content">
+                <span class="btn-title">${btn.title}</span>
+                <span class="btn-sub">${btn.sub}</span>
+            </div>
+            <i class="fas fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+        `;
+        container.appendChild(card);
+    });
 }
 
-function handleButtonClick(btn) {
-    playClickSound();
-    if (btn.type === 'uid' || btn.type === 'guild') {
-        navigator.clipboard.writeText(btn.link);
-        showToast(`📋 ${btn.type.toUpperCase()} Copied: ${btn.link}`);
-        setTimeout(() => {
-            window.location.href = "intent://#Intent;scheme=freefire;package=com.dts.freefireth;end";
-        }, 1000);
-    } else {
-        if (btn.link) window.open(btn.link, '_blank');
-    }
+// Live BD Clock
+function startBDClock() {
+    setInterval(() => {
+        const options = { timeZone: 'Asia/Dhaka', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const timeStr = new Intl.DateTimeFormat('en-US', options).format(new Date());
+        document.getElementById('bdClock').textContent = `BD Time: ${timeStr}`;
+    }, 1000);
 }
 
-function playClickSound() {
-    clickAudio.currentTime = 0;
-    clickAudio.play().catch(() => {});
-}
-
+// Copy & Toast Utility
 function showToast(msg) {
-    const toast = document.getElementById('toast-notify');
-    toast.innerText = msg;
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
     toast.classList.add('show');
-    setTimeout(() => { toast.classList.remove('show'); }, 3000);
+    setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// Secret Trigger for Admin
-let clickCounter = 0;
-let clickTimer;
+function copyAndOpenGame(val) {
+    navigator.clipboard.writeText(val);
+    showToast(`Copied: ${val} (Opening Game...)`);
+    setTimeout(() => {
+        window.location.href = "freefire://";
+    }, 1000);
+}
 
-document.getElementById('secret-trigger').addEventListener('click', () => {
-    clickCounter++;
-    clearTimeout(clickTimer);
+// Bio Generator Tool Logic
+function updateBioPreview() {
+    const input = document.getElementById('bioInput').value;
+    document.getElementById('bioPreviewText').textContent = input ? input : 'Preview: [FF0000]Your Text';
+}
 
-    if (clickCounter === 4) {
-        clickCounter = 0;
-        const enteredPass = prompt("🔑 Enter VIP Admin Password:");
-        if (enteredPass === (currentData.password || "lala999")) {
-            openAdminModal();
-        } else if (enteredPass !== null) {
-            alert("❌ Incorrect Password!");
+function applyColor(code) {
+    const input = document.getElementById('bioInput');
+    input.value = `${code}${input.value}`;
+    updateBioPreview();
+}
+
+function copyBioCode() {
+    const text = document.getElementById('bioInput').value;
+    if(!text) return showToast('Please enter text first!');
+    navigator.clipboard.writeText(text);
+    showToast('FF Bio Code Copied!');
+}
+
+// Secret Admin Panel Activation (Click Title 4 Times)
+function handleTitleClick() {
+    titleClickCount++;
+    clearTimeout(titleClickTimer);
+    titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 1500);
+
+    if (titleClickCount >= 4) {
+        titleClickCount = 0;
+        const pass = prompt('Enter VIP Admin Password:');
+        if (pass === appData.adminPassword) {
+            openAdminPanel();
+        } else if (pass !== null) {
+            alert('Incorrect Password!');
         }
     }
-    clickTimer = setTimeout(() => { clickCounter = 0; }, 1200);
-});
+}
 
-function openAdminModal() {
-    document.getElementById('admin-visitor-count').innerText = currentData.visitors || 1;
-    document.getElementById('admin-title').value = currentData.title || "";
-    document.getElementById('admin-bio').value = currentData.bio || "";
-    document.getElementById('admin-notice').value = currentData.notice || "";
-    document.getElementById('admin-logo').value = currentData.logo || "";
-    document.getElementById('admin-banner').value = currentData.banner || "";
-    document.getElementById('admin-new-pass').value = currentData.password || "lala999";
+function openAdminPanel() {
+    document.getElementById('adminSiteTitle').value = appData.siteTitle;
+    document.getElementById('adminSiteSubtitle').value = appData.siteSubtitle;
+    document.getElementById('adminLogoUrl').value = appData.logoUrl;
+    document.getElementById('adminBannerUrl').value = appData.bannerUrl;
+    document.getElementById('adminNoticeText').value = appData.noticeText;
+    document.getElementById('adminMusicUrl').value = appData.bgMusicUrl || '';
+    document.getElementById('visitorCount').textContent = appData.visitorCount;
 
-    tempAdminButtons = currentData.buttons ? JSON.parse(JSON.stringify(currentData.buttons)) : [];
     renderAdminButtons();
-    document.getElementById('admin-modal').style.display = "flex";
+    document.getElementById('adminModal').style.display = 'flex';
 }
 
-function closeAdmin() {
-    document.getElementById('admin-modal').style.display = "none";
+function closeAdminPanel() {
+    document.getElementById('adminModal').style.display = 'none';
 }
 
-// Refresh Prevent Engine inside Admin Panel
-window.addEventListener('beforeunload', (e) => {
-    if (document.getElementById('admin-modal').style.display === "flex") {
-        e.preventDefault();
-        e.returnValue = '';
-    }
-});
-
-function switchTab(tabName, event) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-    event.target.classList.add('active');
-    document.getElementById(`tab-${tabName}`).classList.add('active');
+function switchAdminTab(tabId, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
 }
 
+// Dynamic Admin Button Editing
 function renderAdminButtons() {
-    const list = document.getElementById('admin-buttons-list');
-    list.innerHTML = "";
+    const list = document.getElementById('adminButtonsList');
+    list.innerHTML = '';
 
-    tempAdminButtons.forEach((btn, index) => {
+    appData.buttons.forEach((btn, i) => {
         const item = document.createElement('div');
-        item.className = "button-item-row";
+        item.className = 'admin-btn-row';
         item.innerHTML = `
-            <button type="button" class="btn-del" onclick="deleteAdminButton(${index})">🗑️ Delete</button>
-            <label>Button Title</label>
-            <input type="text" value="${btn.title}" oninput="tempAdminButtons[${index}].title = this.value">
-            
-            <label>Subtitle / Description</label>
-            <input type="text" value="${btn.desc || ''}" oninput="tempAdminButtons[${index}].desc = this.value">
-            
-            <label>Link / UID Number</label>
-            <input type="text" value="${btn.link}" oninput="tempAdminButtons[${index}].link = this.value">
-            
-            <label>Type / App Icon</label>
-            <select style="width:100%; padding:8px; background:#070910; color:#fff; border:1px solid #bc13fe; border-radius:6px; margin-top:4px;" onchange="tempAdminButtons[${index}].type = this.value">
-                <option value="link" ${btn.type === 'link' ? 'selected' : ''}>Standard URL Link</option>
-                <option value="whatsapp" ${btn.type === 'whatsapp' ? 'selected' : ''}>WhatsApp (Green App Theme)</option>
-                <option value="telegram" ${btn.type === 'telegram' ? 'selected' : ''}>Telegram (Blue App Theme)</option>
-                <option value="tiktok" ${btn.type === 'tiktok' ? 'selected' : ''}>TikTok (Red/Black Theme)</option>
-                <option value="youtube" ${btn.type === 'youtube' ? 'selected' : ''}>YouTube (Red Theme)</option>
-                <option value="uid" ${btn.type === 'uid' ? 'selected' : ''}>Free Fire UID (Copy & Launch)</option>
-                <option value="guild" ${btn.type === 'guild' ? 'selected' : ''}>Guild ID (Copy & Launch)</option>
-            </select>
+            <button class="btn-delete" onclick="removeButton(${i})">&times;</button>
+            <input type="text" value="${btn.title}" placeholder="Button Title" onchange="appData.buttons[${i}].title = this.value">
+            <input type="text" value="${btn.sub}" placeholder="Subtitle" onchange="appData.buttons[${i}].sub = this.value">
+            <input type="text" value="${btn.url || btn.value || ''}" placeholder="Link URL or Value" onchange="appData.buttons[${i}].url = this.value; appData.buttons[${i}].value = this.value;">
         `;
         list.appendChild(item);
     });
 }
 
 function addNewButtonField() {
-    tempAdminButtons.push({ title: "New VIP Button", desc: "Short description here", link: "", type: "link" });
+    appData.buttons.push({ title: "New Button", sub: "Click here", url: "#", icon: "fas fa-link" });
     renderAdminButtons();
 }
 
-function deleteAdminButton(index) {
-    tempAdminButtons.splice(index, 1);
+function removeButton(i) {
+    appData.buttons.splice(i, 1);
     renderAdminButtons();
 }
 
 function saveAdminSettings() {
-    currentData.title = document.getElementById('admin-title').value;
-    currentData.bio = document.getElementById('admin-bio').value;
-    currentData.notice = document.getElementById('admin-notice').value;
-    currentData.logo = document.getElementById('admin-logo').value;
-    currentData.banner = document.getElementById('admin-banner').value;
-    currentData.password = document.getElementById('admin-new-pass').value || "lala999";
-    currentData.buttons = tempAdminButtons;
+    appData.siteTitle = document.getElementById('adminSiteTitle').value;
+    appData.siteSubtitle = document.getElementById('adminSiteSubtitle').value;
+    appData.logoUrl = document.getElementById('adminLogoUrl').value;
+    appData.bannerUrl = document.getElementById('adminBannerUrl').value;
+    appData.noticeText = document.getElementById('adminNoticeText').value;
+    appData.bgMusicUrl = document.getElementById('adminMusicUrl').value;
 
-    localStorage.setItem('lala_vip_site_data', JSON.stringify(currentData));
-    renderUI();
-    closeAdmin();
-    showToast("💾 VIP Dashboard Saved & Live!");
+    const newPass = document.getElementById('adminNewPassword').value;
+    if (newPass) appData.adminPassword = newPass;
+
+    saveConfig();
+    renderSiteUI();
+    closeAdminPanel();
+    showToast('Settings Saved Successfully!');
 }
 
-function applyColor(colorCode) {
-    const input = document.getElementById('ff-bio-input');
-    input.value = colorCode + input.value;
-    updateFFPreview();
+function saveConfig() {
+    localStorage.setItem('lala_app_config', JSON.stringify(appData));
 }
 
-document.getElementById('ff-bio-input').addEventListener('input', updateFFPreview);
-
-function updateFFPreview() {
-    const val = document.getElementById('ff-bio-input').value;
-    document.getElementById('ff-bio-result').innerText = "Preview: " + (val || "Your Text");
-}
-
-function copyFFBio() {
-    const text = document.getElementById('ff-bio-input').value;
-    if (text) {
-        navigator.clipboard.writeText(text);
-        showToast("📋 FF Bio Code Copied!");
-    }
-}
-
-function startClock() {
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('server-time').innerText = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Dhaka' });
-    }, 1000);
-}
-
-const audioBtn = document.getElementById('audio-toggle');
-const bgMusic = document.getElementById('bg-music');
-let isPlaying = false;
-
-audioBtn.addEventListener('click', () => {
-    if (isPlaying) {
-        bgMusic.pause();
-        audioBtn.innerText = "🎵 Music: OFF";
-    } else {
-        bgMusic.play().catch(() => alert("Click again to allow audio"));
-        audioBtn.innerText = "🎵 Music: ON";
-    }
-    isPlaying = !isPlaying;
-});
-
-function exportBackup() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = "lala_digital_backup.json";
-    a.click();
-}
-
-function importBackup(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        try {
-            currentData = JSON.parse(evt.target.result);
-            localStorage.setItem('lala_vip_site_data', JSON.stringify(currentData));
-            renderUI();
-            closeAdmin();
-            showToast("📥 Backup Restored Successfully!");
-        } catch (err) {
-            alert("Invalid Backup File!");
-        }
-    };
-    reader.readAsText(file);
-}
-
+// Background Particle Canvas Logic
 function initParticles() {
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
     let particles = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
     for (let i = 0; i < 40; i++) {
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            radius: Math.random() * 2,
-            dx: (Math.random() - 0.5) * 0.5,
-            dy: (Math.random() - 0.5) * 0.5
+            radius: Math.random() * 2 + 1,
+            color: Math.random() > 0.5 ? '#00f3ff' : '#bc13fe',
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
         });
     }
 
     function animate() {
-        requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.fillStyle = "rgba(0, 243, 255, 0.5)";
         particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = p.color;
             ctx.fill();
-
-            p.x += p.dx;
-            p.y += p.dy;
-
-            if (p.x < 0 || p.x > canvas.width) p.dx = -p.dx;
-            if (p.y < 0 || p.y > canvas.height) p.dy = -p.dy;
         });
+        requestAnimationFrame(animate);
     }
     animate();
 }
-
-window.onload = initSite;
