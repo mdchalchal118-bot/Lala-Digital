@@ -2,131 +2,181 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Lala Digital - VIP Hub</title>
-    <meta name="description" content="Lala Digital Official VIP Hub">
-    <link rel="icon" id="favicon" type="image/x-icon" href="https://via.placeholder.com/150/00f3ff/8000ff?text=LALA">
-    
-    <!-- FontAwesome Icons for Social Logos -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lala Digital - Official VIP Hub</title>
+    <!-- Favicon -->
+    <link id="favicon" rel="icon" href="https://dummyimage.com/500x500/0a0c14/00f3ff.png&text=LALA" type="image/png">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Link -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Particle Background Canvas -->
     <canvas id="particleCanvas"></canvas>
 
-    <div class="main-wrapper">
-        <!-- Header Section -->
-        <div class="header-card">
-            <img id="display-banner" class="banner-img" src="https://via.placeholder.com/600x200/111827/00f3ff?text=LALA+DIGITAL" alt="Banner">
-            <div class="profile-header">
-                <img id="display-logo" class="logo-img" src="https://via.placeholder.com/150/00f3ff/8000ff?text=LALA" alt="Logo">
-                <div class="title-container" id="secret-trigger">
-                    <img id="title-icon" class="title-logo-icon" src="https://via.placeholder.com/50/00f3ff/8000ff?text=LALA" alt="Icon">
-                    <h1 id="site-title">Lala Digital</h1>
+    <div class="container">
+        
+        <!-- Header Card -->
+        <header class="header-card">
+            <!-- Top Banner -->
+            <div class="banner-container">
+                <img id="bannerImg" src="https://dummyimage.com/1200x400/0a0c14/bc13fe.png&text=LALA+DIGITAL+VIP+HUB" alt="Banner" class="banner-img">
+            </div>
+            
+            <!-- Circular Profile/Logo -->
+            <div class="logo-wrapper">
+                <img id="logoImg" src="https://dummyimage.com/500x500/0a0c14/00f3ff.png&text=LALA+DIGITAL" alt="Lala Digital Logo" class="logo-img">
+            </div>
+
+            <!-- Site Title & Subtitle -->
+            <div class="title-area">
+                <h1 id="siteTitle" class="brand-title" onclick="handleTitleClick()">
+                    <span class="brand-first">LALA</span> <span class="brand-second">DIGITAL</span>
+                </h1>
+                <p id="siteSubtitle" class="subtitle">Official VIP Hub & Digital Services</p>
+            </div>
+        </header>
+
+        <!-- Utility Bar (BD Clock & Music Toggle) -->
+        <div class="utility-bar">
+            <div class="clock-badge">
+                <i class="fas fa-clock"></i> <span id="bdClock">BD Time: --:--:--</span>
+            </div>
+            <button id="musicToggleBtn" class="btn-music" onclick="toggleMusic()">
+                <i class="fas fa-music"></i> <span id="musicStatusText">Music: OFF</span>
+            </button>
+        </div>
+
+        <!-- Announcement / Notice Bar -->
+        <div class="notice-card">
+            <i class="fas fa-bullhorn icon-glowing"></i>
+            <span id="noticeText">অফিশিয়াল চ্যানেল ও সাপোর্টের জন্য নিচের বাটনগুলোতে যুক্ত থাকুন!</span>
+        </div>
+
+        <!-- Main Dynamic Buttons Container -->
+        <div id="buttonsContainer" class="buttons-list">
+            <!-- Dynamic Buttons Render Here -->
+        </div>
+
+        <!-- Free Fire VIP Color Bio Generator Tool -->
+        <div class="tool-card">
+            <div class="tool-header">
+                <i class="fas fa-gamepad icon-glowing"></i>
+                <h3>FF VIP Color Bio Generator</h3>
+            </div>
+            <p class="tool-desc">আপনার বায়ো লিখুন এবং কালার কোড সহ কপি করুন:</p>
+
+            <input type="text" id="bioInput" placeholder="Enter text (e.g. LALA GAMER)" oninput="updateBioPreview()">
+
+            <div class="color-palette">
+                <button class="color-btn red" onclick="applyColor('[FF0000]')">Red</button>
+                <button class="color-btn green" onclick="applyColor('[00FF00]')">Green</button>
+                <button class="color-btn cyan" onclick="applyColor('[00FFFF]')">Cyan</button>
+                <button class="color-btn yellow" onclick="applyColor('[FFFF00]')">Yellow</button>
+            </div>
+
+            <div class="bio-preview-box">
+                <span id="bioPreviewText">Preview: [FF0000]Your Text</span>
+            </div>
+
+            <button class="btn-action copy-bio-btn" onclick="copyBioCode()">
+                <i class="fas fa-copy"></i> Copy FF Bio Code
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© <span id="currentYear"></span> Lala Digital. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Copied to Clipboard!</div>
+
+    <!-- VIP Admin Control Panel Modal -->
+    <div id="adminModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-shield"></i> VIP Admin Panel</h2>
+                <button class="close-modal-btn" onclick="closeAdminPanel()">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- Analytics Section -->
+                <div class="admin-section analytics-box">
+                    <p><i class="fas fa-eye"></i> Lifetime Total Visitors: <strong id="visitorCount">0</strong></p>
                 </div>
-                <p id="display-bio" class="user-bio">Loading VIP Profile...</p>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="switchAdminTab('generalTab', this)">General Info</button>
+                    <button class="tab-btn" onclick="switchAdminTab('buttonsTab', this)">Manage Buttons</button>
+                    <button class="tab-btn" onclick="switchAdminTab('settingsTab', this)">Settings & Backup</button>
+                </div>
+
+                <!-- Tab 1: General Info -->
+                <div id="generalTab" class="tab-content active">
+                    <div class="form-group">
+                        <label>Site Title:</label>
+                        <input type="text" id="adminSiteTitle">
+                    </div>
+                    <div class="form-group">
+                        <label>Site Subtitle:</label>
+                        <input type="text" id="adminSiteSubtitle">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo Image URL:</label>
+                        <input type="text" id="adminLogoUrl">
+                    </div>
+                    <div class="form-group">
+                        <label>Banner Image URL:</label>
+                        <input type="text" id="adminBannerUrl">
+                    </div>
+                    <div class="form-group">
+                        <label>Notice / Announcement Text:</label>
+                        <textarea id="adminNoticeText" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Background Music URL (MP3 Link):</label>
+                        <input type="text" id="adminMusicUrl" placeholder="Direct MP3 Link">
+                    </div>
+                </div>
+
+                <!-- Tab 2: Manage Buttons -->
+                <div id="buttonsTab" class="tab-content">
+                    <button class="btn-add" onclick="addNewButtonField()"><i class="fas fa-plus"></i> Add New Button</button>
+                    <div id="adminButtonsList" class="admin-buttons-list">
+                        <!-- Dynamic Editable Buttons Render Here -->
+                    </div>
+                </div>
+
+                <!-- Tab 3: Settings & Security -->
+                <div id="settingsTab" class="tab-content">
+                    <div class="form-group">
+                        <label>Change Admin Password:</label>
+                        <input type="password" id="adminNewPassword" placeholder="Enter new password">
+                    </div>
+                    <hr class="divider">
+                    <div class="backup-actions">
+                        <button class="btn-backup" onclick="exportData()"><i class="fas fa-download"></i> Export Settings (JSON)</button>
+                        <label class="btn-backup file-label">
+                            <i class="fas fa-upload"></i> Import Settings
+                            <input type="file" id="importFileInput" onchange="importData(event)" accept=".json" hidden>
+                        </label>
+                    </div>
+                </div>
+
             </div>
-        </div>
-
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div class="clock-box">⏰ BD Time: <span id="server-time">00:00:00 AM</span></div>
-            <button class="audio-btn" id="audio-toggle">🎵 Music: OFF</button>
-        </div>
-
-        <!-- Running Notice -->
-        <div id="display-notice" class="notice-ticker" style="display: none;"></div>
-
-        <!-- Dynamic Social Buttons Area -->
-        <div id="buttons-container" class="buttons-list"></div>
-
-        <!-- Free Fire Tool Card -->
-        <div class="ff-tool-card">
-            <h3>🎮 FF VIP Color Bio Generator</h3>
-            <p>আপনার বায়ো লিখুন এবং কালার কোড সহ কপি করুন:</p>
-            <input type="text" id="ff-bio-input" placeholder="Enter text (e.g. LALA GAMER)">
-            <div class="color-pickers">
-                <button class="c-btn" style="background:#ff0000;" onclick="applyColor('[FF0000]')">Red</button>
-                <button class="c-btn" style="background:#00ff00; color:#000;" onclick="applyColor('[00FF00]')">Green</button>
-                <button class="c-btn" style="background:#00ffff; color:#000;" onclick="applyColor('[00FFFF]')">Cyan</button>
-                <button class="c-btn" style="background:#ffff00; color:#000;" onclick="applyColor('[FFFF00]')">Yellow</button>
-            </div>
-            <div id="ff-bio-result" class="bio-preview-box">Preview: [FF0000]Your Text</div>
-            <button class="btn-action" onclick="copyFFBio()">📋 Copy FF Bio Code</button>
-        </div>
-
-        <div class="footer">
-            <p>© 2026 Lala Digital. All Rights Reserved.</p>
-        </div>
-    </div>
-
-    <!-- Notification Popup -->
-    <div id="toast-notify" class="toast">Action Successful!</div>
-
-    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
-    <!-- SECRET VIP ADMIN MODAL -->
-    <div id="admin-modal" class="admin-overlay">
-        <div class="admin-modal-box">
-            <div class="admin-header">
-                <h2>👑 VIP Admin Control Panel</h2>
-                <span class="close-admin" onclick="closeAdmin()">&times;</span>
-            </div>
-
-            <div class="admin-stats-card">
-                📊 Total VIP Visitors Counter: <strong id="admin-visitor-count">0</strong>
-            </div>
-
-            <div class="admin-tabs">
-                <button class="tab-btn active" onclick="switchTab('general', event)">General Info</button>
-                <button class="tab-btn" onclick="switchTab('buttons', event)">Manage Buttons</button>
-                <button class="tab-btn" onclick="switchTab('security', event)">Security & Backup</button>
-            </div>
-
-            <!-- Tab 1: General Settings -->
-            <div id="tab-general" class="tab-content active">
-                <label>Website Title</label>
-                <input type="text" id="admin-title">
-
-                <label>Bio / Description</label>
-                <input type="text" id="admin-bio">
-
-                <label>Running Notice Text</label>
-                <input type="text" id="admin-notice">
-
-                <label>Logo Image URL</label>
-                <input type="text" id="admin-logo">
-
-                <label>Banner Image URL</label>
-                <input type="text" id="admin-banner">
-            </div>
-
-            <!-- Tab 2: Buttons Management -->
-            <div id="tab-buttons" class="tab-content">
-                <div id="admin-buttons-list"></div>
-                <button class="btn-add" onclick="addNewButtonField()">+ Add New VIP Button</button>
-            </div>
-
-            <!-- Tab 3: Security & Backup -->
-            <div id="tab-security" class="tab-content">
-                <label>Change Admin Password</label>
-                <input type="text" id="admin-new-pass" placeholder="Default: lala999">
-
-                <hr style="border-color: rgba(0, 243, 255, 0.2); margin: 15px 0;">
-                <label>Export Settings Backup (JSON)</label>
-                <button class="btn-secondary" onclick="exportBackup()">📥 Download Backup File</button>
-
-                <label style="margin-top:15px;">Import Settings Backup</label>
-                <input type="file" id="backup-file-input" accept=".json" onchange="importBackup(event)">
-            </div>
-
-            <div class="admin-actions">
-                <button class="btn-save" onclick="saveAdminSettings()">💾 Save & Publish Changes</button>
+            <div class="modal-footer">
+                <button class="btn-save" onclick="saveAdminSettings()"><i class="fas fa-save"></i> Save & Publish Changes</button>
             </div>
         </div>
     </div>
 
+    <!-- JS Script Link -->
     <script src="script.js"></script>
 </body>
 </html>
