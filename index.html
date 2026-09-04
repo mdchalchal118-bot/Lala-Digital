@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO & Search Engine Favicon -->
+    <title id="page-title">Lala Digital - VIP Hub</title>
+    <meta name="description" content="Lala Digital Official VIP Hub, Links, Free Fire Tools and Direct Contact Portal.">
+    <link rel="icon" id="favicon" type="image/x-icon" href="https://via.placeholder.com/150/00f3ff/8000ff?text=LALA">
+    
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Particle Background Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="main-wrapper">
+        <!-- Banner & Header Section -->
+        <div class="header-card">
+            <img id="display-banner" class="banner-img" src="https://via.placeholder.com/600x200/111827/00f3ff?text=LALA+DIGITAL" alt="Banner">
+            <div class="profile-header">
+                <img id="display-logo" class="logo-img" src="https://via.placeholder.com/150/00f3ff/8000ff?text=LALA" alt="Logo">
+                <div class="title-container" id="secret-trigger">
+                    <img id="title-icon" class="title-logo-icon" src="https://via.placeholder.com/50/00f3ff/8000ff?text=LALA" alt="Icon">
+                    <h1 id="site-title">Lala Digital</h1>
+                </div>
+                <p id="display-bio" class="user-bio">Loading VIP Profile...</p>
+            </div>
+        </div>
+
+        <!-- Live Server Time & Music Control Bar -->
+        <div class="status-bar">
+            <div class="clock-box">⏰ BD Time: <span id="server-time">00:00:00 AM</span></div>
+            <button class="audio-btn" id="audio-toggle">🎵 Music: OFF</button>
+        </div>
+
+        <!-- Live Running Notice Ticker -->
+        <div id="display-notice" class="notice-ticker" style="display: none;"></div>
+
+        <!-- Dynamic Unlimited Social & Utility Buttons Area -->
+        <div id="buttons-container" class="buttons-list"></div>
+
+        <!-- Free Fire VIP Bio Generator Tool (Embedded) -->
+        <div class="ff-tool-card">
+            <h3>🎮 FF VIP Color Bio Generator</h3>
+            <p>আপনার বায়ো লিখুন এবং কালার কোড সহ কপি করুন:</p>
+            <input type="text" id="ff-bio-input" placeholder="Enter text (e.g. LALA GAMER)">
+            <div class="color-pickers">
+                <button class="c-btn" style="background:#ff0000;" onclick="applyColor('[FF0000]')">Red</button>
+                <button class="c-btn" style="background:#00ff00; color:#000;" onclick="applyColor('[00FF00]')">Green</button>
+                <button class="c-btn" style="background:#00ffff; color:#000;" onclick="applyColor('[00FFFF]')">Cyan</button>
+                <button class="c-btn" style="background:#ffff00; color:#000;" onclick="applyColor('[FFFF00]')">Yellow</button>
+            </div>
+            <div id="ff-bio-result" class="bio-preview-box">Preview: [FF0000]Your Text</div>
+            <button class="btn-action" onclick="copyFFBio()">📋 Copy FF Bio Code</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2026 Lala Digital. All Rights Reserved.</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast-notify" class="toast">Action Successful!</div>
+
+    <!-- Hidden Audio Player for Background Music -->
+    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <!-- SECRET VIP ADMIN MODAL -->
+    <div id="admin-modal" class="admin-overlay">
+        <div class="admin-modal-box">
+            <div class="admin-header">
+                <h2>👑 VIP Admin Control Panel</h2>
+                <span class="close-admin" onclick="closeAdmin()">&times;</span>
+            </div>
+
+            <!-- Secret Admin Visitor Analytics Counter -->
+            <div class="admin-stats-card">
+                📊 Total VIP Visitors Counter: <strong id="admin-visitor-count">0</strong>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchTab('general')">General Info</button>
+                <button class="tab-btn" onclick="switchTab('buttons')">Manage Buttons</button>
+                <button class="tab-btn" onclick="switchTab('security')">Security & Backup</button>
+            </div>
+
+            <!-- Tab 1: General Settings -->
+            <div id="tab-general" class="tab-content active">
+                <label>Website Title (Search & Header)</label>
+                <input type="text" id="admin-title">
+
+                <label>Bio / Description</label>
+                <input type="text" id="admin-bio">
+
+                <label>Running Notice Text (Empty to Hide)</label>
+                <input type="text" id="admin-notice">
+
+                <label>Logo Image URL (Favicon & Profile)</label>
+                <input type="text" id="admin-logo">
+
+                <label>Banner Image URL</label>
+                <input type="text" id="admin-banner">
+            </div>
+
+            <!-- Tab 2: Unlimited Buttons Management -->
+            <div id="tab-buttons" class="tab-content">
+                <div id="admin-buttons-list"></div>
+                <button class="btn-add" onclick="addNewButtonField()">+ Add New VIP Button</button>
+            </div>
+
+            <!-- Tab 3: Security & Backup -->
+            <div id="tab-security" class="tab-content">
+                <label>Change Admin Password</label>
+                <input type="text" id="admin-new-pass" placeholder="Default: lala999">
+
+                <hr style="border-color: rgba(0, 243, 255, 0.2); margin: 15px 0;">
+                <label>Export Settings Backup (JSON)</label>
+                <button class="btn-secondary" onclick="exportBackup()">📥 Download Backup File</button>
+
+                <label style="margin-top:15px;">Import Settings Backup</label>
+                <input type="file" id="backup-file-input" accept=".json" onchange="importBackup(event)">
+            </div>
+
+            <div class="admin-actions">
+                <button class="btn-save" onclick="saveAdminSettings()">💾 Save & Publish Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Link -->
+    <script src="script.js"></script>
+</body>
+          </html>
