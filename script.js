@@ -1,4 +1,3 @@
-// Default Configuration Data
 const defaultSiteData = {
     title: "Lala Digital",
     bio: "Official VIP Hub & Digital Services",
@@ -8,21 +7,19 @@ const defaultSiteData = {
     password: "lala999",
     visitors: 0,
     buttons: [
-        { title: "Official Telegram Channel", desc: "সব ধরণের আপডেট ও অফার পেতে জয়েন করুন", link: "https://t.me", type: "link" },
-        { title: "WhatsApp Direct Chat", desc: "সরাসরি ২৪/৭ সাপোর্ট ও মেসেজিং", link: "https://wa.me/", type: "link" },
-        { title: "Free Fire Main UID", desc: "UID: 123456789 (কপি করে গেম ওপেন হবে)", link: "123456789", type: "uid" },
-        { title: "Free Fire Guild ID", desc: "Guild ID: 987654321 (জয়েন করতে ক্লিক করুন)", link: "987654321", type: "guild" }
+        { title: "Official Telegram Channel", desc: "সব ধরণের আপডেট ও অফার পেতে জয়েন করুন", link: "https://t.me", type: "telegram" },
+        { title: "WhatsApp Direct Chat", desc: "সরাসরি ২৪/৭ সাপোর্ট ও মেসেজিং", link: "https://wa.me/", type: "whatsapp" },
+        { title: "TikTok Official Page", desc: "ভিডিও আপডেট দেখতে ফলো করুন", link: "https://tiktok.com", type: "tiktok" },
+        { title: "Free Fire Main UID", desc: "UID: 123456789 (কপি করে গেম ওপেন হবে)", link: "123456789", type: "uid" }
     ]
 };
 
 let currentData = {};
+let tempAdminButtons = [];
 let clickAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
 
-// 1. Initialize Site & Analytics
 function initSite() {
     currentData = JSON.parse(localStorage.getItem('lala_vip_site_data')) || defaultSiteData;
-    
-    // Increment Secret Visitor Count (Admin Only View)
     currentData.visitors = (currentData.visitors || 0) + 1;
     localStorage.setItem('lala_vip_site_data', JSON.stringify(currentData));
 
@@ -36,13 +33,11 @@ function renderUI() {
     document.getElementById('site-title').innerText = currentData.title;
     document.getElementById('display-bio').innerText = currentData.bio;
     
-    // Logo & Banner Updates
     document.getElementById('display-logo').src = currentData.logo;
     document.getElementById('title-icon').src = currentData.logo;
     document.getElementById('favicon').href = currentData.logo;
     document.getElementById('display-banner').src = currentData.banner;
 
-    // Notice Bar
     const noticeEl = document.getElementById('display-notice');
     if (currentData.notice && currentData.notice.trim() !== "") {
         noticeEl.innerText = currentData.notice;
@@ -51,41 +46,48 @@ function renderUI() {
         noticeEl.style.display = "none";
     }
 
-    // Render Dynamic Buttons
     const btnContainer = document.getElementById('buttons-container');
     btnContainer.innerHTML = "";
 
     if (currentData.buttons && currentData.buttons.length > 0) {
         currentData.buttons.forEach((btn) => {
             const card = document.createElement('div');
-            card.className = "vip-card-btn";
+            
+            // Icon & Color Logic based on Type
+            let iconClass = "fa-solid fa-link";
+            let brandClass = "";
+
+            if(btn.type === 'whatsapp') { iconClass = "fa-brands fa-whatsapp"; brandClass = "whatsapp"; }
+            else if(btn.type === 'telegram') { iconClass = "fa-brands fa-telegram"; brandClass = "telegram"; }
+            else if(btn.type === 'tiktok') { iconClass = "fa-brands fa-tiktok"; brandClass = "tiktok"; }
+            else if(btn.type === 'youtube') { iconClass = "fa-brands fa-youtube"; brandClass = "youtube"; }
+            else if(btn.type === 'uid' || btn.type === 'guild') { iconClass = "fa-solid fa-gamepad"; brandClass = "freefire"; }
+
+            card.className = `vip-card-btn ${brandClass}`;
             card.onclick = () => handleButtonClick(btn);
 
             card.innerHTML = `
-                <div class="card-title">${btn.title}</div>
-                <div class="card-desc">${btn.desc || ''}</div>
+                <div class="btn-icon-box"><i class="${iconClass}"></i></div>
+                <div class="card-text-content">
+                    <div class="card-title">${btn.title}</div>
+                    <div class="card-desc">${btn.desc || ''}</div>
+                </div>
             `;
             btnContainer.appendChild(card);
         });
     }
 }
 
-// 2. Handle Button Clicks (Deep Links & FF UID One-Click Copy)
 function handleButtonClick(btn) {
     playClickSound();
-    
     if (btn.type === 'uid' || btn.type === 'guild') {
         navigator.clipboard.writeText(btn.link);
         showToast(`📋 ${btn.type.toUpperCase()} Copied: ${btn.link}`);
-        
-        // Attempt to launch Free Fire App
         setTimeout(() => {
             window.location.href = "intent://#Intent;scheme=freefire;package=com.dts.freefireth;end";
-        }, 1200);
+        }, 1000);
     } else {
-        if (btn.link) {
-            window.open(btn.link, '_blank');
-        }
+        if (btn.link) window.open(btn.link, '_blank');
     }
 }
 
@@ -101,7 +103,7 @@ function showToast(msg) {
     setTimeout(() => { toast.classList.remove('show'); }, 3000);
 }
 
-// 3. Secret 4-Click Trigger for Admin Panel
+// Secret Trigger for Admin
 let clickCounter = 0;
 let clickTimer;
 
@@ -112,19 +114,15 @@ document.getElementById('secret-trigger').addEventListener('click', () => {
     if (clickCounter === 4) {
         clickCounter = 0;
         const enteredPass = prompt("🔑 Enter VIP Admin Password:");
-        const masterPass = currentData.password || "lala999";
-
-        if (enteredPass === masterPass) {
+        if (enteredPass === (currentData.password || "lala999")) {
             openAdminModal();
         } else if (enteredPass !== null) {
             alert("❌ Incorrect Password!");
         }
     }
-
     clickTimer = setTimeout(() => { clickCounter = 0; }, 1200);
 });
 
-// 4. Admin Panel Logic
 function openAdminModal() {
     document.getElementById('admin-visitor-count').innerText = currentData.visitors || 1;
     document.getElementById('admin-title').value = currentData.title || "";
@@ -134,6 +132,7 @@ function openAdminModal() {
     document.getElementById('admin-banner').value = currentData.banner || "";
     document.getElementById('admin-new-pass').value = currentData.password || "lala999";
 
+    tempAdminButtons = currentData.buttons ? JSON.parse(JSON.stringify(currentData.buttons)) : [];
     renderAdminButtons();
     document.getElementById('admin-modal').style.display = "flex";
 }
@@ -142,7 +141,15 @@ function closeAdmin() {
     document.getElementById('admin-modal').style.display = "none";
 }
 
-function switchTab(tabName) {
+// Refresh Prevent Engine inside Admin Panel
+window.addEventListener('beforeunload', (e) => {
+    if (document.getElementById('admin-modal').style.display === "flex") {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+function switchTab(tabName, event) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
@@ -150,10 +157,7 @@ function switchTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('active');
 }
 
-let tempAdminButtons = [];
-
 function renderAdminButtons() {
-    tempAdminButtons = currentData.buttons ? [...currentData.buttons] : [];
     const list = document.getElementById('admin-buttons-list');
     list.innerHTML = "";
 
@@ -161,19 +165,23 @@ function renderAdminButtons() {
         const item = document.createElement('div');
         item.className = "button-item-row";
         item.innerHTML = `
-            <button class="btn-del" onclick="deleteAdminButton(${index})">Delete</button>
+            <button type="button" class="btn-del" onclick="deleteAdminButton(${index})">🗑️ Delete</button>
             <label>Button Title</label>
-            <input type="text" value="${btn.title}" onchange="tempAdminButtons[${index}].title = this.value">
+            <input type="text" value="${btn.title}" oninput="tempAdminButtons[${index}].title = this.value">
             
             <label>Subtitle / Description</label>
-            <input type="text" value="${btn.desc || ''}" onchange="tempAdminButtons[${index}].desc = this.value">
+            <input type="text" value="${btn.desc || ''}" oninput="tempAdminButtons[${index}].desc = this.value">
             
             <label>Link / UID Number</label>
-            <input type="text" value="${btn.link}" onchange="tempAdminButtons[${index}].link = this.value">
+            <input type="text" value="${btn.link}" oninput="tempAdminButtons[${index}].link = this.value">
             
-            <label>Type</label>
-            <select style="width:100%; padding:6px; background:#070910; color:#fff; border:1px solid #bc13fe; border-radius:6px; margin-top:4px;" onchange="tempAdminButtons[${index}].type = this.value">
+            <label>Type / App Icon</label>
+            <select style="width:100%; padding:8px; background:#070910; color:#fff; border:1px solid #bc13fe; border-radius:6px; margin-top:4px;" onchange="tempAdminButtons[${index}].type = this.value">
                 <option value="link" ${btn.type === 'link' ? 'selected' : ''}>Standard URL Link</option>
+                <option value="whatsapp" ${btn.type === 'whatsapp' ? 'selected' : ''}>WhatsApp (Green App Theme)</option>
+                <option value="telegram" ${btn.type === 'telegram' ? 'selected' : ''}>Telegram (Blue App Theme)</option>
+                <option value="tiktok" ${btn.type === 'tiktok' ? 'selected' : ''}>TikTok (Red/Black Theme)</option>
+                <option value="youtube" ${btn.type === 'youtube' ? 'selected' : ''}>YouTube (Red Theme)</option>
                 <option value="uid" ${btn.type === 'uid' ? 'selected' : ''}>Free Fire UID (Copy & Launch)</option>
                 <option value="guild" ${btn.type === 'guild' ? 'selected' : ''}>Guild ID (Copy & Launch)</option>
             </select>
@@ -184,7 +192,6 @@ function renderAdminButtons() {
 
 function addNewButtonField() {
     tempAdminButtons.push({ title: "New VIP Button", desc: "Short description here", link: "", type: "link" });
-    currentData.buttons = tempAdminButtons;
     renderAdminButtons();
 }
 
@@ -208,7 +215,6 @@ function saveAdminSettings() {
     showToast("💾 VIP Dashboard Saved & Live!");
 }
 
-// 5. Free Fire Bio Generator Utility
 function applyColor(colorCode) {
     const input = document.getElementById('ff-bio-input');
     input.value = colorCode + input.value;
@@ -230,7 +236,6 @@ function copyFFBio() {
     }
 }
 
-// 6. Clock & Background Music
 function startClock() {
     setInterval(() => {
         const now = new Date();
@@ -253,7 +258,6 @@ audioBtn.addEventListener('click', () => {
     isPlaying = !isPlaying;
 });
 
-// 7. Backup Export & Import
 function exportBackup() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData));
     const a = document.createElement('a');
@@ -280,7 +284,6 @@ function importBackup(e) {
     reader.readAsText(file);
 }
 
-// 8. Canvas Particle Animation
 function initParticles() {
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
@@ -318,5 +321,4 @@ function initParticles() {
     animate();
 }
 
-// Run Site Initialization
 window.onload = initSite;
