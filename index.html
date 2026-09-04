@@ -68,7 +68,7 @@
             </div>
             <p class="tool-desc">আপনার বায়ো লিখুন এবং কালার কোড সহ কপি করুন:</p>
 
-            <input type="text" id="bioInput" placeholder="Enter text (e.g. LALA GAMER)" oninput="updateBioPreview()">
+            <input type="text" id="bioInput" placeholder="Enter text (e.g. [FF0000]LALA [00FF00]GAMER)" oninput="updateBioPreview()">
 
             <div class="color-palette">
                 <button class="color-btn red" onclick="applyColor('[FF0000]')">Red</button>
@@ -78,7 +78,7 @@
             </div>
 
             <div class="bio-preview-box">
-                <span id="bioPreviewText">Preview: [FF0000]Your Text</span>
+                <div id="bioPreviewText">Preview: <span style="color:#ff0000">Your Text</span></div>
             </div>
 
             <button class="btn-action copy-bio-btn" onclick="copyBioCode()">
@@ -96,7 +96,7 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast">Copied to Clipboard!</div>
 
-    <!-- VIP Admin Control Panel Modal -->
+    <!-- VIP Admin Control Panel Modal (Full-Screen Layout) -->
     <div id="adminModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
