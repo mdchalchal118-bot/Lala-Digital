@@ -32,42 +32,43 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: -1;
     pointer-events: none;
 }
 
-/* Container */
+/* Main Container - Full Screen Fix */
 .container {
     width: 100%;
-    max-width: 440px;
-    padding: 25px 16px;
+    max-width: 100%; /* নির্দিষ্ট ফিক্সড পিক্সেল তুলে পুরো স্ক্রিন কাভার করার জন্য */
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
 }
 
 /* Header Card UI Fix */
 .header-card {
+    width: 100%;
     background: linear-gradient(180deg, rgba(20, 24, 38, 0.6) 0%, rgba(10, 12, 20, 0.8) 100%);
     border: 1px solid var(--card-border);
-    border-radius: 24px;
+    border-radius: 20px;
     overflow: visible !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     text-align: center;
     position: relative;
-    padding-bottom: 22px;
+    padding-bottom: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .banner-container {
     width: 100%;
-    height: 110px;
+    height: 120px;
     overflow: hidden;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 .banner-img {
@@ -76,7 +77,7 @@ body {
     object-fit: cover;
 }
 
-/* Logo Wrapper - Modern Floating Ring */
+/* Logo Wrapper */
 .logo-wrapper {
     position: relative;
     display: inline-block;
@@ -89,7 +90,7 @@ body {
     height: 85px;
     border-radius: 50%;
     border: 2px solid rgba(0, 243, 255, 0.6);
-    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3), inset 0 0 10px rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
     object-fit: cover;
     background: var(--bg-main);
 }
@@ -122,22 +123,24 @@ body {
     font-size: 0.8rem;
     color: var(--text-muted);
     margin-top: 3px;
-    font-weight: 400;
 }
 
-/* Utility Bar - Compact Design */
+/* Utility Bar */
 .utility-bar {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
 
 .clock-badge, .btn-music {
+    flex: 1;
+    text-align: center;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    padding: 8px 14px;
+    padding: 10px 12px;
     border-radius: 12px;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     backdrop-filter: blur(10px);
 }
@@ -149,21 +152,16 @@ body {
 
 .btn-music {
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
-.btn-music:hover {
-    border-color: rgba(0, 243, 255, 0.3);
-    color: #fff;
-}
-
-/* Notice Card - Slim Pill Style */
+/* Notice Card */
 .notice-card {
+    width: 100%;
     background: rgba(157, 77, 221, 0.08);
     border: 1px solid rgba(157, 77, 221, 0.2);
-    padding: 10px 16px;
+    padding: 12px 16px;
     border-radius: 14px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -175,41 +173,41 @@ body {
     font-size: 0.9rem;
 }
 
-/* Dynamic Buttons Container & Sleek Link Design */
+/* Dynamic Buttons Container */
 .buttons-list {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .custom-btn-card {
+    width: 100%;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 16px;
-    padding: 12px 16px;
+    padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 14px;
     text-decoration: none;
     color: var(--text-main);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
     cursor: pointer;
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 .custom-btn-card:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(0, 243, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px var(--hover-glow);
+    box-shadow: 0 6px 20px var(--hover-glow);
 }
 
 .btn-icon-wrapper {
     font-size: 1.2rem;
     color: var(--neon-cyan);
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     background: rgba(0, 243, 255, 0.08);
     border-radius: 10px;
     display: flex;
@@ -223,20 +221,20 @@ body {
 
 .btn-title {
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     display: block;
-    letter-spacing: 0.3px;
 }
 
 .btn-sub {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     display: block;
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
-/* Tool Card Clean Layout */
+/* Tool Card */
 .tool-card {
+    width: 100%;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 20px;
@@ -254,9 +252,8 @@ body {
 }
 
 .tool-header h3 {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     color: var(--text-main);
-    font-weight: 600;
 }
 
 .tool-desc {
@@ -266,18 +263,13 @@ body {
 
 .tool-card input[type="text"] {
     width: 100%;
-    padding: 10px 14px;
+    padding: 11px 14px;
     border-radius: 12px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--card-border);
     color: #fff;
     font-size: 0.85rem;
     outline: none;
-    transition: border-color 0.2s;
-}
-
-.tool-card input[type="text"]:focus {
-    border-color: var(--neon-cyan);
 }
 
 .color-palette {
@@ -291,12 +283,10 @@ body {
     border: none;
     border-radius: 10px;
     font-weight: 600;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     cursor: pointer;
-    transition: opacity 0.2s;
 }
 
-.color-btn:hover { opacity: 0.85; }
 .color-btn.red { background: #ff4757; color: #fff; }
 .color-btn.green { background: #2ed573; color: #fff; }
 .color-btn.cyan { background: #00d2d3; color: #000; }
@@ -304,13 +294,13 @@ body {
 
 .bio-preview-box {
     background: rgba(0, 0, 0, 0.6);
-    padding: 10px 14px;
+    padding: 12px 14px;
     border-radius: 10px;
     font-family: monospace;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     word-break: break-all;
     border: 1px dashed var(--card-border);
-    min-height: 38px;
+    min-height: 40px;
     display: flex;
     align-items: center;
 }
@@ -318,24 +308,26 @@ body {
 .btn-action {
     background: linear-gradient(135deg, #00f3ff 0%, #7000ff 100%);
     border: none;
-    padding: 11px;
+    padding: 12px;
     border-radius: 12px;
     color: #fff;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.btn-action:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 243, 255, 0.3);
+/* Desktop Fix (পিসিতে দেখলে সর্বোচ্চ 550px থাকবে কিন্তু মোবাইলে ফুল স্ক্রিন নিবে) */
+@media (min-width: 600px) {
+    .container {
+        max-width: 520px;
+        margin: 0 auto;
+    }
 }
 
 /* Footer */
 .footer {
     text-align: center;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     padding: 10px 0;
 }
@@ -353,7 +345,7 @@ body {
     font-weight: 600;
     font-size: 0.8rem;
     box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s ease;
     z-index: 3000;
 }
 
@@ -361,7 +353,7 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Fullscreen Admin Modal Fix */
+/* Modal Overlay */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0;
