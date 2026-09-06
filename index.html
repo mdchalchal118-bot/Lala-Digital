@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LALA DIGITAL | Premium Store</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --neon-green: #00C853;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --dark-bg: #0a0a0a;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            user-select: none;
+            overflow-x: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .light-mode {
+            --dark-bg: #f3f4f6;
+            color: #1a1a1a;
+        }
+
+        /* Branding Text */
+        .brand-lala { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); font-weight: 800; }
+        .brand-digital { color: white; font-weight: 800; }
+        .light-mode .brand-digital { color: #000; }
+
+        /* Glassmorphism */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+        }
+
+        /* 3D Card Effect */
+        .card-3d {
+            transition: transform 0.5s, box-shadow 0.5s;
+            transform-style: preserve-3d;
+        }
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 200, 83, 0.3);
+        }
+
+        /* Magic Bottom Tab Bar */
+        .magic-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 70px;
+            background: #151515;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 50px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .nav-item {
+            position: relative;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem;
+            color: #555;
+            transition: 0.5s;
+        }
+
+        .nav-item.active i {
+            color: var(--neon-green);
+            transform: translateY(-15px);
+        }
+
+        .indicator {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            top: -25px;
+            z-index: -1;
+            box-shadow: 0 0 20px var(--neon-green);
+            transition: 0.5s;
+            opacity: 0;
+        }
+        .nav-item.active .indicator { opacity: 1; }
+
+        /* Marquee */
+        .marquee-container {
+            background: rgba(0, 200, 83, 0.2);
+            padding: 5px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Admin Overlay */
+        #adminPanel {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Sound Effect */
+        #clickSound { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Audio for Click -->
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+
+    <!-- Top Utility Bar -->
+    <header class="p-4 flex justify-between items-center sticky top-0 z-50 glass m-2">
+        <div id="brandName" class="text-xl cursor-pointer" onclick="handleBrandClick()">
+            <span class="brand-lala">LALA</span> <span class="brand-digital">DIGITAL</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="toggleTheme()" class="text-xl"><i class="fas fa-moon"></i></button>
+            <a href="https://tiktok.com/@mr_lala100" target="_blank" class="hover:text-green-500"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com/@lalagamer100" target="_blank" class="hover:text-red-500"><i class="fab fa-youtube"></i></a>
+            <a href="https://t.me/toplalabd" target="_blank" class="hover:text-blue-500"><i class="fab fa-telegram"></i></a>
+        </div>
+    </header>
+
+    <!-- Marquee Notice -->
+    <div class="marquee-container mt-2">
+        <div class="marquee-text" id="marqueeText">Welcome to LALA DIGITAL! Best Gaming Tools & Services. New Bots Added.</div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="p-4 pb-32" id="mainContent">
+        <!-- Banner -->
+        <div id="bannerSlot" class="w-full h-48 rounded-3xl mb-6 glass overflow-hidden flex items-center justify-center">
+            <img id="bannerImg" src="https://via.placeholder.com/800x400" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+            <input type="text" id="searchBar" onkeyup="filterCards()" placeholder="পণ্য খুঁজুন..." class="w-full p-4 rounded-2xl bg-white/10 border border-white/20 outline-none focus:border-green-500 transition">
+        </div>
+
+        <!-- Grid Cards Container -->
+        <div id="cardsContainer" class="grid grid-cols-2 gap-4">
+            <!-- Cards will be injected by JS -->
+        </div>
+    </main>
+
+    <!-- APK Section Area (Hidden by Default) -->
+    <main class="p-4 pb-32 hidden" id="apkContent">
+        <h2 class="text-2xl font-bold mb-4">Android Apps & Scripts</h2>
+        <div id="apkGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- APK Cards will be injected -->
+        </div>
+    </main>
+
+    <!-- Product Details Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex-col overflow-y-auto">
+        <div class="p-4 flex items-center justify-between sticky top-0 bg-black z-10 border-b border-white/10">
+            <button onclick="closeModal()" class="text-xl p-2"><i class="fas fa-arrow-left"></i> ব্যাক</button>
+            <div class="brand-lala text-lg">Product Details</div>
+            <div></div>
+        </div>
+        <div id="modalBody" class="p-4">
+            <!-- Dynamic Content -->
+        </div>
+    </div>
+
+    <!-- Magic Tab Bar Navigation -->
+    <nav class="magic-nav">
+        <div class="nav-item active" onclick="switchTab('home', this)">
+            <div class="indicator"></div>
+            <i class="fas fa-home"></i>
+        </div>
+        <div class="nav-item" onclick="switchTab('apps', this)">
+            <div class="indicator"></div>
+            <i class="fab fa-android"></i>
+        </div>
+        <div class="nav-item" onclick="switchTab('bio', this)">
+            <div class="indicator"></div>
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="nav-item" onclick="switchTab('telegram', this)">
+            <div class="indicator"></div>
+            <i class="fab fa-telegram-plane"></i>
+        </div>
+        <div class="nav-item" onclick="switchTab('admin', this)">
+            <div class="indicator"></div>
+            <i class="fas fa-user-shield"></i>
+        </div>
+    </nav>
+
+    <!-- Admin Panel Overlay -->
+    <div id="adminPanel">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-green-500">VIP Admin Dashboard</h1>
+            <button onclick="closeAdmin()" class="bg-red-600 px-4 py-2 rounded-xl">Exit Admin</button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Settings Card -->
+            <div class="glass p-6">
+                <h3 class="text-xl mb-4 font-bold border-b border-white/10 pb-2">সাধারণ সেটিংস</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm opacity-70">ওয়েবসাইট নাম</label>
+                        <input type="text" id="settingSiteName" class="w-full bg-white/10 p-2 rounded mt-1 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm opacity-70">হোয়াটসঅ্যাপ নম্বর</label>
+                        <input type="text" id="settingWA" class="w-full bg-white/10 p-2 rounded mt-1 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm opacity-70">ব্যানার ইমেজ ইউআরএল</label>
+                        <input type="text" id="settingBanner" class="w-full bg-white/10 p-2 rounded mt-1 outline-none">
+                    </div>
+                    <button onclick="saveGeneralSettings()" class="bg-green-600 w-full py-2 rounded-xl font-bold">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Card Management -->
+            <div class="glass p-6">
+                <h3 class="text-xl mb-4 font-bold border-b border-white/10 pb-2">কার্ড ম্যানেজমেন্ট</h3>
+                <button onclick="addNewCard()" class="bg-blue-600 w-full py-2 rounded-xl mb-4">+ Add New Card</button>
+                <div id="adminCardList" class="space-y-2 max-h-64 overflow-y-auto">
+                    <!-- List of cards for edit/delete -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Core Data Logic ---
+        let appData = {
+            siteName: "LALA DIGITAL",
+            whatsapp: "01903982821",
+            banner: "https://i.ibb.co/example/banner.jpg",
+            cards: [
+                {
+                    id: 1,
+                    title: "FF GUILD GLORY",
+                    image: "https://i.ibb.co/3Wf2W0v/ff-glory.jpg",
+                    packages: [
+                        { name: "1 BASIC (4 BOT)", price: "130", info: "INSTANT" },
+                        { name: "2 BASIC (8 BOT)", price: "250", info: "INSTANT" }
+                    ],
+                    rules: "১. গেম আইডি সঠিক দিন। ২. রিফান্ড ৭ ঘণ্টা পর।"
+                }
+            ],
+            apps: [
+                { id: 1, name: "LALA GLOO WALL BOT", desc: "Auto Gloo Wall Script", img: "https://via.placeholder.com/150", link: "#" }
+            ]
+        };
+
+        // Initialize from LocalStorage
+        function initData() {
+            const savedData = localStorage.getItem('lala_data');
+            if (savedData) {
+                appData = JSON.parse(savedData);
+            }
+            renderUI();
+        }
+
+        function playSound() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        // --- UI Rendering ---
+        function renderUI() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            appData.cards.forEach(card => {
+                container.innerHTML += `
+                    <div class="glass p-3 card-3d cursor-pointer" onclick="openProduct(${card.id})">
+                        <img src="${card.image}" class="w-full h-32 object-cover rounded-xl mb-2">
+                        <h3 class="font-bold text-sm truncate">${card.title}</h3>
+                        <p class="text-green-500 text-xs font-bold mt-1">Available ✅</p>
+                    </div>
+                `;
+            });
+
+            const apkGrid = document.getElementById('apkGrid');
+            apkGrid.innerHTML = '';
+            appData.apps.forEach(app => {
+                apkGrid.innerHTML += `
+                    <div class="glass p-4 card-3d flex items-center gap-4">
+                        <img src="${app.img}" class="w-20 h-20 rounded-2xl">
+                        <div class="flex-1">
+                            <h4 class="font-bold">${app.name}</h4>
+                            <p class="text-xs opacity-70">${app.desc}</p>
+                            <a href="${app.link}" class="inline-block mt-2 bg-green-600 text-xs px-3 py-1 rounded-lg">DOWNLOAD NOW 📥</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('bannerImg').src = appData.banner;
+        }
+
+        // --- Product Page Logic ---
+        let selectedPkg = null;
+
+        function openProduct(id) {
+            playSound();
+            const card = appData.cards.find(c => c.id === id);
+            const modal = document.getElementById('productModal');
+            const body = document.getElementById('modalBody');
+
+            body.innerHTML = `
+                <div class="mb-6">
+                    <img src="${card.image}" class="w-full h-48 object-cover rounded-3xl mb-4">
+                    <h1 class="text-2xl font-bold">${card.title}</h1>
+                    <p class="text-green-500">🔥 ${card.packages.length} Packages Available</p>
+                </div>
+                
+                <h3 class="text-lg font-bold mb-3">১. প্যাকেজ সিলেক্ট করুন:</h3>
+                <div class="grid grid-cols-1 gap-3 mb-6">
+                    ${card.packages.map((pkg, idx) => `
+                        <div onclick="selectPkg(this, '${pkg.name}', '${pkg.price}', '${card.title}')" 
+                             class="pkg-item glass p-4 flex justify-between items-center cursor-pointer border border-white/5 hover:border-green-500 transition">
+                            <div>
+                                <span class="font-bold">${pkg.name}</span>
+                                <div class="text-[10px] bg-green-600 w-max px-2 rounded-full mt-1">${pkg.info}</div>
+                            </div>
+                            <div class="text-green-400 font-bold">৳${pkg.price}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="glass p-4 mb-6">
+                    <h3 class="font-bold mb-2 text-red-400">২. নিয়মাবলি ও শর্তাবলী:</h3>
+                    <p class="text-xs opacity-80 leading-relaxed">${card.rules}</p>
+                </div>
+
+                <button id="buyBtn" disabled onclick="orderNow()" class="w-full bg-gray-600 py-4 rounded-2xl font-bold text-xl opacity-50 transition-all">
+                    প্যাকেজ সিলেক্ট করুন
+                </button>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+        }
+
+        function selectPkg(el, name, price, cat) {
+            playSound();
+            document.querySelectorAll('.pkg-item').forEach(item => item.classList.remove('border-green-500', 'bg-green-500/10'));
+            el.classList.add('border-green-500', 'bg-green-500/10');
+            
+            selectedPkg = { name, price, cat };
+            const btn = document.getElementById('buyBtn');
+            btn.disabled = false;
+            btn.classList.remove('bg-gray-600', 'opacity-50');
+            btn.classList.add('bg-green-600', 'shadow-[0_0_20px_#00C853]');
+            btn.innerText = "অর্ডার করুন - ৳" + price;
+        }
+
+        function orderNow() {
+            if (!selectedPkg) return;
+            const text = `হ্যালো এডমিন, আমি LALA DIGITAL ওয়েবসাইট থেকে অর্ডার করতে চাই:
+- প্রোডাক্ট: ${selectedPkg.cat}
+- প্যাকেজ: ${selectedPkg.name}
+- মূল্য: ৳${selectedPkg.price}
+
+দয়া করে অর্ডারটি প্রসেস করুন।`;
+            const url = `https://wa.me/${appData.whatsapp}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        // --- Admin Logic ---
+        let clickCount = 0;
+        function handleBrandClick() {
+            clickCount++;
+            if (clickCount === 4) {
+                const pass = prompt("Enter VIP Password:");
+                if (pass === "lala999") {
+                    openAdmin();
+                } else {
+                    alert("Wrong Password!");
+                }
+                clickCount = 0;
+            }
+            setTimeout(() => clickCount = 0, 2000);
+        }
+
+        function openAdmin() {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('settingSiteName').value = appData.siteName;
+            document.getElementById('settingWA').value = appData.whatsapp;
+            document.getElementById('settingBanner').value = appData.banner;
+            renderAdminCards();
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function renderAdminCards() {
+            const list = document.getElementById('adminCardList');
+            list.innerHTML = '';
+            appData.cards.forEach((card, idx) => {
+                list.innerHTML += `
+                    <div class="flex items-center justify-between bg-white/5 p-2 rounded">
+                        <span>${card.title}</span>
+                        <div class="flex gap-2">
+                            <button onclick="editCard(${card.id})" class="text-blue-400">Edit</button>
+                            <button onclick="deleteCard(${card.id})" class="text-red-400">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function saveGeneralSettings() {
+            appData.siteName = document.getElementById('settingSiteName').value;
+            appData.whatsapp = document.getElementById('settingWA').value;
+            appData.banner = document.getElementById('settingBanner').value;
+            saveData();
+            alert("Settings Saved!");
+            location.reload();
+        }
+
+        function saveData() {
+            localStorage.setItem('lala_data', JSON.stringify(appData));
+        }
+
+        // --- Tab Switching ---
+        function switchTab(tab, el) {
+            playSound();
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            const home = document.getElementById('mainContent');
+            const apk = document.getElementById('apkContent');
+
+            if (tab === 'home') {
+                home.classList.remove('hidden');
+                apk.classList.add('hidden');
+            } else if (tab === 'apps') {
+                home.classList.add('hidden');
+                apk.classList.remove('hidden');
+            } else if (tab === 'admin') {
+                handleBrandClick(); // Re-trigger pass prompt for admin tab
+            } else if (tab === 'telegram') {
+                window.open("https://t.me/toplalabd", "_blank");
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const icon = document.querySelector('header button i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        function filterCards() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const cards = document.querySelectorAll('#cardsContainer > div');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                if (title.includes(query)) card.style.display = 'block';
+                else card.style.display = 'none';
+            });
+        }
+
+        // Initialize
+        initData();
+    </script>
+</body>
+</html>
