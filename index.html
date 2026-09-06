@@ -1,182 +1,571 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lala Digital - Official VIP Hub</title>
-    <!-- Favicon -->
-    <link id="favicon" rel="icon" href="https://dummyimage.com/500x500/0a0c14/00f3ff.png&text=LALA" type="image/png">
-    <!-- FontAwesome Icons -->
+    <title>LALA DIGITAL - Premium Gaming Store</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSS Link -->
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --primary-neon: #39FF14;
+            --bg-dark: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+            user-select: none; /* Text un-copyable */
+        }
+
+        .neon-text {
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        /* Notice Bar Animation */
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            background: rgba(57, 255, 20, 0.1);
+            border-bottom: 1px solid var(--primary-neon);
+            padding: 5px 0;
+        }
+        .marquee span {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* 3D Glassmorphic Cards */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card:active {
+            transform: scale(0.95) rotateY(10deg);
+            box-shadow: 0 0 20px var(--primary-neon);
+        }
+        .card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        /* Magic Bottom Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 70px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .navigation ul {
+            display: flex;
+            width: 350px;
+        }
+        .navigation ul li {
+            position: relative;
+            list-style: none;
+            width: 70px;
+            height: 70px;
+            z-index: 1;
+        }
+        .navigation ul li a {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+        }
+        .navigation ul li a .icon {
+            position: relative;
+            display: block;
+            line-height: 75px;
+            font-size: 1.5em;
+            text-align: center;
+            transition: 0.5s;
+            color: #fff;
+        }
+        .navigation ul li.active a .icon {
+            transform: translateY(-32px);
+            color: var(--primary-neon);
+        }
+        .indicator {
+            position: absolute;
+            top: -50%;
+            width: 70px;
+            height: 70px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            border: 6px solid var(--bg-dark);
+            transition: 0.5s;
+        }
+        .indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -22px;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            border-top-right-radius: 20px;
+            box-shadow: 1px -10px 0 0 var(--bg-dark);
+        }
+        .indicator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -22px;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            border-top-left-radius: 20px;
+            box-shadow: -1px -10px 0 0 var(--bg-dark);
+        }
+
+        /* Overlay Fullscreen */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .active-overlay {
+            display: flex;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* Admin VIP Styling */
+        .admin-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--primary-neon);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 0px; }
+    </style>
 </head>
-<body>
+<body class="pb-32">
 
-    <!-- Particle Background Canvas -->
-    <canvas id="particleCanvas"></canvas>
+    <!-- Top Notice Bar -->
+    <div class="marquee">
+        <span id="noticeText">স্বাগতম LALA DIGITAL এ! আমাদের সকল সার্ভিস এখন সচল। যেকোনো সমস্যায় সরাসরি যোগাযোগ করুন।</span>
+    </div>
 
-    <div class="container">
+    <!-- Header Section -->
+    <header class="p-4 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
+        <div id="brandTitle" class="text-2xl font-extrabold cursor-pointer">
+            <span class="neon-text">LALA</span> DIGITAL
+        </div>
+        <div class="flex gap-3">
+            <a href="#" id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-lg glass-card text-yellow-400">
+                <i class="fas fa-moon"></i>
+            </a>
+            <div class="flex gap-2">
+                <a href="https://tiktok.com/@mr_lala100" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-lg glass-card text-white hover:text-[#ff0050]"><i class="fab fa-tiktok"></i></a>
+                <a href="https://youtube.com/@lalagamer100" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-lg glass-card text-red-500"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <div class="px-4 py-2">
+        <div class="glass-card w-full h-44 rounded-2xl overflow-hidden relative border-none">
+            <img id="mainBanner" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover">
+            <div class="absolute bottom-2 left-4 text-xs bg-black/60 px-2 py-1 rounded">PRO GAMING SERVICES ⚡</div>
+        </div>
+    </div>
+
+    <!-- Main Content: Product Grid -->
+    <main class="p-4">
+        <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+            <i class="fas fa-th-large text-[#39FF14]"></i> আমাদের ক্যাটাগরি
+        </h2>
         
-        <!-- Header Card -->
-        <header class="header-card">
-            <!-- Top Banner -->
-            <div class="banner-container">
-                <img id="bannerImg" src="https://dummyimage.com/1200x400/0a0c14/bc13fe.png&text=LALA+DIGITAL+VIP+HUB" alt="Banner" class="banner-img">
-            </div>
+        <div id="productGrid" class="grid grid-cols-2 gap-4">
+            <!-- Cards will be injected by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Product Details Overlay -->
+    <div id="productOverlay" class="overlay">
+        <div class="flex items-center gap-4 mb-6">
+            <button onclick="closeOverlay()" class="w-10 h-10 glass-card flex items-center justify-center rounded-full">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 id="overlayTitle" class="text-xl font-bold">Product Details</h2>
+        </div>
+        
+        <div id="overlayContent" class="flex-1">
+            <!-- Dynamic Content -->
+        </div>
+
+        <div id="buyButtonContainer" class="mt-4 p-4 sticky bottom-0 bg-black/90 rounded-t-2xl hidden">
+            <button onclick="processOrder()" class="w-full bg-[#39FF14] text-black font-bold py-4 rounded-xl shadow-[0_0_20px_#39ff14] active:scale-95 transition-all">
+                <i class="fab fa-whatsapp text-xl"></i> এখনই অর্ডার করুন
+            </button>
+        </div>
+    </div>
+
+    <!-- VIP Admin Panel Overlay -->
+    <div id="adminPanel" class="overlay">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold neon-text">VIP CONTROL PANEL</h2>
+            <button onclick="closeAdmin()" class="bg-red-500 px-4 py-2 rounded-lg text-white font-bold">EXIT</button>
+        </div>
+        
+        <div class="space-y-6">
+            <section class="glass-card p-4">
+                <h3 class="font-bold mb-3 border-b border-white/10 pb-2">সাধারণ সেটিংস (General)</h3>
+                <label class="text-sm">নোটিশ টেক্সট:</label>
+                <input type="text" id="adminNotice" class="admin-input" placeholder="নোটিশ লিখুন">
+                <label class="text-sm">ব্যানার ইমেজ লিঙ্ক:</label>
+                <input type="text" id="adminBanner" class="admin-input" placeholder="ইমেজ URL দিন">
+                <label class="text-sm">হোয়াটসঅ্যাপ নাম্বার:</label>
+                <input type="text" id="adminWA" class="admin-input" placeholder="01903982821">
+            </section>
+
+            <section class="glass-card p-4">
+                <h3 class="font-bold mb-3 border-b border-white/10 pb-2">কার্ড ম্যানেজমেন্ট</h3>
+                <div id="adminCardList" class="space-y-2 mb-4"></div>
+                <button onclick="addNewCard()" class="w-full bg-blue-600 py-2 rounded-lg">+ নতুন কার্ড যোগ করুন</button>
+            </section>
+
+            <section class="glass-card p-4">
+                <h3 class="font-bold mb-3 border-b border-white/10 pb-2">ব্যাকআপ ও ক্লাউড</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="exportData()" class="bg-gray-700 py-2 rounded">Export JSON</button>
+                    <button onclick="saveToCloudPlaceholder()" class="bg-green-700 py-2 rounded">Sync Cloud</button>
+                </div>
+            </section>
+        </div>
+        <button onclick="saveAdminChanges()" class="mt-6 mb-10 w-full bg-[#39FF14] text-black py-4 font-bold rounded-xl">SAVE ALL CHANGES</button>
+    </div>
+
+    <!-- Magic Bottom Navigation -->
+    <div class="navigation">
+        <ul>
+            <li class="list active" onclick="navTo('home', 0)">
+                <a href="#">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                </a>
+            </li>
+            <li class="list" onclick="navTo('apps', 1)">
+                <a href="#">
+                    <span class="icon"><i class="fab fa-android"></i></span>
+                </a>
+            </li>
+            <li class="list" onclick="navTo('bio', 2)">
+                <a href="#">
+                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                </a>
+            </li>
+            <li class="list" onclick="navTo('telegram', 3)">
+                <a href="https://t.me/toplalabd" target="_blank">
+                    <span class="icon"><i class="fab fa-telegram-plane"></i></span>
+                </a>
+            </li>
+            <li class="list" onclick="navTo('admin-shortcut', 4)">
+                <a href="#">
+                    <span class="icon"><i class="fas fa-shield-alt"></i></span>
+                </a>
+            </li>
+            <div class="indicator"></div>
+        </ul>
+    </div>
+
+    <!-- Sound Effect -->
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+
+    <script>
+        // --- 1. State Management & Initial Data ---
+        let siteData = {
+            brandName: "LALA DIGITAL",
+            notice: "স্বাগতম LALA DIGITAL এ! আমাদের সকল সার্ভিস এখন সচল।",
+            banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000",
+            waNumber: "8801903982821",
+            cards: [
+                {
+                    id: 1,
+                    title: "FF GUILD GLORY BOT",
+                    img: "https://i.ibb.co/Xz9K43f/guild.jpg",
+                    packages: [
+                        { name: "1 BASIC (4 BOT)", price: "130", info: "Instant Activation" },
+                        { name: "2 BASIC (8 BOT)", price: "250", info: "Best Seller" },
+                        { name: "5 BASIC (20 BOT)", price: "600", info: "Premium Speed" }
+                    ],
+                    rules: ["১টি কিনলে ৪টি বট ঢুকবে।", "সঠিক Guild ID প্রদান করুন।", "glory শুরু না হলে রিফান্ড পাবেন।"]
+                },
+                {
+                    id: 2,
+                    title: "WEEKLY / MONTHLY TOPUP",
+                    img: "https://i.ibb.co/m0fH4Lp/topup.jpg",
+                    packages: [
+                        { name: "WEEKLY", price: "158", info: "Instant" },
+                        { name: "MONTHLY", price: "790", info: "High Value" }
+                    ],
+                    rules: ["২ সেকেন্ডে টপআপ হবে।", "গেম আইডি ও পাসওয়ার্ড নির্ভুল দিন।"]
+                }
+            ]
+        };
+
+        let selectedPackage = null;
+        let selectedCategory = "";
+        let clickCount = 0;
+
+        // --- 2. Core Functions ---
+
+        function init() {
+            const savedData = localStorage.getItem('lala_site_data');
+            if(savedData) siteData = JSON.parse(savedData);
+            renderUI();
+        }
+
+        function renderUI() {
+            // Update Text
+            document.getElementById('noticeText').innerText = siteData.notice;
+            document.getElementById('mainBanner').src = siteData.banner;
             
-            <!-- Circular Profile/Logo -->
-            <div class="logo-wrapper">
-                <img id="logoImg" src="https://dummyimage.com/500x500/0a0c14/00f3ff.png&text=LALA+DIGITAL" alt="Lala Digital Logo" class="logo-img">
-            </div>
+            // Render Cards
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            siteData.cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'glass-card p-2 active:scale-95 transition-all';
+                cardEl.innerHTML = `
+                    <img src="${card.img}" class="card-img rounded-xl mb-2">
+                    <h3 class="text-sm font-bold truncate">${card.title}</h3>
+                    <p class="text-[10px] text-green-400 mt-1">Available <i class="fas fa-check-circle"></i></p>
+                `;
+                cardEl.onclick = () => openProduct(card);
+                grid.appendChild(cardEl);
+            });
+        }
 
-            <!-- Site Title & Subtitle -->
-            <div class="title-area">
-                <h1 id="siteTitle" class="brand-title" onclick="handleTitleClick()">
-                    <span class="brand-first">LALA</span> <span class="brand-second">DIGITAL</span>
-                </h1>
-                <p id="siteSubtitle" class="subtitle">Official VIP Hub & Digital Services</p>
-            </div>
-        </header>
+        function playClick() {
+            const sound = document.getElementById('clickSound');
+            sound.currentTime = 0;
+            sound.play();
+        }
 
-        <!-- Utility Bar (BD Clock & Music Toggle) -->
-        <div class="utility-bar">
-            <div class="clock-badge">
-                <i class="fas fa-clock"></i> <span id="bdClock">BD Time: --:--:--</span>
-            </div>
-            <button id="musicToggleBtn" class="btn-music" onclick="toggleMusic()">
-                <i class="fas fa-music"></i> <span id="musicStatusText">Music: OFF</span>
-            </button>
-        </div>
+        // --- 3. Overlay & Ordering Logic ---
 
-        <!-- Announcement / Notice Bar -->
-        <div class="notice-card">
-            <i class="fas fa-bullhorn icon-glowing"></i>
-            <span id="noticeText">অফিশিয়াল চ্যানেল ও সাপোর্টের জন্য নিচের বাটনগুলোতে যুক্ত থাকুন!</span>
-        </div>
+        function openProduct(card) {
+            playClick();
+            selectedCategory = card.title;
+            selectedPackage = null;
+            document.getElementById('overlayTitle').innerText = card.title;
+            const container = document.getElementById('overlayContent');
+            
+            let packagesHTML = `<h3 class="text-md font-bold mb-3">প্যাকেজ নির্বাচন করুন:</h3><div class="grid grid-cols-1 gap-3">`;
+            card.packages.forEach((pkg, index) => {
+                packagesHTML += `
+                    <div id="pkg-${index}" onclick="selectPkg(${index}, '${pkg.name}', '${pkg.price}')" class="glass-card p-4 flex justify-between items-center cursor-pointer border-l-4 border-transparent">
+                        <div>
+                            <div class="font-bold">${pkg.name}</div>
+                            <div class="text-xs opacity-60">${pkg.info}</div>
+                        </div>
+                        <div class="text-[#39FF14] font-bold">৳${pkg.price}</div>
+                    </div>
+                `;
+            });
+            packagesHTML += `</div>`;
 
-        <!-- Main Dynamic Buttons Container -->
-        <div id="buttonsContainer" class="buttons-list">
-            <!-- Dynamic Buttons Render Here -->
-        </div>
+            let rulesHTML = `<div class="mt-6 p-4 bg-white/5 rounded-xl border border-dashed border-white/20">
+                <h3 class="text-yellow-400 font-bold mb-2"><i class="fas fa-info-circle"></i> নিয়মাবলি:</h3>
+                <ul class="text-xs space-y-2 opacity-80">
+                    ${card.rules.map(rule => `<li>• ${rule}</li>`).join('')}
+                </ul>
+            </div>`;
 
-        <!-- Free Fire VIP Color Bio Generator Tool -->
-        <div class="tool-card">
-            <div class="tool-header">
-                <i class="fas fa-gamepad icon-glowing"></i>
-                <h3>FF VIP Color Bio Generator</h3>
-            </div>
-            <p class="tool-desc">আপনার বায়ো লিখুন এবং কালার কোড সহ কপি করুন:</p>
+            container.innerHTML = packagesHTML + rulesHTML;
+            document.getElementById('productOverlay').classList.add('active-overlay');
+            document.getElementById('buyButtonContainer').classList.remove('hidden');
+        }
 
-            <input type="text" id="bioInput" placeholder="Enter text (e.g. [FF0000]LALA [00FF00]GAMER)" oninput="updateBioPreview()">
+        function selectPkg(index, name, price) {
+            playClick();
+            selectedPackage = { name, price };
+            // Highlight
+            document.querySelectorAll('[id^="pkg-"]').forEach(el => el.classList.remove('border-[#39FF14]', 'bg-white/10'));
+            document.getElementById(`pkg-${index}`).classList.add('border-[#39FF14]', 'bg-white/10');
+        }
 
-            <div class="color-palette">
-                <button class="color-btn red" onclick="applyColor('[FF0000]')">Red</button>
-                <button class="color-btn green" onclick="applyColor('[00FF00]')">Green</button>
-                <button class="color-btn cyan" onclick="applyColor('[00FFFF]')">Cyan</button>
-                <button class="color-btn yellow" onclick="applyColor('[FFFF00]')">Yellow</button>
-            </div>
+        function closeOverlay() {
+            document.getElementById('productOverlay').classList.remove('active-overlay');
+        }
 
-            <div class="bio-preview-box">
-                <div id="bioPreviewText">Preview: <span style="color:#ff0000">Your Text</span></div>
-            </div>
+        function processOrder() {
+            if(!selectedPackage) {
+                alert("দয়া করে একটি প্যাকেজ সিলেক্ট করুন!");
+                return;
+            }
+            const msg = `হ্যালো এডমিন, আমি LALA DIGITAL ওয়েবসাইট থেকে অর্ডার করতে চাই:
+- প্রোডাক্ট নাম: ${selectedCategory}
+- প্যাকেজ: ${selectedPackage.name}
+- মূল্য: ${selectedPackage.price} BDT
 
-            <button class="btn-action copy-bio-btn" onclick="copyBioCode()">
-                <i class="fas fa-copy"></i> Copy FF Bio Code
-            </button>
-        </div>
+দয়া করে অর্ডারটি প্রসেস করুন।`;
+            const waUrl = `https://wa.me/${siteData.waNumber}?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+        }
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>© <span id="currentYear"></span> Lala Digital. All Rights Reserved.</p>
-        </footer>
+        // --- 4. Bottom Nav Logic ---
 
-    </div>
+        function navTo(type, index) {
+            playClick();
+            const list = document.querySelectorAll('.list');
+            list.forEach((item) => item.classList.remove('active'));
+            list[index].classList.add('active');
+            
+            const indicator = document.querySelector('.indicator');
+            indicator.style.transform = `translateX(${index * 70}px)`;
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">Copied to Clipboard!</div>
+            if(type === 'admin-shortcut') {
+                triggerAdmin();
+            }
+        }
 
-    <!-- VIP Admin Control Panel Modal (Full-Screen Layout) -->
-    <div id="adminModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-shield"></i> VIP Admin Panel</h2>
-                <button class="close-modal-btn" onclick="closeAdminPanel()">&times;</button>
-            </div>
-            <div class="modal-body">
-                
-                <!-- Analytics Section -->
-                <div class="admin-section analytics-box">
-                    <p><i class="fas fa-eye"></i> Lifetime Total Visitors: <strong id="visitorCount">0</strong></p>
+        // --- 5. Admin Panel Logic ---
+
+        document.getElementById('brandTitle').onclick = function() {
+            clickCount++;
+            if(clickCount >= 4) {
+                triggerAdmin();
+                clickCount = 0;
+            }
+        };
+
+        function triggerAdmin() {
+            const pass = prompt("এন্টার ভিআইপি পাসওয়ার্ড:");
+            if(pass === "lala999") {
+                openAdmin();
+            } else if(pass != null) {
+                alert("ভুল পাসওয়ার্ড!");
+            }
+        }
+
+        function openAdmin() {
+            document.getElementById('adminNotice').value = siteData.notice;
+            document.getElementById('adminBanner').value = siteData.banner;
+            document.getElementById('adminWA').value = siteData.waNumber;
+            
+            renderAdminCardList();
+            document.getElementById('adminPanel').classList.add('active-overlay');
+        }
+
+        function renderAdminCardList() {
+            const list = document.getElementById('adminCardList');
+            list.innerHTML = siteData.cards.map((card, idx) => `
+                <div class="flex justify-between bg-white/5 p-2 rounded">
+                    <span>${card.title}</span>
+                    <button onclick="deleteCard(${idx})" class="text-red-500"><i class="fas fa-trash"></i></button>
                 </div>
+            `).join('');
+        }
 
-                <!-- Admin Tabs -->
-                <div class="admin-tabs">
-                    <button class="tab-btn active" onclick="switchAdminTab('generalTab', this)">General Info</button>
-                    <button class="tab-btn" onclick="switchAdminTab('buttonsTab', this)">Manage Buttons</button>
-                    <button class="tab-btn" onclick="switchAdminTab('settingsTab', this)">Settings & Backup</button>
-                </div>
+        function saveAdminChanges() {
+            siteData.notice = document.getElementById('adminNotice').value;
+            siteData.banner = document.getElementById('adminBanner').value;
+            siteData.waNumber = document.getElementById('adminWA').value;
+            
+            localStorage.setItem('lala_site_data', JSON.stringify(siteData));
+            alert("সব তথ্য আপডেট করা হয়েছে!");
+            renderUI();
+            closeAdmin();
+        }
 
-                <!-- Tab 1: General Info -->
-                <div id="generalTab" class="tab-content active">
-                    <div class="form-group">
-                        <label>Site Title:</label>
-                        <input type="text" id="adminSiteTitle">
-                    </div>
-                    <div class="form-group">
-                        <label>Site Subtitle:</label>
-                        <input type="text" id="adminSiteSubtitle">
-                    </div>
-                    <div class="form-group">
-                        <label>Logo Image URL:</label>
-                        <input type="text" id="adminLogoUrl">
-                    </div>
-                    <div class="form-group">
-                        <label>Banner Image URL:</label>
-                        <input type="text" id="adminBannerUrl">
-                    </div>
-                    <div class="form-group">
-                        <label>Notice / Announcement Text:</label>
-                        <textarea id="adminNoticeText" rows="2"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Background Music URL (MP3 Link):</label>
-                        <input type="text" id="adminMusicUrl" placeholder="Direct MP3 Link">
-                    </div>
-                </div>
+        function closeAdmin() {
+            document.getElementById('adminPanel').classList.remove('active-overlay');
+        }
 
-                <!-- Tab 2: Manage Buttons -->
-                <div id="buttonsTab" class="tab-content">
-                    <button class="btn-add" onclick="addNewButtonField()"><i class="fas fa-plus"></i> Add New Button</button>
-                    <div id="adminButtonsList" class="admin-buttons-list">
-                        <!-- Dynamic Editable Buttons Render Here -->
-                    </div>
-                </div>
+        function deleteCard(idx) {
+            if(confirm("আপনি কি এটি ডিলিট করতে চান?")) {
+                siteData.cards.splice(idx, 1);
+                renderAdminCardList();
+            }
+        }
 
-                <!-- Tab 3: Settings & Security -->
-                <div id="settingsTab" class="tab-content">
-                    <div class="form-group">
-                        <label>Change Admin Password:</label>
-                        <input type="password" id="adminNewPassword" placeholder="Enter new password">
-                    </div>
-                    <hr class="divider">
-                    <div class="backup-actions">
-                        <button class="btn-backup" onclick="exportData()"><i class="fas fa-download"></i> Export Settings (JSON)</button>
-                        <label class="btn-backup file-label">
-                            <i class="fas fa-upload"></i> Import Settings
-                            <input type="file" id="importFileInput" onchange="importData(event)" accept=".json" hidden>
-                        </label>
-                    </div>
-                </div>
+        function addNewCard() {
+            const title = prompt("কার্ডের নাম দিন:");
+            if(title) {
+                siteData.cards.push({
+                    id: Date.now(),
+                    title: title,
+                    img: "https://via.placeholder.com/300",
+                    packages: [{name: "New Item", price: "0", info: "Edit me"}],
+                    rules: ["নতুন নিয়ম যোগ করুন"]
+                });
+                renderAdminCardList();
+            }
+        }
 
-            </div>
-            <div class="modal-footer">
-                <button class="btn-save" onclick="saveAdminSettings()"><i class="fas fa-save"></i> Save & Publish Changes</button>
-            </div>
-        </div>
-    </div>
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "lala_config.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
 
-    <!-- JS Script Link -->
-    <script src="script.js"></script>
+        function saveToCloudPlaceholder() {
+            alert("Cloud Sync functionality connected (JSONBin/Firebase API can be added here). Currently saving to local storage.");
+            saveAdminChanges();
+        }
+
+        // --- 6. Initialization ---
+        window.onload = init;
+
+    </script>
 </body>
 </html>
