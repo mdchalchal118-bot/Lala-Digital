@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LALA DIGITAL - VIP Gaming Hub & APK Store</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --primary-neon: #39FF14;
+            --bg-dark: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+
+        .neon-text {
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        /* 3D Glassmorphism */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card:active { transform: scale(0.96); }
+
+        /* Magic Bottom Navigation */
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 380px; height: 70px; background: #1a1a1a;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 20px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .navigation ul { display: flex; width: 100%; justify-content: space-around; padding: 0 10px; }
+        .navigation ul li { list-style: none; position: relative; width: 60px; height: 60px; z-index: 1; }
+        .navigation ul li a { position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
+        .navigation ul li a .icon { font-size: 1.5em; transition: 0.5s; color: #fff; }
+        .navigation ul li.active a .icon { transform: translateY(-32px); color: var(--primary-neon); }
+        .indicator {
+            position: absolute; top: -50%; width: 60px; height: 60px; background: #1a1a1a;
+            border-radius: 50%; border: 6px solid var(--bg-dark); transition: 0.5s;
+        }
+        .indicator::before { content: ''; position: absolute; top: 50%; left: -22px; width: 20px; height: 20px; background: transparent; border-top-right-radius: 20px; box-shadow: 1px -10px 0 0 var(--bg-dark); }
+        .indicator::after { content: ''; position: absolute; top: 50%; right: -22px; width: 20px; height: 20px; background: transparent; border-top-left-radius: 20px; box-shadow: -1px -10px 0 0 var(--bg-dark); }
+
+        /* Overlays */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); z-index: 2000; display: none;
+            flex-direction: column; padding: 20px; overflow-y: auto;
+        }
+        .active-overlay { display: flex; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* VIP Password Modal */
+        #vipPassModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+            z-index: 5000; display: none; align-items: center; justify-content: center;
+        }
+        .pass-box {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--primary-neon);
+            padding: 30px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center;
+            box-shadow: 0 0 30px rgba(57,255,20,0.2);
+        }
+
+        .marquee { overflow: hidden; background: rgba(57, 255, 20, 0.1); padding: 5px 0; border-bottom: 1px solid var(--primary-neon); }
+        .marquee span { display: inline-block; animation: marquee 15s linear infinite; white-space: nowrap; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .admin-input { background: rgba(255,255,255,0.05); border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; width: 100%; margin-bottom: 8px; font-size: 14px; }
+        .admin-input:focus { border-color: var(--primary-neon); outline: none; }
+
+        /* Stock Badge */
+        .stock-badge {
+            position: absolute; top: 8px; right: 8px; background: #ff0000; color: white;
+            padding: 2px 8px; border-radius: 5px; font-size: 9px; font-weight: bold;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5); z-index: 5;
+        }
+        .grayscale-card { filter: grayscale(0.8); opacity: 0.7; }
+        
+        /* APK Hub Grid */
+        #apkGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .apk-icon { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; }
+        
+        /* Bio Hub */
+        .cat-tab {
+            padding: 8px 18px; border-radius: 10px; background: rgba(255,255,255,0.05);
+            font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer;
+            border: 1px solid transparent; transition: 0.3s;
+        }
+        .cat-tab.active { background: var(--primary-neon); color: black; box-shadow: 0 0 15px var(--primary-neon); }
+
+        /* Toast */
+        #toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: #39FF14; color: black; font-weight: bold; padding: 10px 20px;
+            border-radius: 50px; z-index: 10000; display: none; box-shadow: 0 0 20px #39ff14;
+        }
+
+        ::-webkit-scrollbar { width: 0px; }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Toast Notification -->
+    <div id="toast">Copied! 📋</div>
+
+    <!-- Notice Bar -->
+    <div class="marquee">
+        <span id="noticeText">স্বাগতম LALA DIGITAL এ!</span>
+    </div>
+
+    <!-- Header -->
+    <header class="p-4 flex justify-between items-center bg-black/50 backdrop-blur-md sticky top-0 z-50">
+        <div id="brandTitle" class="text-2xl font-extrabold cursor-pointer select-none">
+            <span class="neon-text">LALA</span> DIGITAL
+        </div>
+        <div class="flex gap-2 items-center">
+            <button id="themeToggle" class="w-9 h-9 flex items-center justify-center rounded-lg glass-card text-yellow-400">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="https://tiktok.com/@mr_lala100" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-lg glass-card"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com/@lalagamer100" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-lg glass-card text-red-500"><i class="fab fa-youtube"></i></a>
+            <a href="https://t.me/toplalabd" target="_blank" class="w-9 h-9 flex items-center justify-center rounded-lg glass-card text-blue-400"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+    </header>
+
+    <!-- Pages Container -->
+    <div id="homePage" class="page-content">
+        <div class="px-4 py-3"><img id="mainBanner" src="" class="w-full h-44 object-cover rounded-2xl glass-card"></div>
+        <main class="p-4"><div id="productGrid" class="grid grid-cols-2 gap-4"></div></main>
+    </div>
+
+    <div id="apkPage" class="page-content hidden">
+        <div class="p-4">
+            <h2 class="text-xl font-bold mb-4 neon-text flex items-center gap-2"><i class="fab fa-android"></i> APK Hub</h2>
+            <div id="apkGrid">
+                <!-- APK Cards (4 column) -->
+            </div>
+        </div>
+    </div>
+
+    <div id="bioPage" class="page-content hidden">
+        <div class="p-4">
+            <h2 class="text-xl font-bold mb-4 neon-text flex items-center gap-2"><i class="fas fa-file-alt"></i> Bio Store</h2>
+            <div id="bioCategoryBar" class="flex gap-2 overflow-x-auto scroll-hide mb-6 pb-2"></div>
+            <div id="bioGrid" class="flex flex-col gap-4"></div>
+        </div>
+    </div>
+
+    <!-- Admin Password Modal -->
+    <div id="vipPassModal">
+        <div class="pass-box">
+            <i class="fas fa-shield-halved text-4xl neon-text mb-4"></i>
+            <h2 class="text-white font-bold mb-4">VIP ADMIN LOGIN</h2>
+            <input type="password" id="adminPassInput" class="admin-input text-center mb-4" placeholder="Password">
+            <div class="flex gap-2">
+                <button onclick="closePassModal()" class="flex-1 bg-white/10 py-2 rounded-lg text-xs">CANCEL</button>
+                <button onclick="verifyAdmin()" class="flex-1 bg-[#39FF14] text-black py-2 rounded-lg font-bold text-xs">VERIFY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Admin Panel -->
+    <div id="adminPanelHome" class="overlay">
+        <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold neon-text">HOME ADMIN</h2><button onclick="closeAdmin('home')" class="bg-red-600 px-4 py-1 rounded text-sm font-bold">EXIT</button></div>
+        <div class="space-y-4">
+            <div class="glass-card p-4">
+                <input type="text" id="admNotice" class="admin-input" placeholder="Notice Text">
+                <input type="text" id="admBanner" class="admin-input" placeholder="Banner URL">
+                <input type="text" id="admWA" class="admin-input" placeholder="WhatsApp">
+            </div>
+            <div id="admCardList" class="space-y-2"></div>
+            <button onclick="addNewHomeCard()" class="w-full bg-blue-600 py-3 rounded-xl">+ Add Service</button>
+        </div>
+        <button onclick="saveHomeAdminChanges()" class="my-8 w-full bg-[#39FF14] text-black py-4 font-bold rounded-xl">SAVE ALL</button>
+    </div>
+
+    <!-- APK Admin Panel -->
+    <div id="adminPanelApk" class="overlay">
+        <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold neon-text">APK HUB ADMIN</h2><button onclick="closeAdmin('apk')" class="bg-red-600 px-4 py-1 rounded text-sm font-bold">EXIT</button></div>
+        <div id="admApkList" class="space-y-2 mb-4"></div>
+        <button onclick="addNewApkItem()" class="w-full bg-green-600 py-3 rounded-xl font-bold">+ Create New App</button>
+    </div>
+
+    <!-- Bio Admin Panel -->
+    <div id="adminPanelBio" class="overlay">
+        <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold neon-text">BIO ADMIN</h2><button onclick="closeAdmin('bio')" class="bg-red-600 px-4 py-1 rounded text-sm font-bold">EXIT</button></div>
+        <div class="glass-card p-4 mb-4">
+            <div id="admBioCatList" class="flex flex-wrap gap-2 mb-3"></div>
+            <input type="text" id="newBioCatName" class="admin-input" placeholder="New Category">
+            <button onclick="addBioCategory()" class="w-full bg-blue-500 py-2 rounded-lg text-xs">Add Category</button>
+        </div>
+        <div id="admBioCardList" class="space-y-2 mb-4"></div>
+        <button onclick="addNewBioCard()" class="w-full bg-[#39FF14] text-black py-3 rounded-xl font-bold">+ Add New Bio Card</button>
+    </div>
+
+    <!-- Editors -->
+    <div id="homeCardEditor" class="overlay" style="background: rgba(0,0,0,0.98);">
+        <div class="flex justify-between items-center mb-6"><h2 class="font-bold">Edit Home Card</h2><button onclick="closeHomeCardEditor()" class="text-3xl">&times;</button></div>
+        <div id="edHomeFields" class="space-y-3"></div>
+        <select id="edHomeStock" class="admin-input mt-2"><option value="available">Available 🟢</option><option value="stockout">Stock Out 🔴</option></select>
+        <div id="edHomePkgList" class="space-y-3 mt-4"></div>
+        <button onclick="addPackageInHomeEditor()" class="mt-2 text-xs bg-gray-700 px-3 py-1 rounded">+ Add Package</button>
+        <button onclick="finishHomeCardEdit()" class="mt-10 w-full bg-blue-500 py-4 rounded-xl font-bold">APPLY CHANGES</button>
+    </div>
+
+    <div id="apkEditor" class="overlay" style="background: rgba(0,0,0,0.98);">
+        <div class="flex justify-between items-center mb-6"><h2 class="font-bold">Edit APK Hub</h2><button onclick="closeApkEditor()" class="text-3xl">&times;</button></div>
+        <input type="text" id="edApkName" class="admin-input" placeholder="App Name">
+        <input type="text" id="edApkUrl" class="admin-input" placeholder="Download Link">
+        <input type="file" id="edApkFile" class="admin-input pt-2" accept="image/*">
+        <div class="w-24 h-24 mx-auto glass-card overflow-hidden mt-2"><img id="apkPreviewTag" src="" class="apk-icon"></div>
+        <button onclick="finishApkEdit()" class="mt-10 w-full bg-green-500 py-4 rounded-xl font-bold">SAVE & PUBLISH 💾</button>
+    </div>
+
+    <div id="bioEditor" class="overlay" style="background: rgba(0,0,0,0.98);">
+        <div class="flex justify-between items-center mb-6"><h2>Edit Bio</h2><button onclick="closeBioEditor()" class="text-3xl">&times;</button></div>
+        <select id="edBioCat" class="admin-input"></select>
+        <input type="text" id="edBioTitle" class="admin-input">
+        <textarea id="edBioText" class="admin-input h-48" placeholder="Bio Content..."></textarea>
+        <button onclick="finishBioEdit()" class="mt-10 w-full bg-blue-500 py-4 rounded-xl font-bold">UPDATE BIO 💾</button>
+    </div>
+
+    <!-- Details Overlay -->
+    <div id="productOverlay" class="overlay">
+        <div class="flex items-center gap-4 mb-6 sticky top-0 bg-[#0a0a0a] py-2 z-10"><button onclick="closeOverlay()" class="w-10 h-10 glass-card flex items-center justify-center rounded-full"><i class="fas fa-arrow-left"></i></button><h2 id="overlayTitle" class="text-xl font-bold">Details</h2></div>
+        <div id="overlayContent" class="flex-1"></div>
+        <div id="buyBtnSection" class="mt-auto pt-6 sticky bottom-0 bg-[#0a0a0a] pb-4 hidden">
+            <div id="stockNotice" class="text-center text-red-500 text-sm font-bold mb-3 hidden">STOCK OUT 🔴</div>
+            <button id="mainBuyBtn" onclick="processOrder()" class="w-full bg-[#39FF14] text-black font-extrabold py-4 rounded-xl">ORDER NOW</button>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="navigation">
+        <ul>
+            <li class="list active" onclick="navTo(0, 'home')"><a href="#"><span class="icon"><i class="fas fa-home"></i></span></a></li>
+            <li class="list" onclick="navTo(1, 'apps')"><a href="#"><span class="icon"><i class="fab fa-android"></i></span></a></li>
+            <li class="list" onclick="navTo(2, 'bio')"><a href="#"><span class="icon"><i class="fas fa-file-alt"></i></span></a></li>
+            <li class="list" onclick="navTo(3, 'telegram')"><a href="https://t.me/toplalabd" target="_blank"><span class="icon"><i class="fab fa-telegram-plane"></i></span></a></li>
+            <div class="indicator"></div>
+        </ul>
+    </div>
+
+    <audio id="clickSnd" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+
+    <script>
+        // --- ডাটা কন্ট্রোল ---
+        let homeData = { notice: "LALA DIGITAL!", banner: "", waNumber: "", cards: [] };
+        let apkData = [];
+        let bioData = { categories: ["All", "Gaming"], cards: [] };
+
+        let curTab = 'home', bCount = 0, bTimer, curIdx = null, tempImg = "", selBCat = "All", activeHC = null, selHP = null;
+
+        // --- ইনিশিয়ালাইজেশন ---
+        function init() {
+            const h = localStorage.getItem('lala_h_v11'), a = localStorage.getItem('lala_a_v11'), b = localStorage.getItem('lala_b_v11');
+            if(h) homeData = JSON.parse(h); if(a) apkData = JSON.parse(a); if(b) bioData = JSON.parse(b);
+            renderHome(); renderApkCards(); renderBio();
+        }
+
+        // --- ৪-ক্লিক অ্যাডমিন ট্রিগার ---
+        document.getElementById('brandTitle').onclick = () => {
+            bCount++; clearTimeout(bTimer);
+            if(bCount === 4) { bCount = 0; document.getElementById('vipPassModal').style.display='flex'; }
+            else { bTimer = setTimeout(()=>bCount=0, 1500); }
+        };
+        function verifyAdmin() {
+            if(document.getElementById('adminPassInput').value === 'lala999') {
+                closePassModal();
+                if(curTab === 'home') openAdminHome();
+                else if(curTab === 'apps') openAdminApk();
+                else if(curTab === 'bio') openAdminBio();
+            } else { alert("Error!"); closePassModal(); }
+        }
+        function closePassModal() { document.getElementById('vipPassModal').style.display='none'; document.getElementById('adminPassInput').value=''; }
+
+        // --- ন্যাভিগেশন ---
+        function navTo(idx, tab) {
+            playSound(); curTab = tab;
+            document.querySelectorAll('.list').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.list')[idx].classList.add('active');
+            const nw = document.querySelector('.navigation').offsetWidth;
+            document.querySelector('.indicator').style.transform = `translateX(${idx * (nw/4.8)}px)`;
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.getElementById(tab+'Page').classList.remove('hidden');
+            if(tab === 'apps') renderApkCards();
+        }
+
+        // --- ডিলিট লজিক (গ্লোবাল স্কোপ ফিক্স) ---
+        window.deleteHomeCard = function(i) {
+            if(confirm("মুছে ফেলতে চান?")) {
+                homeData.cards.splice(i, 1);
+                localStorage.setItem('lala_h_v11', JSON.stringify(homeData));
+                renderAdmH(); renderHome();
+            }
+        };
+
+        window.deleteApkCard = function(i) {
+            if(confirm("এই অ্যাপটি ডিলিট করবেন?")) {
+                apkData.splice(i, 1);
+                localStorage.setItem('lala_a_v11', JSON.stringify(apkData));
+                renderAdmApkList(); renderApkCards();
+            }
+        };
+
+        window.deleteBioCard = function(i) {
+            if(confirm("বায়োটি মুছবেন?")) {
+                bioData.cards.splice(i, 1);
+                localStorage.setItem('lala_b_v11', JSON.stringify(bioData));
+                renderAdmBioList(); renderBio();
+            }
+        };
+
+        // --- বায়ো পার্সার (বাগ ফিক্স) ---
+        function parseFF(text) {
+            let html = text
+                .replace(/\[b\](.*?)\[\/b\]/gi, '<b>$1</b>')
+                .replace(/\[i\](.*?)\[\/i\]/gi, '<i>$1</i>')
+                .replace(/\[c\](.*?)\[\/c\]/gi, '<div style="text-align:center;">$1</div>')
+                .replace(/\[([0-9a-fA-F]{6})\](.*?)\[\/\1\]/gi, '<span style="color:#$1">$2</span>')
+                .replace(/\[([0-9a-fA-F]{6})\]/gi, '<span style="color:#$1">'); 
+            html = html.replace(/\[b\]|\[\/b\]|\[i\]|\[\/i\]|\[c\]|\[\/c\]/gi, '');
+            return html;
+        }
+
+        function renderBio() {
+            const bar = document.getElementById('bioCategoryBar');
+            bar.innerHTML = bioData.categories.map(c => `<div onclick="filterBio('${c}')" class="cat-tab ${selBCat===c?'active':''}">${c}</div>`).join('');
+            const grid = document.getElementById('bioGrid'); grid.innerHTML = '';
+            const filtered = (selBCat === 'All') ? bioData.cards : bioData.cards.filter(c => c.category === selBCat);
+            filtered.forEach((c, i) => {
+                grid.innerHTML += `<div class="glass-card p-4">
+                    <div class="flex justify-between items-center mb-2 border-b border-white/5 pb-2">
+                        <h3 class="text-xs font-bold neon-text">${c.title}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="copyB('${encodeURIComponent(c.text)}', true)" class="text-[9px] bg-white/10 px-2 py-1 rounded">Copy</button>
+                            <button onclick="copyB('${encodeURIComponent(c.text)}', false)" class="text-[9px] bg-green-500 text-black px-2 py-1 rounded font-bold">All Copy</button>
+                        </div>
+                    </div>
+                    <div class="text-[11px] opacity-90 whitespace-pre-line leading-relaxed">${parseFF(c.text)}</div>
+                </div>`;
+            });
+        }
+        function filterBio(c) { playSound(); selBCat = c; renderBio(); }
+        function copyB(e, c) {
+            let txt = decodeURIComponent(e);
+            if(c) txt = txt.replace(/\[.*?\]/gi, '');
+            navigator.clipboard.writeText(txt);
+            const t = document.getElementById('toast'); t.style.display='block'; setTimeout(()=>t.style.display='none', 1500);
+        }
+
+        // --- এপিকে রেন্ডারিং (বাগ ফিক্স) ---
+        function renderApkCards() {
+            const grid = document.getElementById('apkGrid');
+            grid.innerHTML = '';
+            if(apkData.length === 0) grid.innerHTML = '<p class="col-span-4 text-center text-xs opacity-50 py-10">কোনো অ্যাপ নেই</p>';
+            apkData.forEach(a => {
+                grid.innerHTML += `<div class="glass-card p-2 text-center flex flex-col items-center">
+                    <img src="${a.icon || 'https://via.placeholder.com/150'}" class="apk-icon mb-1">
+                    <h3 class="text-[8px] font-bold truncate w-full">${a.name}</h3>
+                    <a href="${a.url}" target="_blank" class="block bg-white/10 text-[7px] py-1 rounded w-full mt-1 font-bold">Download</a>
+                </div>`;
+            });
+        }
+
+        // --- হোম রেন্ডারিং ---
+        function renderHome() {
+            document.getElementById('noticeText').innerText = homeData.notice;
+            document.getElementById('mainBanner').src = homeData.banner;
+            const grid = document.getElementById('productGrid'); grid.innerHTML = '';
+            homeData.cards.forEach((c, i) => {
+                const isOut = c.status === 'stockout';
+                grid.innerHTML += `<div class="glass-card p-2" onclick="openHomeDetails(${i})">${isOut?'<div class="stock-badge">STOCK OUT 🔴</div>':''}<img src="${c.img}" class="w-full h-28 object-cover rounded-xl mb-2 ${isOut?'grayscale-card':''}"><h3 class="text-xs font-bold truncate">${c.title}</h3><p class="text-[9px] mt-1 ${isOut?'text-red-500':'text-green-400'}">${isOut?'Stock Out':'Available 🟢'}</p></div>`;
+            });
+        }
+        function openHomeDetails(i) {
+            playSound(); activeHC = homeData.cards[i]; selHP = null;
+            document.getElementById('overlayTitle').innerText = activeHC.title;
+            const isOut = activeHC.status === 'stockout';
+            let pkgH = `<div class="grid gap-3 ${isOut?'opacity-40 pointer-events-none':''}">`;
+            activeHC.packages.forEach((p, pi) => {
+                pkgH += `<div id="hp-${pi}" onclick="selH(${pi},'${p.name}','${p.price}')" class="glass-card p-4 flex justify-between items-center border-l-4 border-transparent cursor-pointer"><div><div class="font-bold text-sm">${p.name}</div><div class="text-[10px] opacity-60">${p.info}</div></div><div class="text-[#39FF14] font-bold">৳${p.price}</div></div>`;
+            });
+            pkgH += `</div><div class="mt-6 p-4 bg-white/5 rounded-xl border border-dashed border-white/20 text-[11px] whitespace-pre-line">${activeHC.rules}</div>`;
+            document.getElementById('overlayContent').innerHTML = pkgH;
+            document.getElementById('productOverlay').classList.add('active-overlay');
+            document.getElementById('buyBtnSection').classList.remove('hidden');
+            const b = document.getElementById('mainBuyBtn'), sn = document.getElementById('stockNotice');
+            if(isOut) { b.classList.add('grayscale','opacity-40'); b.disabled=true; sn.classList.remove('hidden'); }
+            else { b.classList.remove('grayscale','opacity-40'); b.disabled=false; sn.classList.add('hidden'); }
+        }
+        function selH(i,n,p) { playSound(); selHP={n,p}; document.querySelectorAll('[id^="hp-"]').forEach(e=>e.classList.remove('border-[#39FF14]','bg-white/10')); document.getElementById(`hp-${i}`).classList.add('border-[#39FF14]','bg-white/10'); }
+        function processOrder() { if(!selHP) return alert("প্যাকেজ বেছে নিন!"); window.open(`https://wa.me/${homeData.waNumber}?text=Order: ${activeHC.title} - ${selHP.n}`, '_blank'); }
+
+        // --- অ্যাডমিন কন্ট্রোলস ---
+        function openAdminHome() { document.getElementById('admNotice').value=homeData.notice; document.getElementById('admBanner').value=homeData.banner; document.getElementById('admWA').value=homeData.waNumber; renderAdmH(); document.getElementById('adminPanelHome').classList.add('active-overlay'); }
+        function renderAdmH() { document.getElementById('admCardList').innerHTML = homeData.cards.map((c,i)=>`<div class="flex justify-between items-center bg-white/5 p-2 rounded"><span class="text-xs truncate w-32">${c.title}</span><div class="flex gap-2"><button onclick="editH(${i})" class="text-blue-400 text-xs">EDIT</button><button onclick="deleteHomeCard(${i})" class="text-red-500 text-xs">DEL</button></div></div>`).join(''); }
+        function editH(i) {
+            curIdx=i; const c=homeData.cards[i];
+            document.getElementById('edHomeFields').innerHTML = `<label class="text-[10px]">Title</label><input id="edHT" class="admin-input" value="${c.title}"><label class="text-[10px]">Img URL</label><input id="edHI" class="admin-input" value="${c.img}"><label class="text-[10px]">Rules</label><textarea id="edHR" class="admin-input h-20">${c.rules}</textarea>`;
+            document.getElementById('edHomeStock').value = c.status||"available"; renderAdmHPkg(); document.getElementById('homeCardEditor').classList.add('active-overlay');
+        }
+        function renderAdmHPkg() { document.getElementById('edHomePkgList').innerHTML = homeData.cards[curIdx].packages.map((p,pi)=>`<div class="bg-white/5 p-2 rounded relative"><input class="admin-input !p-1 text-xs" value="${p.name}" onchange="updHP(${pi},'name',this.value)"><div class="flex gap-1"><input class="admin-input !p-1 text-[10px]" value="${p.info}" onchange="updHP(${pi},'info',this.value)"><input class="admin-input !p-1 text-[10px]" value="${p.price}" onchange="updHP(${pi},'price',this.value)"></div><button onclick="delHP(${pi})" class="absolute -top-1 -right-1 bg-red-600 rounded-full w-4 h-4 text-[10px]">&times;</button></div>`).join(''); }
+        function updHP(pi,k,v){ homeData.cards[curIdx].packages[pi][k]=v; }
+        function delHP(pi){ homeData.cards[curIdx].packages.splice(pi,1); renderAdmHPkg(); }
+        function addPackageInHomeEditor(){ homeData.cards[curIdx].packages.push({name:"New", info:"Sub", price:"0"}); renderAdmHPkg(); }
+        function finishHomeCardEdit() { const c=homeData.cards[curIdx]; c.title=document.getElementById('edHT').value; c.img=document.getElementById('edHI').value; c.rules=document.getElementById('edHR').value; c.status=document.getElementById('edHomeStock').value; localStorage.setItem('lala_h_v11', JSON.stringify(homeData)); document.getElementById('homeCardEditor').classList.remove('active-overlay'); renderAdmH(); renderHome(); }
+        function addNewHomeCard() { homeData.cards.push({title:"New Card", img:"", rules:"", status:"available", packages:[]}); renderAdmH(); editH(homeData.cards.length-1); }
+        function saveHomeAdminChanges() { homeData.notice=document.getElementById('admNotice').value; homeData.banner=document.getElementById('admBanner').value; homeData.waNumber=document.getElementById('admWA').value; localStorage.setItem('lala_h_v11', JSON.stringify(homeData)); renderHome(); closeAdmin('home'); }
+
+        function openAdminApk() { renderAdmApkList(); document.getElementById('adminPanelApk').classList.add('active-overlay'); }
+        function renderAdmApkList() { document.getElementById('admApkList').innerHTML = apkData.map((a,i)=>`<div class="flex justify-between items-center bg-white/5 p-2 rounded"><img src="${a.icon}" class="w-8 h-8 rounded"><span class="text-xs truncate w-24">${a.name}</span><div class="flex gap-2"><button onclick="editA(${i})" class="text-blue-400 text-xs font-bold">EDIT</button><button onclick="deleteApkCard(${i})" class="text-red-500 text-xs">DEL</button></div></div>`).join(''); }
+        function editA(i) { curIdx=i; const a=apkData[i]; document.getElementById('edApkName').value=a.name; document.getElementById('edApkUrl').value=a.url; document.getElementById('apkPreviewTag').src=a.icon; tempImg=a.icon; document.getElementById('apkEditor').classList.add('active-overlay'); }
+        function finishApkEdit() { apkData[curIdx]={name:document.getElementById('edApkName').value, url:document.getElementById('edApkUrl').value, icon:tempImg}; localStorage.setItem('lala_a_v11', JSON.stringify(apkData)); renderApkCards(); renderAdmApkList(); closeApkEditor(); }
+        function addNewApkItem() { apkData.push({name:"New App", url:"#", icon:""}); renderAdmApkList(); editA(apkData.length-1); }
+        document.getElementById('edApkFile').addEventListener('change', function(e) {
+            const file = e.target.files[0]; if(!file) return;
+            const r = new FileReader(); r.onload=(ev)=>{ tempImg=ev.target.result; document.getElementById('apkPreviewTag').src=tempImg; }; r.readAsDataURL(file);
+        });
+
+        function openAdminBio() { renderAdmBioList(); renderAdmBioCats(); document.getElementById('adminPanelBio').classList.add('active-overlay'); }
+        function renderAdmBioCats() { document.getElementById('admBioCatList').innerHTML = bioData.categories.map((c,i)=>`<div class="bg-white/10 px-2 py-1 rounded text-[10px] flex items-center gap-1">${c}<i class="fas fa-times text-red-500 cursor-pointer" onclick="delBCat(${i})"></i></div>`).join(''); }
+        function addBioCategory() { const n=document.getElementById('newBioCatName').value; if(n){ bioData.categories.push(n); renderAdmBioCats(); document.getElementById('newBioCatName').value=''; } }
+        function delBCat(i) { bioData.categories.splice(i,1); localStorage.setItem('lala_b_v11', JSON.stringify(bioData)); renderAdmBioCats(); renderBio(); }
+        function renderAdmBioList() { document.getElementById('admBioCardList').innerHTML = bioData.cards.map((c,i)=>`<div class="flex justify-between items-center bg-white/5 p-2 rounded"><span class="text-xs truncate w-40">${c.title}</span><div class="flex gap-2"><button onclick="editB(${i})" class="text-blue-400 text-xs">EDIT</button><button onclick="deleteBioCard(${i})" class="text-red-500 text-xs">DEL</button></div></div>`).join(''); }
+        function editB(i) {
+            curIdx=i; const c=bioData.cards[i];
+            const sel=document.getElementById('edBioCat'); sel.innerHTML=bioData.categories.map(cat=>`<option value="${cat}">${cat}</option>`).join('');
+            sel.value=c.category; document.getElementById('edBioTitle').value=c.title; document.getElementById('edBioText').value=c.text;
+            document.getElementById('bioEditor').classList.add('active-overlay');
+        }
+        function finishBioEdit() { bioData.cards[curIdx]={category:document.getElementById('edBioCat').value, title:document.getElementById('edBioTitle').value, text:document.getElementById('edBioText').value}; localStorage.setItem('lala_b_v11', JSON.stringify(bioData)); renderBio(); renderAdmBioList(); closeBioEditor(); }
+        function addNewBioCard() { bioData.cards.push({category:"All", title:"New Bio", text:""}); renderAdmBioList(); editB(bioData.cards.length-1); }
+
+        function closeAdmin(t) { document.getElementById('adminPanel'+(t.charAt(0).toUpperCase()+t.slice(1))).classList.remove('active-overlay'); }
+        function closeOverlay() { document.getElementById('productOverlay').classList.remove('active-overlay'); }
+        function closeHomeCardEditor(){ document.getElementById('homeCardEditor').classList.remove('active-overlay'); }
+        function closeApkEditor(){ document.getElementById('apkEditor').classList.remove('active-overlay'); }
+        function closeBioEditor(){ document.getElementById('bioEditor').classList.remove('active-overlay'); }
+        function playSound() { const s=document.getElementById('clickSnd'); s.currentTime=0; s.play(); }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
