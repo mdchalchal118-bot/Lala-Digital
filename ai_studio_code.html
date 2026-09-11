@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR LALA - Official Link-in-Bio</title>
+    <!-- Google Fonts: Orbitron & Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 CDN for Official Brand Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase App (Compat) & Realtime Database SDK (v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-base: #050103;
+            --neon-primary: #FF003C;
+            --neon-secondary: #00F0FF;
+            --neon-accent: #39FF14;
+            --neon-glow: rgba(255, 0, 60, 0.35);
+            --card-bg: rgba(18, 5, 10, 0.7);
+            --card-border: rgba(255, 0, 60, 0.3);
+            --card-hover-bg: rgba(32, 8, 15, 0.85);
+            --text-main: #ffffff;
+            --text-sub: #b8a9ac;
+            --font-main: 'Montserrat', sans-serif;
+            --font-display: 'Orbitron', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 30px 0;
+        }
+
+        /* Cyberpunk Mesh Background Layer */
+        .cyber-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 20%, #1a050d 0%, #080103 60%, #030001 100%);
+            overflow: hidden;
+        }
+
+        .cyber-bg::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--neon-primary);
+            filter: blur(160px);
+            opacity: 0.15;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.12; }
+            100% { transform: translateX(-50%) scale(1.3); opacity: 0.22; }
+        }
+
+        /* Floating Cyber Embers */
+        .embers-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ember {
+            position: absolute;
+            background: var(--neon-accent);
+            border-radius: 50%;
+            animation: floatEmber linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes floatEmber {
+            0% { transform: translateY(105vh) translateX(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 0 20px;
+            z-index: 1;
+        }
+
+        /* Profile Header Section */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 18px;
+            cursor: pointer;
+        }
+
+        .avatar-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary), var(--neon-accent));
+            z-index: -1;
+            animation: rotateGlow 3s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #111;
+            background: #111;
+        }
+
+        /* Advanced Multi-Color Animated Title */
+        .profile-title {
+            font-family: var(--font-display);
+            font-size: 2.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .profile-title span {
+            display: inline-block;
+            animation: waveText 2s ease-in-out infinite;
+        }
+
+        .profile-title span:nth-child(1) { color: #00FF66; animation-delay: 0.0s; text-shadow: 0 0 12px rgba(0,255,102,0.7); }
+        .profile-title span:nth-child(2) { color: #00F0FF; animation-delay: 0.2s; text-shadow: 0 0 12px rgba(0,240,255,0.7); }
+        .profile-title span:nth-child(3) { color: #FF0055; animation-delay: 0.4s; text-shadow: 0 0 12px rgba(255,0,85,0.7); }
+        .profile-title span:nth-child(4) { color: #9900FF; animation-delay: 0.6s; text-shadow: 0 0 12px rgba(153,0,255,0.7); }
+        .profile-title span:nth-child(5) { color: #00FF66; animation-delay: 0.8s; text-shadow: 0 0 12px rgba(0,255,102,0.7); }
+        .profile-title span:nth-child(6) { color: #00F0FF; animation-delay: 1.0s; text-shadow: 0 0 12px rgba(0,240,255,0.7); }
+        .profile-title span:nth-child(7) { color: #FF0055; animation-delay: 1.2s; text-shadow: 0 0 12px rgba(255,0,85,0.7); }
+
+        @keyframes waveText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+
+        .profile-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            font-weight: 400;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        /* Links List Container */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        /* Standard Link Card */
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 15px 20px;
+            border-radius: 14px;
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--neon-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .link-card:hover {
+            background: var(--card-hover-bg);
+            border-color: var(--neon-primary);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 6px 25px var(--neon-glow);
+        }
+
+        .link-card:hover::before {
+            opacity: 1;
+        }
+
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-icon-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: var(--neon-primary);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .link-card:hover .link-icon-box {
+            background: var(--neon-primary);
+            color: #fff;
+            box-shadow: 0 0 12px var(--neon-primary);
+        }
+
+        .link-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .link-arrow {
+            color: var(--text-sub);
+            opacity: 0.5;
+            transition: transform 0.3s, opacity 0.3s, color 0.3s;
+            flex-shrink: 0;
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        .link-card:hover .link-arrow {
+            opacity: 1;
+            color: var(--neon-primary);
+            transform: translateX(3px);
+        }
+
+        /* --- FREE FIRE SPECIAL HIGHLIGHT CARD STYLING --- */
+        .ff-banner-card {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(30, 5, 12, 0.85), rgba(10, 2, 5, 0.95));
+            border: 2px solid var(--neon-accent);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .ff-banner-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+            border-color: #fff;
+        }
+
+        .ff-banner-img-wrapper {
+            width: 100%;
+            height: 140px;
+            position: relative;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .ff-banner-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .ff-banner-card:hover .ff-banner-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .ff-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid var(--neon-accent);
+            color: var(--neon-accent);
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+        }
+
+        .ff-banner-content {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ff-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .ff-info p {
+            font-size: 0.8rem;
+            color: var(--neon-accent);
+            font-weight: 600;
+        }
+
+        .ff-action-btn {
+            background: var(--neon-accent);
+            color: #050103;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+            transition: background 0.2s;
+        }
+
+        .ff-banner-card:hover .ff-action-btn {
+            background: #fff;
+        }
+
+        /* --- FLOATING AUDIO MUSIC PLAYER WIDGET --- */
+        .music-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(18, 5, 10, 0.85);
+            border: 1px solid var(--neon-secondary);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 900;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .music-widget:hover {
+            transform: scale(1.05);
+        }
+
+        .music-widget i {
+            color: var(--neon-secondary);
+            font-size: 1.1rem;
+            animation: spinAudioIcon 3s linear infinite paused;
+        }
+
+        .music-widget.playing i {
+            animation-play-state: running;
+        }
+
+        @keyframes spinAudioIcon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .music-status-text {
+            font-size: 0.75rem;
+            font-family: var(--font-display);
+            letter-spacing: 0.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        /* Footer Stats View */
+        .footer-stats {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-stats span {
+            color: var(--neon-primary);
+            font-weight: 600;
+        }
+
+        /* --- TOAST NOTIFICATION POPUP --- */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #140508;
+            border: 1px solid var(--neon-accent);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.4);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            z-index: 2000;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Modals Overlay Styling */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 1, 2, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: #140508;
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 35px var(--neon-glow);
+            width: 100%;
+            max-width: 440px;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-select option {
+            background: #140508;
+            color: #fff;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--neon-primary);
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--neon-primary);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 15px var(--neon-glow);
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 25px var(--neon-primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-sub);
+            box-shadow: none;
+            margin-top: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: #fff;
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .error-msg {
+            color: #ff3333;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 10px;
+            min-height: 1.2rem;
+        }
+
+        /* VIP Control Panel Dashboard Layout */
+        .admin-modal-box {
+            max-width: 650px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .tab-btn.active {
+            background: var(--neon-primary);
+            color: #fff;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .admin-tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+            max-height: calc(90vh - 190px);
+        }
+
+        .admin-tab-pane {
+            display: none;
+        }
+
+        .admin-tab-pane.active {
+            display: block;
+        }
+
+        .admin-tab-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .admin-tab-content::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+        .admin-tab-content::-webkit-scrollbar-thumb {
+            background: var(--neon-primary);
+            border-radius: 3px;
+        }
+
+        /* Admin Link Rows */
+        .admin-link-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .admin-link-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .admin-link-info i {
+            color: var(--neon-primary);
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .admin-link-details {
+            min-width: 0;
+        }
+
+        .admin-link-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-link-url {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--neon-primary);
+            color: #fff;
+        }
+
+        .action-btn.delete:hover {
+            background: #ff3333;
+        }
+
+        /* Analytics Tab Grids */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-card-value {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--neon-primary);
+            margin-top: 5px;
+        }
+
+        .stat-card-label {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .link-stats-list {
+            margin-top: 15px;
+        }
+
+        .link-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .link-stat-row span:last-child {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--neon-primary);
+        }
+
+        .close-modal-x {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+
+        .close-modal-x:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            .profile-title {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cyberpunk Mesh Background Layer -->
+    <div class="cyber-bg"></div>
+    <!-- Floating Embers Particle Generator -->
+    <div class="embers-container" id="embersContainer"></div>
+
+    <!-- Toast Notification Popup Element -->
+    <div class="toast-notification" id="toastNotification">UID Copied! Opening Free Fire...</div>
+
+    <!-- Floating Audio Background Music Widget Player -->
+    <div class="music-widget" id="musicToggleWidget" title="Toggle Background Music">
+        <i class="fa-solid fa-compact-disc" id="musicIcon"></i>
+        <span class="music-status-text" id="musicStatusText">Play BGM</span>
+    </div>
+
+    <div class="container">
+        <!-- Profile Header Section -->
+        <header class="profile-header">
+            <div class="avatar-wrapper" id="avatarTrigger" title="Click avatar or brand name">
+                <!-- Direct CDN Logo URL Fallback -->
+                <img id="profileAvatar" src="https://i.postimg.cc/zGsTG7Qx/635a42b84ece03523ccbdf28287fbf49.jpg" alt="Profile Logo" class="avatar">
+            </div>
+            
+            <!-- Multi-Color Animated Header Title (Clicking 4 times opens Admin Panel) -->
+            <h1 class="profile-title" id="profileTitle" title="Click 4 times quickly to open Admin Panel">
+                <span>M</span><span>R</span> <span>L</span><span>A</span><span>L</span><span>A</span>
+            </h1>
+            <p class="profile-subtitle" id="profileSubtitle">Welcome to my official links & gaming hub</p>
+        </header>
+
+        <!-- Dynamic Action Cards & Free Fire Cards Container -->
+        <main class="links-container" id="linksContainer">
+            <!-- Injected via Realtime Database Synchronization -->
+        </main>
+
+        <!-- Footer Views Tracker -->
+        <footer class="footer-stats">
+            Total Page Views: <span id="totalViewsCount">0</span>
+        </footer>
+    </div>
+
+    <!-- 1. Password Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 class="modal-title" style="margin-bottom: 0;">VIP ADMIN ACCESS</h2>
+                <button class="close-modal-x" id="closeLoginModal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="adminPasswordInput">Admin Password</label>
+                <input type="password" id="adminPasswordInput" class="form-input" placeholder="Enter password...">
+            </div>
+            <div class="error-msg" id="loginErrorMsg"></div>
+            <button class="btn" id="submitLoginBtn">Login Dashboard</button>
+        </div>
+    </div>
+
+    <!-- 2. VIP Control Panel Dashboard Modal -->
+    <div class="modal-overlay" id="adminDashboardModal">
+        <div class="modal-box admin-modal-box">
+            <div class="admin-header">
+                <h2 class="modal-title" style="margin-bottom: 0; text-align: left;">VIP Control Panel</h2>
+                <button class="close-modal-x" id="closeAdminDashboard">&times;</button>
+            </div>
+
+            <!-- Tab Navigation Bar -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="linksTab">Links</button>
+                <button class="tab-btn" data-tab="ffTab">Free Fire Banner</button>
+                <button class="tab-btn" data-tab="profileTab">Profile</button>
+                <button class="tab-btn" data-tab="audioTab">Audio BGM</button>
+                <button class="tab-btn" data-tab="analyticsTab">Analytics</button>
+            </div>
+
+            <!-- Tab Panels Content Container -->
+            <div class="admin-tab-content">
+                
+                <!-- Links Tab View -->
+                <div class="admin-tab-pane active" id="linksTab">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="font-size: 1rem; font-family: var(--font-display);">Manage Link Cards</h3>
+                        <button class="btn" id="addNewLinkBtn" style="width: auto; margin-top: 0; padding: 6px 14px; font-size: 0.85rem;">+ Add Link</button>
+                    </div>
+                    <div id="adminLinksList"></div>
+                </div>
+
+                <!-- Free Fire Banner Management Tab View -->
+                <div class="admin-tab-pane" id="ffTab">
+                    <form id="ffConfigForm">
+                        <div class="form-group">
+                            <label class="form-label">Card Display Title</label>
+                            <input type="text" id="ffConfigTitle" class="form-input" placeholder="e.g. Free Fire Main ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Player / Guild UID Number</label>
+                            <input type="text" id="ffConfigUid" class="form-input" placeholder="e.g. 1956218180" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Banner Image URL (Direct Link)</label>
+                            <input type="text" id="ffConfigImage" class="form-input" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Or Upload Banner Image File</label>
+                            <input type="file" id="ffConfigFileUpload" class="form-input" accept="image/*" style="padding: 9px;">
+                        </div>
+                        <button type="submit" class="btn">Save Free Fire Banner Card</button>
+                    </form>
+                </div>
+
+                <!-- Profile Customization Tab View -->
+                <div class="admin-tab-pane" id="profileTab">
+                    <form id="profileConfigForm">
+                        <div class="form-group">
+                            <label class="form-label">Subtitle / Bio Tagline</label>
+                            <input type="text" id="configSubtitle" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Profile Avatar URL</label>
+                            <input type="text" id="configAvatar" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Primary Neon Accent Color</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="color" id="configNeonColor" style="width: 50px; height: 42px; background: none; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; padding: 0;">
+                                <input type="text" id="configNeonColorText" class="form-input" placeholder="#FF003C">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Save Profile Config</button>
+                    </form>
+                </div>
+
+                <!-- Audio BGM Management Tab View -->
+                <div class="admin-tab-pane" id="audioTab">
+                    <form id="audioConfigForm">
+                        <div class="form-group">
+                            <label class="form-label">Background Audio Stream / MP3 URL</label>
+                            <input type="text" id="configAudioUrl" class="form-input" placeholder="https://example.com/song.mp3" required>
+                            <small style="color: var(--text-sub); font-size: 0.72rem; margin-top: 5px; display: block;">Paste a direct MP3 or audio streaming link.</small>
+                        </div>
+                        <button type="submit" class="btn">Update Background Music</button>
+                    </form>
+                </div>
+
+                <!-- Analytics Tab View -->
+                <div class="admin-tab-pane" id="analyticsTab">
+                    <div class="analytics-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-label">Total Page Views</div>
+                            <div class="stat-card-value" id="adminTotalViews">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-label">Total Link Clicks</div>
+                            <div class="stat-card-value" id="adminTotalClicks">0</div>
+                        </div>
+                    </div>
+                    <h3 style="font-size: 0.95rem; font-family: var(--font-display); margin-bottom: 10px;">Link Click Breakdown</h3>
+                    <div class="link-stats-list" id="adminLinkStatsList"></div>
+                    <button class="btn btn-secondary" id="resetStatsBtn" style="margin-top: 15px;">Reset All Analytics Stats</button>
+                </div>
+
+            </div>
+
+            <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                <button class="btn btn-secondary" id="logoutAdminBtn" style="margin-top: 0; background: rgba(255,0,60,0.1); border-color: var(--neon-primary); color: #fff;">Lock / Exit Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Add / Edit Link Form Modal -->
+    <div class="modal-overlay" id="linkEditorModal">
+        <div class="modal-box" style="max-width: 420px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 class="modal-title" id="linkEditorModalTitle" style="margin-bottom: 0; font-size: 1.2rem;">Add Link Item</h2>
+                <button class="close-modal-x" id="closeLinkEditor">&times;</button>
+            </div>
+            <form id="linkEditorForm">
+                <input type="hidden" id="editLinkIndex" value="-1">
+                <div class="form-group">
+                    <label class="form-label">Link Title</label>
+                    <input type="text" id="linkInputTitle" class="form-input" placeholder="e.g. Official YouTube" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subtitle / Description</label>
+                    <input type="text" id="linkInputSubtitle" class="form-input" placeholder="e.g. Subscribe for daily streams" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target URL</label>
+                    <input type="text" id="linkInputUrl" class="form-input" placeholder="https://..." required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Official Platform Icon</label>
+                    <select id="linkInputIcon" class="form-select" required>
+                        <option value="fa-brands fa-youtube">YouTube (Official Brand Logo)</option>
+                        <option value="fa-brands fa-tiktok">TikTok (Official Brand Logo)</option>
+                        <option value="fa-brands fa-facebook-f">Facebook (Official Brand Logo)</option>
+                        <option value="fa-brands fa-instagram">Instagram (Official Brand Logo)</option>
+                        <option value="fa-brands fa-whatsapp">WhatsApp (Official Brand Logo)</option>
+                        <option value="fa-brands fa-telegram">Telegram (Official Brand Logo)</option>
+                        <option value="fa-solid fa-cart-shopping">Store / TopUp (Shopping Cart)</option>
+                        <option value="fa-solid fa-download">Download (File Package)</option>
+                        <option value="fa-solid fa-globe">Global Website (Browser Globe)</option>
+                        <option value="fa-solid fa-gamepad">Gaming Control (Gamepad)</option>
+                        <option value="fa-solid fa-fire">Hot Deal / Fire (Flame)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Save Link Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core Interactive Application Script with Firebase Realtime Sync -->
+    <script>
+        // --- FIREBASE REALTIME DATABASE CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt4HkLaBxpZ2MVbxaKCKooyMoQeFZcWpc",
+            authDomain: "lala-digital.firebaseapp.com",
+            databaseURL: "https://lala-digital-default-rtdb.firebaseio.com",
+            projectId: "lala-digital",
+            storageBucket: "lala-digital.firebasestorage.app",
+            messagingSenderId: "417683090201",
+            appId: "1:417683090201:web:d5820e225d7578803f3388",
+            measurementId: "G-2T1YH5L4EG"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref();
+
+        // --- ROBUST HARDCODED FALLBACK DEFAULTS WITH DIRECT CDN URLS ---
+        const DEFAULT_PROFILE = {
+            subtitle: "Welcome to my official links & gaming hub",
+            avatar: "https://i.postimg.cc/zGsTG7Qx/635a42b84ece03523ccbdf28287fbf49.jpg",
+            neonColor: "#FF003C",
+            audioUrl: "https://actions.google.com/sounds/v1/ambiences/cyberpunk_city_ambience.ogg",
+            totalViews: 0
+        };
+
+        const DEFAULT_FF_BANNER = {
+            title: "Free Fire ID: Main Account",
+            uid: "1956218180",
+            image: "https://i.postimg.cc/Y00xW9z3/Screenshot-2026-09-12-03-54-11-93-e5d3893ac03954c6bb675ef2555b879b.jpg"
+        };
+
+        const DEFAULT_LINKS = [
+            { id: 1, title: "YouTube Channel", subtitle: "Watch high-tier gameplay & vids", url: "#", icon: "fa-brands fa-youtube", clicks: 0 },
+            { id: 2, title: "TikTok Community", subtitle: "Catch viral short gaming clips", url: "#", icon: "fa-brands fa-tiktok", clicks: 0 },
+            { id: 3, title: "Facebook Page", subtitle: "Connect with my main community", url: "#", icon: "fa-brands fa-facebook-f", clicks: 0 },
+            { id: 4, title: "WhatsApp Direct", subtitle: "Fast customer inquiry support", url: "#", icon: "fa-brands fa-whatsapp", clicks: 0 },
+            { id: 5, title: "TopUp Store", subtitle: "Secure instant diamond top-ups", url: "#", icon: "fa-solid fa-cart-shopping", clicks: 0 }
+        ];
+
+        // Global application state initialized immediately with safe fallbacks
+        let appState = {
+            profile: DEFAULT_PROFILE,
+            ffBanner: DEFAULT_FF_BANNER,
+            links: DEFAULT_LINKS
+        };
+
+        // Render fallback UI immediately before waiting for network handshake
+        renderPublicUI();
+
+        // --- REALTIME LISTENER (onValue) ---
+        dbRef.on('value', (snapshot) => {
+            const serverData = snapshot.val();
+            if (serverData) {
+                if (serverData.profile) {
+                    appState.profile = { ...DEFAULT_PROFILE, ...serverData.profile };
+                    if (!appState.profile.avatar) appState.profile.avatar = DEFAULT_PROFILE.avatar;
+                }
+                if (serverData.ffBanner) {
+                    appState.ffBanner = { ...DEFAULT_FF_BANNER, ...serverData.ffBanner };
+                    if (!appState.ffBanner.image) appState.ffBanner.image = DEFAULT_FF_BANNER.image;
+                }
+                if (serverData.links) {
+                    appState.links = Array.isArray(serverData.links) ? serverData.links : Object.values(serverData.links);
+                }
+            } else {
+                // Initialize database if unpopulated
+                dbRef.set({
+                    profile: DEFAULT_PROFILE,
+                    ffBanner: DEFAULT_FF_BANNER,
+                    links: DEFAULT_LINKS
+                });
+            }
+            renderPublicUI();
+            if (document.getElementById('adminDashboardModal').classList.contains('active')) {
+                renderAdminDashboard();
+            }
+        }, (error) => {
+            console.error("Firebase read error, relying on CDN fallbacks: ", error);
+        });
+
+        // Track page view once per browser session
+        if (!sessionStorage.getItem('mrlala_counted_view')) {
+            dbRef.child('profile/totalViews').transaction((currentViews) => {
+                return (currentViews || 0) + 1;
+            });
+            sessionStorage.setItem('mrlala_counted_view', 'true');
+        }
+
+        // --- FLOATING EMBERS PARTICLE GENERATOR ---
+        function createEmbers() {
+            const container = document.getElementById('embersContainer');
+            for (let i = 0; i < 20; i++) {
+                const ember = document.createElement('div');
+                ember.className = 'ember';
+                ember.style.left = `${Math.random() * 100}vw`;
+                ember.style.top = `${Math.random() * 100}vh`;
+                const size = Math.random() * 4 + 2;
+                ember.style.width = `${size}px`;
+                ember.style.height = `${size}px`;
+                ember.style.animationDuration = `${Math.random() * 5 + 4}s`;
+                ember.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(ember);
+            }
+        }
+        createEmbers();
+
+        // --- BACKGROUND MUSIC PLAYER CONTROLLER ---
+        let bgAudio = new Audio();
+        let isAudioPlaying = false;
+        let activeAudioUrl = "";
+
+        const musicToggleWidget = document.getElementById('musicToggleWidget');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatusText = document.getElementById('musicStatusText');
+
+        musicToggleWidget.addEventListener('click', () => {
+            if (isAudioPlaying) {
+                bgAudio.pause();
+                isAudioPlaying = false;
+                musicToggleWidget.classList.remove('playing');
+                musicStatusText.textContent = 'Play BGM';
+            } else {
+                if (bgAudio.src !== activeAudioUrl && activeAudioUrl) {
+                    bgAudio.src = activeAudioUrl;
+                }
+                bgAudio.play().then(() => {
+                    isAudioPlaying = true;
+                    musicToggleWidget.classList.add('playing');
+                    musicStatusText.textContent = 'Mute BGM';
+                }).catch(err => {
+                    console.log("Audio autoplay restricted:", err);
+                    showToast("Click anywhere to enable background audio.");
+                });
+            }
+        });
+
+        // --- TOAST NOTIFICATION HELPER ---
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- THEME COLOR & PUBLIC UI RENDER ---
+        function applyThemeColors() {
+            const hex = appState.profile.neonColor || "#FF003C";
+            document.documentElement.style.setProperty('--neon-primary', hex);
+            
+            let r = parseInt(hex.slice(1,3), 16) || 255;
+            let g = parseInt(hex.slice(3,5), 16) || 0;
+            let b = parseInt(hex.slice(5,7), 16) || 60;
+            document.documentElement.style.setProperty('--neon-glow', `rgba(${r}, ${g}, ${b}, 0.35)` );
+        }
+
+        function renderPublicUI() {
+            applyThemeColors();
+
+            document.getElementById('profileSubtitle').textContent = appState.profile.subtitle;
+            document.getElementById('profileAvatar').src = appState.profile.avatar || DEFAULT_PROFILE.avatar;
+            document.getElementById('totalViewsCount').textContent = appState.profile.totalViews || 0;
+
+            // Audio stream sync
+            if (appState.profile.audioUrl && appState.profile.audioUrl !== activeAudioUrl) {
+                activeAudioUrl = appState.profile.audioUrl;
+                bgAudio.src = activeAudioUrl;
+                bgAudio.loop = true;
+                if (isAudioPlaying) {
+                    bgAudio.play().catch(e => console.log("Stream play block:", e));
+                }
+            }
+
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+
+            // 1. Render Special Free Fire Highlight Card First
+            if (appState.ffBanner && appState.ffBanner.uid) {
+                const ffCard = document.createElement('div');
+                ffCard.className = 'ff-banner-card';
+                ffCard.innerHTML = `
+                    <div class="ff-banner-img-wrapper">
+                        <div class="ff-badge"><i class="fa-solid fa-shield-halved"></i> Verified FF ID</div>
+                        <img src="${appState.ffBanner.image || DEFAULT_FF_BANNER.image}" alt="Free Fire Banner" onerror="this.src='${DEFAULT_FF_BANNER.image}'">
+                    </div>
+                    <div class="ff-banner-content">
+                        <div class="ff-info">
+                            <h4>${appState.ffBanner.title}</h4>
+                            <p>UID: ${appState.ffBanner.uid}</p>
+                        </div>
+                        <div class="ff-action-btn">Copy & Open</div>
+                    </div>
+                `;
+
+                ffCard.addEventListener('click', () => {
+                    const targetUid = appState.ffBanner.uid || "1956218180";
+                    navigator.clipboard.writeText(targetUid).then(() => {
+                        showToast(`UID Copied: ${targetUid}! Opening Free Fire...`);
+                        setTimeout(() => {
+                            window.location.href = "freefire://";
+                            setTimeout(() => {
+                                window.open("https://play.google.com/store/apps/details?id=com.dts.freefireth", "_blank");
+                            }, 1500);
+                        }, 500);
+                    }).catch(err => {
+                        console.error('Clipboard copy failed: ', err);
+                    });
+                });
+
+                container.appendChild(ffCard);
+            }
+
+            // 2. Render Standard Dynamic Links
+            if (appState.links) {
+                appState.links.forEach((link, index) => {
+                    const a = document.createElement('a');
+                    a.href = link.url;
+                    a.className = 'link-card';
+                    a.target = link.url.startsWith('http') ? '_blank' : '_self';
+                    
+                    a.innerHTML = `
+                        <div class="link-content">
+                            <div class="link-icon-box">
+                                <i class="${link.icon || 'fa-solid fa-globe'}"></i>
+                            </div>
+                            <div class="link-text">
+                                <span class="link-title">${link.title}</span>
+                                <span class="link-subtitle">${link.subtitle}</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right link-arrow"></i>
+                    `;
+
+                    a.addEventListener('click', () => {
+                        dbRef.child(`links/${index}/clicks`).transaction((currentClicks) => {
+                            return (currentClicks || 0) + 1;
+                        });
+                    });
+
+                    container.appendChild(a);
+                });
+            }
+        }
+
+        // --- SECRET ADMIN TRIGGER (4 clicks within 2 seconds) ---
+        let clickTimestamps = [];
+        const profileTitleEl = document.getElementById('profileTitle');
+        const avatarTriggerEl = document.getElementById('avatarTrigger');
+
+        function handleSecretAdminTrigger() {
+            const now = Date.now();
+            clickTimestamps.push(now);
+            clickTimestamps = clickTimestamps.filter(t => now - t < 2000);
+
+            if (clickTimestamps.length >= 4) {
+                clickTimestamps = [];
+                openModal('loginModal');
+            }
+        }
+
+        profileTitleEl.addEventListener('click', handleSecretAdminTrigger);
+        avatarTriggerEl.addEventListener('click', handleSecretAdminTrigger);
+
+        // --- MODAL CONTROLLER HELPERS ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            if (modalId === 'adminDashboardModal') {
+                renderAdminDashboard();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        document.getElementById('closeLoginModal').addEventListener('click', () => closeModal('loginModal'));
+        document.getElementById('closeAdminDashboard').addEventListener('click', () => closeModal('adminDashboardModal'));
+        document.getElementById('closeLinkEditor').addEventListener('click', () => closeModal('linkEditorModal'));
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) overlay.classList.remove('active');
+            });
+        });
+
+        // --- PASSWORD AUTHENTICATION ---
+        const submitLoginBtn = document.getElementById('submitLoginBtn');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const loginErrorMsg = document.getElementById('loginErrorMsg');
+
+        submitLoginBtn.addEventListener('click', () => {
+            if (adminPasswordInput.value === 'mrlala999') {
+                loginErrorMsg.textContent = '';
+                adminPasswordInput.value = '';
+                closeModal('loginModal');
+                openModal('adminDashboardModal');
+            } else {
+                loginErrorMsg.textContent = 'Incorrect Admin Password!';
+                adminPasswordInput.style.borderColor = '#ff3333';
+                setTimeout(() => adminPasswordInput.style.borderColor = '', 1500);
+            }
+        });
+
+        adminPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitLoginBtn.click();
+        });
+
+        document.getElementById('logoutAdminBtn').addEventListener('click', () => {
+            closeModal('adminDashboardModal');
+        });
+
+        // --- ADMIN TABS NAVIGATION ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const targetTabId = btn.getAttribute('data-tab');
+                document.querySelectorAll('.admin-tab-pane').forEach(pane => pane.classList.remove('active'));
+                document.getElementById(targetTabId).classList.add('active');
+            });
+        });
+
+        // --- ADMIN DASHBOARD DATA POPULATION ---
+        function renderAdminDashboard() {
+            // 1. Links List
+            const adminLinksList = document.getElementById('adminLinksList');
+            adminLinksList.innerHTML = '';
+
+            if (appState.links) {
+                appState.links.forEach((link, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'admin-link-item';
+                    item.innerHTML = `
+                        <div class="admin-link-info">
+                            <i class="${link.icon || 'fa-solid fa-globe'}"></i>
+                            <div class="admin-link-details">
+                                <div class="admin-link-name">${link.title}</div>
+                                <div class="admin-link-url">${link.url}</div>
+                            </div>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="action-btn" title="Move Up" onclick="moveLink(${idx}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button class="action-btn" title="Move Down" onclick="moveLink(${idx}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
+                            <button class="action-btn" title="Edit Link" onclick="openEditLinkModal(${idx})"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn delete" title="Delete Link" onclick="deleteLink(${idx})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                    adminLinksList.appendChild(item);
+                });
+            }
+
+            // 2. Free Fire Tab Values
+            if (appState.ffBanner) {
+                document.getElementById('ffConfigTitle').value = appState.ffBanner.title || '';
+                document.getElementById('ffConfigUid').value = appState.ffBanner.uid || '';
+                document.getElementById('ffConfigImage').value = appState.ffBanner.image || '';
+            }
+
+            // 3. Profile Tab Values
+            if (appState.profile) {
+                document.getElementById('configSubtitle').value = appState.profile.subtitle || '';
+                document.getElementById('configAvatar').value = appState.profile.avatar || '';
+                document.getElementById('configNeonColor').value = appState.profile.neonColor || '#FF003C';
+                document.getElementById('configNeonColorText').value = appState.profile.neonColor || '#FF003C';
+                document.getElementById('configAudioUrl').value = appState.profile.audioUrl || '';
+            }
+
+            // 4. Analytics Tab Values
+            document.getElementById('adminTotalViews').textContent = appState.profile.totalViews || 0;
+            
+            let totalClicksSum = 0;
+            if (appState.links) {
+                totalClicksSum = appState.links.reduce((acc, curr) => acc + (curr.clicks || 0), 0);
+            }
+            document.getElementById('adminTotalClicks').textContent = totalClicksSum;
+
+            const adminLinkStatsList = document.getElementById('adminLinkStatsList');
+            adminLinkStatsList.innerHTML = '';
+            if (appState.links) {
+                appState.links.forEach(link => {
+                    const row = document.createElement('div');
+                    row.className = 'link-stat-row';
+                    row.innerHTML = `
+                        <span>${link.title}</span>
+                        <span>${link.clicks || 0} clicks</span>
+                    `;
+                    adminLinkStatsList.appendChild(row);
+                });
+            }
+        }
+
+        // Color input pairing handlers
+        const colorPicker = document.getElementById('configNeonColor');
+        const colorText = document.getElementById('configNeonColorText');
+        colorPicker.addEventListener('input', (e) => { colorText.value = e.target.value; });
+        colorText.addEventListener('input', (e) => { if(e.target.value.startsWith('#')) colorPicker.value = e.target.value; });
+
+        // Profile Form Submission -> Firebase Sync
+        document.getElementById('profileConfigForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appState.profile.subtitle = document.getElementById('configSubtitle').value;
+            appState.profile.avatar = document.getElementById('configAvatar').value;
+            appState.profile.neonColor = document.getElementById('configNeonColorText').value;
+
+            dbRef.child('profile').set(appState.profile).then(() => {
+                alert('Profile configuration successfully synced to Firebase!');
+            }).catch(err => alert('Error saving to Firebase: ' + err));
+        });
+
+        // Free Fire Banner Form Submission & File Reader -> Firebase Sync
+        const ffConfigFileUpload = document.getElementById('ffConfigFileUpload');
+        ffConfigFileUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('ffConfigImage').value = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('ffConfigForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appState.ffBanner = {
+                title: document.getElementById('ffConfigTitle').value,
+                uid: document.getElementById('ffConfigUid').value,
+                image: document.getElementById('ffConfigImage').value
+            };
+
+            dbRef.child('ffBanner').set(appState.ffBanner).then(() => {
+                alert('Free Fire banner successfully synced to Firebase!');
+            }).catch(err => alert('Error saving to Firebase: ' + err));
+        });
+
+        // Audio Stream URL Update Submission -> Firebase Sync
+        document.getElementById('audioConfigForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appState.profile.audioUrl = document.getElementById('configAudioUrl').value;
+
+            dbRef.child('profile/audioUrl').set(appState.profile.audioUrl).then(() => {
+                alert('Background music stream URL successfully synced to Firebase!');
+            }).catch(err => alert('Error saving to Firebase: ' + err));
+        });
+
+        // --- CRUD LINK MANAGER ACTIONS (Firebase Sync) ---
+        function moveLink(index, direction) {
+            const newIndex = index + direction;
+            if (!appState.links || newIndex < 0 || newIndex >= appState.links.length) return;
+            
+            const temp = appState.links[index];
+            appState.links[index] = appState.links[newIndex];
+            appState.links[newIndex] = temp;
+
+            dbRef.child('links').set(appState.links);
+        }
+
+        window.moveLink = moveLink;
+
+        function deleteLink(index) {
+            if (confirm(`Are you sure you want to delete card "${appState.links[index].title}"?`)) {
+                appState.links.splice(index, 1);
+                dbRef.child('links').set(appState.links);
+            }
+        }
+
+        window.deleteLink = deleteLink;
+
+        const linkEditorModal = document.getElementById('linkEditorModal');
+        const linkEditorForm = document.getElementById('linkEditorForm');
+
+        document.getElementById('addNewLinkBtn').addEventListener('click', () => {
+            document.getElementById('linkEditorModalTitle').textContent = 'Add New Link Item';
+            document.getElementById('editLinkIndex').value = '-1';
+            document.getElementById('linkInputTitle').value = '';
+            document.getElementById('linkInputSubtitle').value = '';
+            document.getElementById('linkInputUrl').value = '';
+            document.getElementById('linkInputIcon').value = 'fa-brands fa-youtube';
+            linkEditorModal.classList.add('active');
+        });
+
+        window.openEditLinkModal = function(index) {
+            const link = appState.links[index];
+            document.getElementById('linkEditorModalTitle').textContent = 'Edit Link Item';
+            document.getElementById('editLinkIndex').value = index;
+            document.getElementById('linkInputTitle').value = link.title;
+            document.getElementById('linkInputSubtitle').value = link.subtitle;
+            document.getElementById('linkInputUrl').value = link.url;
+            document.getElementById('linkInputIcon').value = link.icon || 'fa-solid fa-globe';
+            linkEditorModal.classList.add('active');
+        };
+
+        // Smart icon matching helper
+        document.getElementById('linkInputUrl').addEventListener('blur', (e) => {
+            const url = e.target.value.toLowerCase();
+            const iconSelect = document.getElementById('linkInputIcon');
+            
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                iconSelect.value = 'fa-brands fa-youtube';
+            } else if (url.includes('tiktok.com')) {
+                iconSelect.value = 'fa-brands fa-tiktok';
+            } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                iconSelect.value = 'fa-brands fa-facebook-f';
+            } else if (url.includes('instagram.com')) {
+                iconSelect.value = 'fa-brands fa-instagram';
+            } else if (url.includes('whatsapp.com') || url.includes('wa.me')) {
+                iconSelect.value = 'fa-brands fa-whatsapp';
+            } else if (url.includes('t.me') || url.includes('telegram')) {
+                iconSelect.value = 'fa-brands fa-telegram';
+            }
+        });
+
+        linkEditorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('editLinkIndex').value);
+            const title = document.getElementById('linkInputTitle').value;
+            const subtitle = document.getElementById('linkInputSubtitle').value;
+            const url = document.getElementById('linkInputUrl').value;
+            const icon = document.getElementById('linkInputIcon').value;
+
+            if (!appState.links) appState.links = [];
+
+            if (index === -1) {
+                appState.links.push({ title, subtitle, url, icon, clicks: 0 });
+            } else {
+                const existingClicks = appState.links[index].clicks || 0;
+                appState.links[index] = { title, subtitle, url, icon, clicks: existingClicks };
+            }
+
+            dbRef.child('links').set(appState.links).then(() => {
+                linkEditorModal.classList.remove('active');
+                alert('Link successfully synced to Firebase!');
+            }).catch(err => alert('Firebase sync error: ' + err));
+        });
+
+        // Reset all metrics action -> Firebase Sync
+        document.getElementById('resetStatsBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all analytics page views and click metrics across the database?')) {
+                appState.profile.totalViews = 0;
+                if(appState.links) {
+                    appState.links.forEach(l => l.clicks = 0);
+                }
+                dbRef.set(appState).then(() => {
+                    alert('Database analytics successfully reset.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
