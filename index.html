@@ -6,8 +6,8 @@
     <title>SF Glory Shop</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
+            --bg-color: #0b0f19;
+            --card-bg: #141b2d;
             --accent-color: #00ffcc;
             --text-color: #ffffff;
             --secondary-text: #8b949e;
@@ -31,9 +31,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(22, 27, 34, 0.9);
-            border-bottom: 1px solid #30363d;
+            padding: 12px 15px;
+            background: rgba(20, 27, 45, 0.95);
+            border-bottom: 1px solid #1f293d;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -42,28 +42,29 @@
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .logo-area img {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             border: 2px solid var(--accent-color);
+            object-fit: cover;
         }
 
         .shop-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff007f, #00ffcc, #ffff00);
-            background-size: 200% auto;
+            background: linear-gradient(45deg, #ff007f, #00ffcc, #ffff00, #ff007f);
+            background-size: 300% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite, floatName 2s ease-in-out infinite alternate;
+            animation: shine 4s linear infinite, floatName 2s ease-in-out infinite alternate;
         }
 
         @keyframes shine {
-            to { background-position: 200% center; }
+            to { background-position: 300% center; }
         }
 
         @keyframes floatName {
@@ -75,64 +76,65 @@
             background: transparent;
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
-            padding: 5px 12px;
-            border-radius: 5px;
+            padding: 5px 10px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         /* Banner Section */
         .banner-container {
-            margin: 15px;
+            margin: 12px;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #30363d;
+            border: 1px solid #1f293d;
             position: relative;
         }
 
         .banner-container img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
         }
 
         .banner-text {
             position: absolute;
-            bottom: 10px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
+            bottom: 8px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 13px;
             color: var(--accent-color);
         }
 
-        /* Main Section Title */
+        /* Section Title */
         .section-title {
-            margin: 20px 15px 10px;
-            font-size: 18px;
+            margin: 15px 12px 10px;
+            font-size: 16px;
             color: var(--text-color);
-            border-left: 4px solid var(--accent-color);
-            padding-left: 8px;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 6px;
         }
 
-        /* Cards Grid (2 Columns) */
+        /* 2-Column Cards Grid */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 0 15px;
+            gap: 12px;
+            padding: 0 12px;
         }
 
         .category-card {
             background: var(--card-bg);
-            border: 1px solid #30363d;
+            border: 1px solid #1f293d;
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.2s, border-color 0.2s;
             text-align: center;
             padding-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .category-card:hover {
@@ -142,16 +144,18 @@
 
         .category-card img {
             width: 100%;
-            height: 100px;
+            height: 110px;
             object-fit: cover;
+            border-bottom: 1px solid #1f293d;
         }
 
         .category-card h3 {
-            font-size: 15px;
-            margin: 10px 5px;
+            font-size: 14px;
+            margin: 8px 5px 2px;
+            color: var(--text-color);
         }
 
-        /* Modal / Package View */
+        /* Modal / Inside Package View */
         .modal {
             display: none;
             position: fixed;
@@ -159,7 +163,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -167,12 +171,12 @@
 
         .modal-content {
             background: var(--card-bg);
-            width: 90%;
-            max-width: 400px;
+            width: 92%;
+            max-width: 420px;
             border-radius: 12px;
             border: 1px solid var(--accent-color);
-            padding: 20px;
-            max-height: 80vh;
+            padding: 15px;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
         }
@@ -180,34 +184,35 @@
         .close-modal {
             position: absolute;
             top: 10px;
-            right: 15px;
+            right: 12px;
             font-size: 20px;
             cursor: pointer;
             color: var(--secondary-text);
         }
 
         .package-item {
-            background: #21262d;
+            background: #1c263d;
             padding: 10px;
             border-radius: 8px;
             margin-top: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #30363d;
+            border: 1px solid #28354f;
         }
 
         .package-item button {
             background: var(--accent-color);
             color: #000;
             border: none;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
+            font-size: 12px;
         }
 
-        /* Admin Panel Overlay */
+        /* Admin Panel Overlay with Left Sidebar */
         #admin-panel {
             display: none;
             position: fixed;
@@ -217,262 +222,267 @@
             height: 100%;
             background: var(--bg-color);
             z-index: 2000;
-            overflow-y: auto;
-            padding: 20px;
+            display: none;
+            flex-direction: column;
         }
 
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 10px;
-        }
-
-        .admin-sidebar-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
+            padding: 15px;
             background: var(--card-bg);
-            border: 1px solid #30363d;
-            color: var(--text-color);
-            padding: 8px 15px;
-            border-radius: 6px;
+            border-bottom: 1px solid #1f293d;
+        }
+
+        .admin-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .admin-sidebar {
+            width: 140px;
+            background: #101624;
+            border-right: 1px solid #1f293d;
+            padding: 10px 0;
+        }
+
+        .sidebar-tab {
+            width: 100%;
+            padding: 12px 10px;
+            text-align: left;
+            background: transparent;
+            border: none;
+            color: var(--secondary-text);
             cursor: pointer;
-            white-space: nowrap;
+            font-size: 13px;
+            border-left: 3px solid transparent;
         }
 
-        .tab-btn.active {
-            border-color: var(--accent-color);
+        .sidebar-tab.active {
             color: var(--accent-color);
+            background: rgba(0, 255, 204, 0.05);
+            border-left-color: var(--accent-color);
         }
 
-        .admin-section-content {
+        .admin-content-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .admin-section {
             display: none;
         }
 
-        .admin-section-content.active {
+        .admin-section.active {
             display: block;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: var(--secondary-text);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
-            background: var(--card-bg);
-            border: 1px solid #30363d;
+            padding: 9px;
+            background: #1c263d;
+            border: 1px solid #28354f;
             color: var(--text-color);
             border-radius: 6px;
+            font-size: 13px;
         }
 
         .save-btn {
             background: var(--accent-color);
             color: #000;
             border: none;
-            padding: 10px 20px;
+            padding: 10px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
             width: 100%;
+            margin-top: 10px;
         }
 
-        /* Custom Alert without Github name */
+        /* Clean Alert */
         .custom-alert {
             display: none;
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #238636;
+            background: #1f883d;
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
             z-index: 3000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Custom Alert Box -->
     <div id="customAlert" class="custom-alert">সফলভাবে আপডেট করা হয়েছে!</div>
 
     <!-- Header -->
     <header>
         <div class="logo-area">
-            <img id="mainLogo" src="https://via.placeholder.com/40" alt="Logo">
+            <img id="mainLogo" src="" alt="Logo">
             <div class="shop-name" id="displayShopName">SF GLORY SHOP</div>
         </div>
-        <button class="admin-btn" onclick="toggleAdminPanel(true)">এডমিন প্যানেল</button>
+        <button class="admin-btn" onclick="toggleAdmin(true)">এডমিন প্যানেল</button>
     </header>
 
     <!-- Banner -->
     <div class="banner-container">
-        <img id="mainBannerImg" src="https://via.placeholder.com/600x180" alt="Banner">
-        <div class="banner-text" id="displayBannerText">🔥 Verified SF Glory & Bot Service</div>
+        <img id="mainBannerImg" src="" alt="Banner">
+        <div class="banner-text" id="displayBannerText">🔥 Verified SF Glory Service</div>
     </div>
 
-    <!-- Main Content: Cards in 2 Columns -->
+    <!-- Main Cards Grid (2 Columns) -->
     <div class="section-title">Select Package & Glory Cards</div>
-    <div class="cards-grid" id="cardsGridContainer">
-        <!-- Dynamically injected cards -->
-    </div>
+    <div class="cards-grid" id="cardsGridContainer"></div>
 
     <!-- Package Modal -->
     <div class="modal" id="packageModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modalCardTitle" style="margin-bottom: 15px; color: var(--accent-color);">Card Packages</h2>
-            <div id="modalPackagesList">
-                <!-- Packages will load here -->
-            </div>
+            <h3 id="modalCardTitle" style="margin-bottom: 12px; color: var(--accent-color);">Card Packages</h3>
+            <div id="modalPackagesList"></div>
         </div>
     </div>
 
-    <!-- Admin Panel -->
+    <!-- Admin Panel with Left Sidebar -->
     <div id="admin-panel">
         <div class="admin-header">
-            <h2>VIP Admin Control Panel</h2>
-            <button class="admin-btn" onclick="toggleAdminPanel(false)">✕ Close</button>
+            <h3>Admin Control Panel</h3>
+            <button class="admin-btn" onclick="toggleAdmin(false)">✕ Close</button>
         </div>
-
-        <div class="admin-sidebar-tabs">
-            <button class="tab-btn active" onclick="switchTab(event, 'generalTab')">জেনারেল সেটিংস</button>
-            <button class="tab-btn" onclick="switchTab(event, 'cardsTab')">কার্ড ও ছবি ম্যানেজ</button>
-            <button class="tab-btn" onclick="switchTab(event, 'packagesTab')">প্যাকেজ ও দাম এডিট</button>
-        </div>
-
-        <!-- Tab 1: General Settings -->
-        <div id="generalTab" class="admin-section-content active">
-            <div class="form-group">
-                <label>ওয়েবসাইটের নাম</label>
-                <input type="text" id="inputShopName" value="SF GLORY SHOP">
+        <div class="admin-body">
+            <div class="admin-sidebar">
+                <button class="sidebar-tab active" onclick="switchAdminTab(event, 'tabGeneral')">জেনারেল</button>
+                <button class="sidebar-tab" onclick="switchAdminTab(event, 'tabCards')">কার্ড ম্যানেজ</button>
+                <button class="sidebar-tab" onclick="switchAdminTab(event, 'tabPackages')">প্যাকেজ এডিট</button>
             </div>
-            <div class="form-group">
-                <label>WhatsApp নম্বর</label>
-                <input type="text" id="inputWhatsApp" value="01903982821">
+            <div class="admin-content-area">
+                <!-- Tab 1 -->
+                <div id="tabGeneral" class="admin-section active">
+                    <div class="form-group">
+                        <label>ওয়েবসাইটের নাম</label>
+                        <input type="text" id="inputShopName" value="SF GLORY SHOP">
+                    </div>
+                    <div class="form-group">
+                        <label>লোগো ইমেজ লিংক (URL)</label>
+                        <input type="text" id="inputLogoUrl">
+                    </div>
+                    <div class="form-group">
+                        <label>ব্যানার ইমেজ লিংক (URL)</label>
+                        <input type="text" id="inputBannerUrl">
+                    </div>
+                    <button class="save-btn" onclick="saveGeneral()">সেভ করুন</button>
+                </div>
+                <!-- Tab 2 -->
+                <div id="tabCards" class="admin-section">
+                    <div class="form-group">
+                        <label>কার্ডের নাম</label>
+                        <input type="text" id="inputCardTitleEdit" value="FF GUILD GLORY">
+                    </div>
+                    <div class="form-group">
+                        <label>কার্ডের ছবি লিংক (URL)</label>
+                        <input type="text" id="inputCardImgEdit">
+                    </div>
+                    <button class="save-btn" onclick="saveCardInfo()">কার্ড আপডেট করুন</button>
+                </div>
+                <!-- Tab 3 -->
+                <div id="tabPackages" class="admin-section">
+                    <div class="form-group">
+                        <label>প্যাকেজ ও দাম কাস্টমাইজ</label>
+                        <input type="text" id="inputPkgEditName" value="1 BASIC (4 BOT) - ৳130">
+                    </div>
+                    <div class="form-group">
+                        <label>স্টক স্ট্যাটাস</label>
+                        <select id="inputStock">
+                            <option value="In Stock">In Stock</option>
+                            <option value="Stock Out">Stock Out</option>
+                        </select>
+                    </div>
+                    <button class="save-btn" onclick="showAlert()">প্যাকেজ সেভ করুন</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label>লোগো ইমেজ লিংক (URL)</label>
-                <input type="text" id="inputLogoUrl" placeholder="Image link">
-            </div>
-            <div class="form-group">
-                <label>ব্যানার ইমেজ লিংক (URL)</label>
-                <input type="text" id="inputBannerUrl" placeholder="Banner image link">
-            </div>
-            <button class="save-btn" onclick="saveGeneralSettings()">Save Settings</button>
-        </div>
-
-        <!-- Tab 2: Cards Management -->
-        <div id="cardsTab" class="admin-section-content">
-            <div class="form-group">
-                <label>কার্ডের নাম পরিবর্তন</label>
-                <input type="text" id="inputCardName" value="I BASIC (4 BOT)">
-            </div>
-            <div class="form-group">
-                <label>কার্ডের ছবি (URL)</label>
-                <input type="text" id="inputCardImg" placeholder="Card image link">
-            </div>
-            <button class="save-btn" onclick="showAlert()">Save Card Details</button>
-        </div>
-
-        <!-- Tab 3: Packages & Stock -->
-        <div id="packagesTab" class="admin-section-content">
-            <div class="form-group">
-                <label>প্যাকেজ নাম ও দাম কাস্টমাইজ</label>
-                <input type="text" id="inputPkgName" value="I BASIC (4 BOT) - ৳130">
-            </div>
-            <div class="form-group">
-                <label>স্টক স্ট্যাটাস</label>
-                <select id="inputStockStatus">
-                    <option value="In Stock">In Stock</option>
-                    <option value="Stock Out">Stock Out</option>
-                </select>
-            </div>
-            <button class="save-btn" onclick="showAlert()">Update Package</button>
         </div>
     </div>
 
     <script>
-        // Sample Data Structure
-        let siteData = {
+        let db = {
             shopName: "SF GLORY SHOP",
-            whatsapp: "01903982821",
             logo: "https://via.placeholder.com/40",
-            banner: "https://via.placeholder.com/600x180",
+            banner: "https://via.placeholder.com/600x160",
             bannerText: "🔥 Verified SF Glory & Bot Service",
             cards: [
                 {
                     id: 1,
-                    title: "I BASIC (4 BOT)",
+                    title: "FF GUILD GLORY",
                     image: "https://via.placeholder.com/300x150",
                     packages: [
-                        { name: "4 Bot Pack", price: "৳130.00", status: "In Stock" },
-                        { name: "Extra Addon", price: "৳50.00", status: "In Stock" }
+                        { name: "1 BASIC (4 BOT)", price: "৳130.00", status: "In Stock" },
+                        { name: "2 BASIC (8 BOT)", price: "৳250.00", status: "In Stock" }
                     ]
                 },
                 {
                     id: 2,
-                    title: "II BASIC (8 BOT)",
+                    title: "VIP GLORY CARD",
                     image: "https://via.placeholder.com/300x150",
                     packages: [
-                        { name: "8 Bot Pack", price: "৳250.00", status: "In Stock" }
+                        { name: "5 BASIC (20 BOT)", price: "৳600.00", status: "In Stock" }
                     ]
                 }
             ]
         };
 
-        function renderSite() {
-            document.getElementById('displayShopName').innerText = siteData.shopName;
-            document.getElementById('mainLogo').src = siteData.logo;
-            document.getElementById('mainBannerImg').src = siteData.banner;
-            document.getElementById('displayBannerText').innerText = siteData.bannerText;
+        function render() {
+            document.getElementById('displayShopName').innerText = db.shopName;
+            document.getElementById('mainLogo').src = db.logo;
+            document.getElementById('mainBannerImg').src = db.banner;
+            document.getElementById('displayBannerText').innerText = db.bannerText;
 
-            let gridHTML = '';
-            siteData.cards.forEach(card => {
-                gridHTML += `
-                    <div class="category-card" onclick="openCardModal(${card.id})">
+            let html = '';
+            db.cards.forEach(card => {
+                html += `
+                    <div class="category-card" onclick="openModal(${card.id})">
                         <img src="${card.image}" alt="${card.title}">
                         <h3>${card.title}</h3>
                     </div>
                 `;
             });
-            document.getElementById('cardsGridContainer').innerHTML = gridHTML;
+            document.getElementById('cardsGridContainer').innerHTML = html;
         }
 
-        function openCardModal(cardId) {
-            let card = siteData.cards.find(c => c.id === cardId);
-            if (!card) return;
-
+        function openModal(id) {
+            let card = db.cards.find(c => c.id === id);
+            if(!card) return;
             document.getElementById('modalCardTitle').innerText = card.title;
-            let pkgHTML = '';
-            card.packages.forEach(pkg => {
-                pkgHTML += `
+            let pHtml = '';
+            card.packages.forEach(p => {
+                pHtml += `
                     <div class="package-item">
                         <div>
-                            <strong>${pkg.name}</strong><br>
-                            <span style="color: var(--accent-color);">${pkg.price}</span>
+                            <strong>${p.name}</strong><br>
+                            <span style="color: var(--accent-color);">${p.price}</span> (${p.status})
                         </div>
-                        <button onclick="alert('Order placed for ${pkg.name}')">Buy Now</button>
+                        <button onclick="alert('Order placed for ${p.name}')">Buy Now</button>
                     </div>
                 `;
             });
-            document.getElementById('modalPackagesList').innerHTML = pkgHTML;
+            document.getElementById('modalPackagesList').innerHTML = pHtml;
             document.getElementById('packageModal').style.display = 'flex';
         }
 
@@ -480,43 +490,38 @@
             document.getElementById('packageModal').style.display = 'none';
         }
 
-        function toggleAdminPanel(show) {
-            document.getElementById('admin-panel').style.display = show ? 'block' : 'none';
+        function toggleAdmin(show) {
+            document.getElementById('admin-panel').style.display = show ? 'flex' : 'none';
         }
 
-        function switchTab(evt, tabId) {
-            let contents = document.getElementsByClassName('admin-section-content');
-            for (let c of contents) c.classList.remove('active');
-
-            let buttons = document.getElementsByClassName('tab-btn');
-            for (let b of buttons) b.classList.remove('active');
-
+        function switchAdminTab(evt, tabId) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             evt.currentTarget.classList.add('active');
         }
 
-        function saveGeneralSettings() {
-            siteData.shopName = document.getElementById('inputShopName').value;
-            siteData.whatsapp = document.getElementById('inputWhatsApp').value;
-            let lUrl = document.getElementById('inputLogoUrl').value;
-            let bUrl = document.getElementById('inputBannerUrl').value;
-            if(lUrl) siteData.logo = lUrl;
-            if(bUrl) siteData.banner = bUrl;
+        function saveGeneral() {
+            db.shopName = document.getElementById('inputShopName').value;
+            let l = document.getElementById('inputLogoUrl').value;
+            let b = document.getElementById('inputBannerUrl').value;
+            if(l) db.logo = l;
+            if(b) db.banner = b;
+            render();
+            showAlert();
+        }
 
-            renderSite();
+        function saveCardInfo() {
             showAlert();
         }
 
         function showAlert() {
-            let alertBox = document.getElementById('customAlert');
-            alertBox.style.display = 'block';
-            setTimeout(() => {
-                alertBox.style.display = 'none';
-            }, 2000);
+            let a = document.getElementById('customAlert');
+            a.style.display = 'block';
+            setTimeout(() => a.style.display = 'none', 2000);
         }
 
-        // Initial Load
-        renderSite();
+        render();
     </script>
 </body>
 </html>
