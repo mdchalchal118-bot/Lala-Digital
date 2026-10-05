@@ -3,476 +3,520 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="siteTitleMeta">FF Guild Glory Store</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        gamingDark: '#0b0f19',
-                        gamingCard: '#131c31',
-                        accentNeon: '#00ffcc',
-                        accentOrange: '#ff5500',
-                        accentGold: '#ffd700'
-                    }
-                }
-            }
-        }
-    </script>
+    <title>SF Glory Shop</title>
     <style>
-        .no-select {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #00ffcc;
+            --text-color: #ffffff;
+            --secondary-text: #8b949e;
         }
-        /* Neon Glowing & Animation Effects */
-        .neon-glow {
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-            border: 1px solid rgba(0, 255, 204, 0.6);
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .neon-glow-orange {
-            box-shadow: 0 0 15px rgba(255, 85, 0, 0.4);
-            border: 1px solid rgba(255, 85, 0, 0.6);
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 50px;
         }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 5px #00ffcc; }
-            50% { box-shadow: 0 0 20px #00ffcc, 0 0 30px #ff5500; }
-            100% { box-shadow: 0 0 5px #00ffcc; }
+
+        /* Header & Animated Name */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(22, 27, 34, 0.9);
+            border-bottom: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .anim-glow {
-            animation: pulseGlow 3s infinite;
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-area img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+        }
+
+        .shop-name {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff007f, #00ffcc, #ffff00);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite, floatName 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes floatName {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-2px); }
+        }
+
+        .admin-btn {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Banner Section */
+        .banner-container {
+            margin: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            position: relative;
+        }
+
+        .banner-container img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .banner-text {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: var(--accent-color);
+        }
+
+        /* Main Section Title */
+        .section-title {
+            margin: 20px 15px 10px;
+            font-size: 18px;
+            color: var(--text-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 8px;
+        }
+
+        /* Cards Grid (2 Columns) */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .category-card:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-color);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .category-card h3 {
+            font-size: 15px;
+            margin: 10px 5px;
+        }
+
+        /* Modal / Package View */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            border: 1px solid var(--accent-color);
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--secondary-text);
+        }
+
+        .package-item {
+            background: #21262d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #30363d;
+        }
+
+        .package-item button {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Admin Panel Overlay */
+        #admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        .admin-sidebar-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .admin-section-content {
+            display: none;
+        }
+
+        .admin-section-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            color: var(--text-color);
+            border-radius: 6px;
+        }
+
+        .save-btn {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Custom Alert without Github name */
+        .custom-alert {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #238636;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
     </style>
 </head>
-<body class="bg-gamingDark text-gray-100 font-sans antialiased pb-24">
+<body>
 
-    <!-- Top Header Bar -->
-    <header class="bg-gamingCard border-b border-gray-800 sticky top-0 z-40 shadow-xl">
-        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-            <!-- Left: Logo & Name (Click 4 times to open Admin Panel) -->
-            <div id="adminTrigger" onclick="handleAdminTrigger()" class="flex items-center space-x-3 cursor-pointer no-select group">
-                <div id="headerLogoIcon" class="w-10 h-10 rounded-xl bg-gamingDark border border-accentNeon flex items-center justify-center text-accentNeon font-bold text-xl neon-glow group-hover:scale-105 transition">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <span id="siteNameDisplay" class="text-lg md:text-xl font-extrabold tracking-wider text-white group-hover:text-accentNeon transition">FF GUILD GLORY</span>
-            </div>
-            <!-- Wallet Badge -->
-            <div class="flex items-center space-x-2 bg-gamingDark border border-accentGold px-3 py-1.5 rounded-full text-accentGold font-bold text-sm shadow-lg">
-                <i class="fa-solid fa-wallet"></i>
-                <span>৳0.00</span>
-            </div>
+    <!-- Custom Alert Box -->
+    <div id="customAlert" class="custom-alert">সফলভাবে আপডেট করা হয়েছে!</div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-area">
+            <img id="mainLogo" src="https://via.placeholder.com/40" alt="Logo">
+            <div class="shop-name" id="displayShopName">SF GLORY SHOP</div>
         </div>
+        <button class="admin-btn" onclick="toggleAdminPanel(true)">এডমিন প্যানেল</button>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
-
-        <!-- Auto & Manual Image Slider (Banner Section) -->
-        <div class="relative w-full h-44 md:h-64 rounded-2xl overflow-hidden shadow-2xl bg-gamingCard border border-gray-800 anim-glow">
-            <div id="sliderWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
-                <!-- Dynamic Banners injected via JS -->
-            </div>
-            <!-- Slider Dots -->
-            <div id="sliderDots" class="absolute bottom-3 right-3 flex space-x-1.5 z-10"></div>
-        </div>
-
-        <!-- Section 1: Select Package (Main Category Cards) -->
-        <div class="bg-gamingCard rounded-2xl p-5 shadow-xl border border-gray-800">
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center space-x-2.5">
-                    <span class="w-7 h-7 rounded-full bg-accentNeon text-black font-extrabold flex items-center justify-center text-sm shadow-md">1</span>
-                    <h2 class="font-bold text-lg text-white">Select Package & Glory Cards</h2>
-                </div>
-                <span class="text-xs font-semibold bg-gray-800 text-accentNeon px-3 py-1 rounded-full border border-gray-700">Instant Active</span>
-            </div>
-
-            <!-- Dynamic Package Cards Grid -->
-            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Populated via JS -->
-            </div>
-        </div>
-
-        <!-- Dynamic Selected Package & Order Box -->
-        <div id="orderSection" class="hidden bg-gamingCard rounded-2xl p-5 shadow-2xl border-2 border-accentNeon neon-glow">
-            <h3 class="font-bold text-base text-white mb-3 flex items-center justify-between border-b border-gray-800 pb-2">
-                <span><i class="fa-solid fa-cart-shopping text-accentNeon mr-2"></i> Selected: <span id="selectedPkgName" class="text-accentGold"></span></span>
-                <span id="selectedPkgPrice" class="text-accentNeon font-extrabold text-lg"></span>
-            </h3>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Free Fire Guild ID / UID</label>
-                    <input type="text" id="guildUid" placeholder="Enter your Guild ID" class="w-full bg-gamingDark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentNeon">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Your WhatsApp Number</label>
-                    <input type="text" id="userPhone" placeholder="01XXXXXXXXX" class="w-full bg-gamingDark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accentNeon">
-                </div>
-                <button onclick="proceedToWhatsApp()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-lg text-sm border border-green-400 flex items-center justify-center space-x-2">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Order via WhatsApp</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Section 2: Rules & Conditions -->
-        <div class="bg-gamingCard rounded-2xl p-5 shadow-xl border border-gray-800">
-            <div class="flex items-center space-x-2.5 mb-4">
-                <span class="w-7 h-7 rounded-full bg-accentOrange text-white font-extrabold flex items-center justify-center text-sm shadow-md">2</span>
-                <h2 class="font-bold text-lg text-white">Rules & Conditions</h2>
-            </div>
-            <div class="space-y-3 text-sm text-gray-300">
-                <div class="flex items-start space-x-2.5">
-                    <i class="fa-solid fa-circle-check text-accentNeon mt-1"></i>
-                    <p><strong>1 Basic</strong> কিনলে <strong>8টা Bot</strong> গিল্ডে ঢুকাতে পারবেন।</p>
-                </div>
-                <div class="flex items-start space-x-2.5">
-                    <i class="fa-solid fa-circle-check text-accentNeon mt-1"></i>
-                    <p>সঠিক <strong>Guild ID</strong> এবং গিল্ডের <strong>Rank / Level</strong> সব Default করে Bot অর্ডার করবেন।</p>
-                </div>
-                <div class="flex items-start space-x-2.5">
-                    <i class="fa-solid fa-circle-check text-accentNeon mt-1"></i>
-                    <p>৩০ মিনিটের মধ্যে যদি <strong>Glory</strong> দেওয়া শুরু না করে, তাহলে ৭ ঘণ্টার মধ্যে <strong>Refund</strong> এ ক্লিক করে রিফান্ড নিন।</p>
-                </div>
-                <div class="flex items-start space-x-2.5">
-                    <i class="fa-solid fa-circle-check text-accentNeon mt-1"></i>
-                    <p>Guild Bot কত Glory দিবে তার কোনো গ্যারান্টি নেই, পুরোটা আপনার ভাগ্যের (Luck) উপর নির্ভরশীল।</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 3: Demo & Tutorial Video -->
-        <div id="videoSection" class="bg-gamingCard rounded-2xl p-5 shadow-xl border border-gray-800">
-            <div class="flex items-center space-x-2.5 mb-3">
-                <span class="w-7 h-7 rounded-full bg-accentGold text-black font-extrabold flex items-center justify-center text-sm shadow-md">
-                    <i class="fa-solid fa-video"></i>
-                </span>
-                <h2 class="font-bold text-lg text-white">FF Guild Glory ডেমো ও টিউটোরিয়াল ভিডিও</h2>
-            </div>
-            <p class="text-xs text-gray-400 mb-4">গিল্ডে বট ঢুকানো ও গ্লোরি নেওয়ার সম্পূর্ণ নিয়ম ভিডিওতে দেখে নিন</p>
-            <div class="relative w-full pt-[56.25%] rounded-xl overflow-hidden shadow-2xl bg-black border border-gray-800">
-                <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="Tutorial Video" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Bottom-Left Floating Support Bubble -->
-    <div class="fixed bottom-5 left-5 z-50">
-        <a href="https://wa.me/8801903982821?text=Hi,%20I%20need%20support%20regarding%20FF%20Guild%20Glory" target="_blank" class="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center shadow-2xl text-2xl transition transform hover:scale-110 neon-glow animate-bounce">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
+    <!-- Banner -->
+    <div class="banner-container">
+        <img id="mainBannerImg" src="https://via.placeholder.com/600x180" alt="Banner">
+        <div class="banner-text" id="displayBannerText">🔥 Verified SF Glory & Bot Service</div>
     </div>
 
-    <!-- VIP Password Modal for Admin -->
-    <div id="adminLoginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-gamingCard w-full max-w-sm rounded-2xl p-6 border-2 border-accentNeon neon-glow text-center space-y-4">
-            <div class="w-12 h-12 bg-gamingDark border border-accentNeon rounded-full flex items-center justify-center mx-auto text-accentNeon text-xl">
-                <i class="fa-solid fa-lock"></i>
-            </div>
-            <h3 class="text-xl font-bold text-white">VIP Admin Access</h3>
-            <p class="text-xs text-gray-400">Enter secure password to open dashboard</p>
-            <input type="password" id="adminPassInput" placeholder="Enter Password" class="w-full bg-gamingDark border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white text-center focus:outline-none focus:border-accentNeon">
-            <div class="flex space-x-2">
-                <button onclick="verifyAdminPass()" class="flex-1 bg-accentNeon hover:bg-emerald-400 text-black font-bold py-2.5 rounded-xl transition text-sm">Login</button>
-                <button onclick="closeAdminLogin()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold py-2.5 rounded-xl transition text-sm">Cancel</button>
+    <!-- Main Content: Cards in 2 Columns -->
+    <div class="section-title">Select Package & Glory Cards</div>
+    <div class="cards-grid" id="cardsGridContainer">
+        <!-- Dynamically injected cards -->
+    </div>
+
+    <!-- Package Modal -->
+    <div class="modal" id="packageModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalCardTitle" style="margin-bottom: 15px; color: var(--accent-color);">Card Packages</h2>
+            <div id="modalPackagesList">
+                <!-- Packages will load here -->
             </div>
         </div>
     </div>
 
-    <!-- Full Screen VIP Admin Dashboard Modal -->
-    <div id="adminDashboardModal" class="fixed inset-0 bg-gamingDark hidden z-50 overflow-y-auto p-4 md:p-8">
-        <div class="max-w-3xl mx-auto bg-gamingCard rounded-2xl p-6 border-2 border-accentGold shadow-2xl space-y-6">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-gauge-high text-accentGold text-2xl"></i>
-                    <h2 class="text-xl font-extrabold text-white">VIP Admin Control Panel</h2>
-                </div>
-                <button onclick="closeAdminDashboard()" class="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-xl transition text-sm font-bold border border-red-500/30">
-                    <i class="fa-solid fa-xmark mr-1"></i> Close
-                </button>
+    <!-- Admin Panel -->
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h2>VIP Admin Control Panel</h2>
+            <button class="admin-btn" onclick="toggleAdminPanel(false)">✕ Close</button>
+        </div>
+
+        <div class="admin-sidebar-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'generalTab')">জেনারেল সেটিংস</button>
+            <button class="tab-btn" onclick="switchTab(event, 'cardsTab')">কার্ড ও ছবি ম্যানেজ</button>
+            <button class="tab-btn" onclick="switchTab(event, 'packagesTab')">প্যাকেজ ও দাম এডিট</button>
+        </div>
+
+        <!-- Tab 1: General Settings -->
+        <div id="generalTab" class="admin-section-content active">
+            <div class="form-group">
+                <label>ওয়েবসাইটের নাম</label>
+                <input type="text" id="inputShopName" value="SF GLORY SHOP">
             </div>
-
-            <!-- Dashboard Tabs / Sections -->
-            <div class="space-y-6 text-sm">
-                <!-- General Settings -->
-                <div class="bg-gamingDark p-4 rounded-xl border border-gray-800 space-y-3">
-                    <h3 class="font-bold text-accentGold text-base"><i class="fa-solid fa-globe mr-2"></i> General Website Settings</h3>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">Website Name</label>
-                        <input type="text" id="settingSiteName" class="w-full bg-gamingCard border border-gray-700 rounded-lg px-3 py-2 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1">WhatsApp Order Number</label>
-                        <input type="text" id="settingWhatsApp" class="w-full bg-gamingCard border border-gray-700 rounded-lg px-3 py-2 text-white">
-                    </div>
-                    <button onclick="saveGeneralSettings()" class="bg-accentNeon text-black font-bold px-4 py-2 rounded-lg transition text-xs">Save Settings</button>
-                </div>
-
-                <!-- Stock & Package Management -->
-                <div class="bg-gamingDark p-4 rounded-xl border border-gray-800 space-y-3">
-                    <h3 class="font-bold text-accentNeon text-base"><i class="fa-solid fa-box-archive mr-2"></i> Package & Stock Management</h3>
-                    <div id="adminProductList" class="space-y-2">
-                        <!-- Injected via JS -->
-                    </div>
-                </div>
-
-                <!-- Banner Manager -->
-                <div class="bg-gamingDark p-4 rounded-xl border border-gray-800 space-y-3">
-                    <h3 class="font-bold text-accentOrange text-base"><i class="fa-solid fa-images mr-2"></i> Banner Image URLs (Comma separated)</h3>
-                    <textarea id="settingBanners" rows="3" class="w-full bg-gamingCard border border-gray-700 rounded-lg px-3 py-2 text-white text-xs"></textarea>
-                    <button onclick="saveBanners()" class="bg-accentOrange text-white font-bold px-4 py-2 rounded-lg transition text-xs">Update Banners</button>
-                </div>
+            <div class="form-group">
+                <label>WhatsApp নম্বর</label>
+                <input type="text" id="inputWhatsApp" value="01903982821">
             </div>
+            <div class="form-group">
+                <label>লোগো ইমেজ লিংক (URL)</label>
+                <input type="text" id="inputLogoUrl" placeholder="Image link">
+            </div>
+            <div class="form-group">
+                <label>ব্যানার ইমেজ লিংক (URL)</label>
+                <input type="text" id="inputBannerUrl" placeholder="Banner image link">
+            </div>
+            <button class="save-btn" onclick="saveGeneralSettings()">Save Settings</button>
+        </div>
+
+        <!-- Tab 2: Cards Management -->
+        <div id="cardsTab" class="admin-section-content">
+            <div class="form-group">
+                <label>কার্ডের নাম পরিবর্তন</label>
+                <input type="text" id="inputCardName" value="I BASIC (4 BOT)">
+            </div>
+            <div class="form-group">
+                <label>কার্ডের ছবি (URL)</label>
+                <input type="text" id="inputCardImg" placeholder="Card image link">
+            </div>
+            <button class="save-btn" onclick="showAlert()">Save Card Details</button>
+        </div>
+
+        <!-- Tab 3: Packages & Stock -->
+        <div id="packagesTab" class="admin-section-content">
+            <div class="form-group">
+                <label>প্যাকেজ নাম ও দাম কাস্টমাইজ</label>
+                <input type="text" id="inputPkgName" value="I BASIC (4 BOT) - ৳130">
+            </div>
+            <div class="form-group">
+                <label>স্টক স্ট্যাটাস</label>
+                <select id="inputStockStatus">
+                    <option value="In Stock">In Stock</option>
+                    <option value="Stock Out">Stock Out</option>
+                </select>
+            </div>
+            <button class="save-btn" onclick="showAlert()">Update Package</button>
         </div>
     </div>
 
-    <!-- WhatsApp Missing Warning Modal -->
-    <div id="whatsappWarningModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-gamingCard w-full max-w-md rounded-2xl p-6 border-2 border-accentOrange neon-glow-orange text-center space-y-4">
-            <div class="w-14 h-14 bg-amber-500/10 border border-accentOrange rounded-full flex items-center justify-center mx-auto text-accentOrange text-2xl">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <h3 class="text-xl font-bold text-white">WhatsApp Not Found!</h3>
-            <p class="text-sm text-gray-300 leading-relaxed">
-                আপনার ফোনে কোনো WhatsApp একাউন্ট পাওয়া যায়নি! অর্ডারটি সম্পন্ন করার জন্য অনুগ্রহ করে আমাদের ওয়েবসাইটের নিচের বাম কোণায় থাকা সবুজ <strong>Support Bubble</strong> আইকনে ক্লিক করে সরাসরি যোগাযোগ করুন।
-            </p>
-            <button onclick="closeWhatsAppWarning()" class="w-full bg-accentOrange hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition text-sm">
-                Understand & Contact Support
-            </button>
-        </div>
-    </div>
-
-    <!-- JavaScript Application Logic -->
     <script>
-        // Initial Database State (Managed via localStorage or default)
-        let siteData = JSON.parse(localStorage.getItem('ff_site_data')) || {
-            siteName: "FF GUILD GLORY",
-            whatsappNumber: "01903982821",
-            banners: [
-                "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80",
-                "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&auto=format&fit=crop&q=80"
-            ],
-            products: [
-                { id: 1, name: "1 BASIC (4 BOT)", price: 130, banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=80", inStock: true },
-                { id: 2, name: "2 BASIC (8 BOT)", price: 250, banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&auto=format&fit=crop&q=80", inStock: true },
-                { id: 3, name: "5 BASIC (20 BOT)", price: 600, banner: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=80", inStock: true }
+        // Sample Data Structure
+        let siteData = {
+            shopName: "SF GLORY SHOP",
+            whatsapp: "01903982821",
+            logo: "https://via.placeholder.com/40",
+            banner: "https://via.placeholder.com/600x180",
+            bannerText: "🔥 Verified SF Glory & Bot Service",
+            cards: [
+                {
+                    id: 1,
+                    title: "I BASIC (4 BOT)",
+                    image: "https://via.placeholder.com/300x150",
+                    packages: [
+                        { name: "4 Bot Pack", price: "৳130.00", status: "In Stock" },
+                        { name: "Extra Addon", price: "৳50.00", status: "In Stock" }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "II BASIC (8 BOT)",
+                    image: "https://via.placeholder.com/300x150",
+                    packages: [
+                        { name: "8 Bot Pack", price: "৳250.00", status: "In Stock" }
+                    ]
+                }
             ]
         };
 
-        let selectedProduct = null;
-        let clickCount = 0;
-        let clickTimer = null;
+        function renderSite() {
+            document.getElementById('displayShopName').innerText = siteData.shopName;
+            document.getElementById('mainLogo').src = siteData.logo;
+            document.getElementById('mainBannerImg').src = siteData.banner;
+            document.getElementById('displayBannerText').innerText = siteData.bannerText;
 
-        // Initialize UI
-        function initApp() {
-            document.getElementById('siteNameDisplay').innerText = siteData.siteName;
-            document.getElementById('siteTitleMeta').innerText = siteData.siteName;
-            renderBanners();
-            renderProducts();
-        }
-
-        // Render Banners & Slider
-        function renderBanners() {
-            const wrapper = document.getElementById('sliderWrapper');
-            const dots = document.getElementById('sliderDots');
-            
-            wrapper.innerHTML = siteData.banners.map(url => `
-                <div class="min-w-full h-full relative">
-                    <img src="${url}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gamingDark/80 to-transparent flex items-end p-4">
-                        <span class="text-white font-bold text-sm md:text-base">🔥 Verified Guild Glory & Bot Service</span>
+            let gridHTML = '';
+            siteData.cards.forEach(card => {
+                gridHTML += `
+                    <div class="category-card" onclick="openCardModal(${card.id})">
+                        <img src="${card.image}" alt="${card.title}">
+                        <h3>${card.title}</h3>
                     </div>
-                </div>
-            `).join('');
-
-            dots.innerHTML = siteData.banners.map((_, idx) => `
-                <button onclick="currentSlide(${idx})" class="w-2.5 h-2.5 rounded-full bg-white/60 transition-all dot-indicator" id="dot-${idx}"></button>
-            `).join('');
-        }
-
-        let currentIndex = 0;
-        function updateSlider() {
-            const wrapper = document.getElementById('sliderWrapper');
-            if(!wrapper) return;
-            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-            document.querySelectorAll('.dot-indicator').forEach((dot, idx) => {
-                if(idx === currentIndex) {
-                    dot.classList.add('bg-accentNeon', 'w-6');
-                    dot.classList.remove('bg-white/60');
-                } else {
-                    dot.classList.remove('bg-accentNeon', 'w-6');
-                    dot.classList.add('bg-white/60');
-                }
+                `;
             });
+            document.getElementById('cardsGridContainer').innerHTML = gridHTML;
         }
-        function currentSlide(idx) {
-            currentIndex = idx;
-            updateSlider();
-        }
-        setInterval(() => {
-            if(siteData.banners.length > 0) {
-                currentIndex = (currentIndex + 1) % siteData.banners.length;
-                updateSlider();
-            }
-        }, 4000);
 
-        // Render Products
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = siteData.products.map(p => `
-                <div onclick="${p.inStock ? `selectPackage(${p.id})` : ''}" class="border-2 ${p.inStock ? 'border-gray-800 hover:border-accentNeon cursor-pointer bg-gamingCard' : 'border-red-900/50 bg-red-950/20 opacity-70 cursor-not-allowed'} rounded-2xl p-4 transition shadow-xl relative group">
-                    <div class="absolute top-3 right-3 ${p.inStock ? 'bg-amber-500/10 text-accentGold border-amber-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'} text-[10px] font-bold px-2.5 py-1 rounded-md border flex items-center space-x-1">
-                        <i class="fa-solid ${p.inStock ? 'fa-bolt' : 'fa-ban'}"></i><span>${p.inStock ? 'INSTANT' : 'STOCK OUT'}</span>
+        function openCardModal(cardId) {
+            let card = siteData.cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            document.getElementById('modalCardTitle').innerText = card.title;
+            let pkgHTML = '';
+            card.packages.forEach(pkg => {
+                pkgHTML += `
+                    <div class="package-item">
+                        <div>
+                            <strong>${pkg.name}</strong><br>
+                            <span style="color: var(--accent-color);">${pkg.price}</span>
+                        </div>
+                        <button onclick="alert('Order placed for ${pkg.name}')">Buy Now</button>
                     </div>
-                    <div class="h-32 rounded-xl overflow-hidden mb-3 border border-gray-800">
-                        <img src="${p.banner}" class="w-full h-full object-cover group-hover:scale-105 transition">
-                    </div>
-                    <h3 class="font-bold text-white text-base mb-1">${p.name}</h3>
-                    <div class="text-gray-400 text-xs">Price</div>
-                    <div class="text-accentNeon font-extrabold text-lg">৳${p.price}.00</div>
-                    <div class="text-[11px] text-gray-500 mt-1">FF GUILD GLORY</div>
-                </div>
-            `).join('');
+                `;
+            });
+            document.getElementById('modalPackagesList').innerHTML = pkgHTML;
+            document.getElementById('packageModal').style.display = 'flex';
         }
 
-        // Package Selection
-        function selectPackage(id) {
-            const p = siteData.products.find(item => item.id === id);
-            if(!p || !p.inStock) return;
-            selectedProduct = p;
-            document.getElementById('orderSection').classList.remove('hidden');
-            document.getElementById('selectedPkgName').innerText = p.name;
-            document.getElementById('selectedPkgPrice').innerText = '৳' + p.price;
-            window.scrollTo({ top: document.getElementById('orderSection').offsetTop - 80, behavior: 'smooth' });
+        function closeModal() {
+            document.getElementById('packageModal').style.display = 'none';
         }
 
-        // WhatsApp Order & Fallback Logic
-        function proceedToWhatsApp() {
-            const uid = document.getElementById('guildUid').value.trim();
-            const phone = document.getElementById('userPhone').value.trim();
-            if(!uid || !phone) {
-                alert('দয়া করে সঠিক Guild ID এবং WhatsApp নাম্বার দিন!');
-                return;
-            }
-
-            const msg = `Hi Admin, I want to order:\n\n📦 Package: ${selectedProduct.name}\n💰 Price: ৳${selectedProduct.price}\n🆔 Guild UID: ${uid}\n📱 User Phone: ${phone}\n\nPlease process my order!`;
-            const encodedMsg = encodeURIComponent(msg);
-            const waNumber = siteData.whatsappNumber;
-
-            // Check device/WhatsApp availability simulation & redirect
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            // Try opening WhatsApp link
-            const waUrl = `https://wa.me/${waNumber}?text=${encodedMsg}`;
-            
-            // Trigger check
-            let opened = window.open(waUrl, '_blank');
-            
-            // If popup blocked or missing whatsapp app capability on some devices, fallback
-            setTimeout(() => {
-                if(!opened || opened.closed || typeof opened.closed === 'undefined') {
-                    document.getElementById('whatsappWarningModal').classList.remove('hidden');
-                }
-            }, 1000);
+        function toggleAdminPanel(show) {
+            document.getElementById('admin-panel').style.display = show ? 'block' : 'none';
         }
 
-        function closeWhatsAppWarning() {
-            document.getElementById('whatsappWarningModal').classList.add('hidden');
-        }
+        function switchTab(evt, tabId) {
+            let contents = document.getElementsByClassName('admin-section-content');
+            for (let c of contents) c.classList.remove('active');
 
-        // 4-Click Admin Trigger Logic
-        function handleAdminTrigger() {
-            clickCount++;
-            if(clickCount === 1) {
-                clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
-            } else if(clickCount === 4) {
-                clearTimeout(clickTimer);
-                clickCount = 0;
-                document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
-        }
+            let buttons = document.getElementsByClassName('tab-btn');
+            for (let b of buttons) b.classList.remove('active');
 
-        function closeAdminLogin() {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            document.getElementById('adminPassInput').value = '';
-        }
-
-        function verifyAdminPass() {
-            const pass = document.getElementById('adminPassInput').value.trim();
-            if(pass === 'mrlala') {
-                closeAdminLogin();
-                openAdminDashboard();
-            } else {
-                alert('ভুল পাসওয়ার্ড! দয়া করে সঠিক পাসওয়ার্ড দিন।');
-            }
-        }
-
-        // Admin Dashboard Controls
-        function openAdminDashboard() {
-            document.getElementById('settingSiteName').value = siteData.siteName;
-            document.getElementById('settingWhatsApp').value = siteData.whatsappNumber;
-            document.getElementById('settingBanners').value = siteData.banners.join(', ');
-            
-            renderAdminProducts();
-            document.getElementById('adminDashboardModal').classList.remove('hidden');
-        }
-
-        function closeAdminDashboard() {
-            document.getElementById('adminDashboardModal').classList.add('hidden');
-        }
-
-        function renderAdminProducts() {
-            const list = document.getElementById('adminProductList');
-            list.innerHTML = siteData.products.map(p => `
-                <div class="flex items-center justify-between bg-gamingCard p-3 rounded-lg border border-gray-700">
-                    <div>
-                        <span class="font-bold text-white text-sm">${p.name}</span>
-                        <div class="text-xs text-accentGold">৳${p.price}</div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="toggleStock(${p.id})" class="px-3 py-1 rounded text-xs font-bold ${p.inStock ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}">
-                            ${p.inStock ? 'In Stock' : 'Stock Out'}
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleStock(id) {
-            const p = siteData.products.find(item => item.id === id);
-            if(p) {
-                p.inStock = !p.inStock;
-                saveToStorage();
-                renderAdminProducts();
-                renderProducts();
-            }
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
 
         function saveGeneralSettings() {
-            siteData.siteName = document.getElementById('settingSiteName').value.trim() || "FF GUILD GLORY";
-            siteData.whatsappNumber = document.getElementById('settingWhatsApp').value.trim() || "01903982821";
-            saveToStorage();
-            initApp();
-            alert('সফলভাবে সেটিংস আপডেট হয়েছে!');
+            siteData.shopName = document.getElementById('inputShopName').value;
+            siteData.whatsapp = document.getElementById('inputWhatsApp').value;
+            let lUrl = document.getElementById('inputLogoUrl').value;
+            let bUrl = document.getElementById('inputBannerUrl').value;
+            if(lUrl) siteData.logo = lUrl;
+            if(bUrl) siteData.banner = bUrl;
+
+            renderSite();
+            showAlert();
         }
 
-        function saveBanners() {
-            const raw = document.getElementById('settingBanners').value;
-            siteData.banners = raw.split(',').map(s => s.trim()).filter(s => s.length > 0);
-            saveToStorage();
-            renderBanners();
-            alert('ব্যানার সফলভাবে আপডেট হয়েছে!');
+        function showAlert() {
+            let alertBox = document.getElementById('customAlert');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 2000);
         }
 
-        function saveToStorage() {
-            localStorage.setItem('ff_site_data', JSON.stringify(siteData));
-        }
-
-        // Run Initializer
-        initApp();
+        // Initial Load
+        renderSite();
     </script>
 </body>
 </html>
