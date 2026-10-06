@@ -1,528 +1,90 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SF Glory Shop</title>
+    <title>FF GLORY SHOP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #141b2d;
-            --accent-color: #00ffcc;
-            --text-color: #ffffff;
-            --secondary-text: #8b949e;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding-bottom: 50px;
-        }
-
-        /* Header */
-        header {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            background: rgba(20, 27, 45, 0.95);
-            border-bottom: 1px solid #1f293d;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-area img {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-color);
-            object-fit: cover;
-            background: #1f293d;
-        }
-
-        .shop-name {
-            font-size: 18px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff007f, #00ffcc, #ffff00, #ff007f);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shine 4s linear infinite;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        @keyframes shine {
-            to { background-position: 300% center; }
-        }
-
-        /* Banner Section */
-        .banner-container {
-            margin: 12px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #1f293d;
-            position: relative;
-            background: #141b2d;
-            min-height: 140px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .banner-container img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .banner-text {
-            position: absolute;
-            bottom: 8px;
-            left: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: var(--accent-color);
-        }
-
-        /* Section Title */
-        .section-title {
-            margin: 20px 12px 10px;
-            font-size: 15px;
-            color: var(--text-color);
-            border-left: 3px solid var(--accent-color);
-            padding-left: 8px;
-        }
-
-        /* Single Card Container (Centered & Clean) */
-        .single-card-container {
-            padding: 0 12px;
-            max-width: 360px;
-            margin: 0 auto;
-        }
-
-        .category-card {
-            background: var(--card-bg);
-            border: 1px solid #1f293d;
-            border-radius: 14px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-            text-align: center;
-            padding-bottom: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-        }
-
-        .category-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent-color);
-        }
-
-        .category-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 1px solid #1f293d;
-            background: #1c263d;
-        }
-
-        .category-card h3 {
-            font-size: 16px;
-            margin: 12px 5px 4px;
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
-        /* Modal / Inside Package View */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 380px;
-            border-radius: 14px;
-            border: 1px solid var(--accent-color);
-            padding: 18px;
-            max-height: 85vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 12px;
-            right: 15px;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--secondary-text);
-        }
-
-        .package-item {
-            background: #1c263d;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #28354f;
-        }
-
-        .package-item button {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* Hidden Admin Panel */
-        #admin-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
-            z-index: 2000;
-            flex-direction: column;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: var(--card-bg);
-            border-bottom: 1px solid #1f293d;
-        }
-
-        .admin-body {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .admin-sidebar {
-            width: 130px;
-            background: #101624;
-            border-right: 1px solid #1f293d;
-            padding: 10px 0;
-        }
-
-        .sidebar-tab {
-            width: 100%;
-            padding: 12px 10px;
-            text-align: left;
-            background: transparent;
-            border: none;
-            color: var(--secondary-text);
-            cursor: pointer;
-            font-size: 13px;
-            border-left: 3px solid transparent;
-        }
-
-        .sidebar-tab.active {
-            color: var(--accent-color);
-            background: rgba(0, 255, 204, 0.05);
-            border-left-color: var(--accent-color);
-        }
-
-        .admin-content-area {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .admin-section {
-            display: none;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--secondary-text);
-            font-size: 12px;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: #1c263d;
-            border: 1px solid #28354f;
-            color: var(--text-color);
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .save-btn {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            padding: 10px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .custom-alert {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1f883d;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            z-index: 3000;
-            font-size: 13px;
-        }
+        .no-select { user-select: none; pointer-events: none; }
+        .gradient-text { background: linear-gradient(90deg, #ff00cc, #33ccff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .neon-glow { box-shadow: 0 0 15px rgba(51, 204, 255, 0.5); }
     </style>
 </head>
-<body>
+<body class="bg-gray-950 text-white font-sans selection:bg-pink-500">
 
-    <div id="customAlert" class="custom-alert">সফলভাবে আপডেট করা হয়েছে!</div>
-
-    <!-- Header (Click shop name 4 times for Admin) -->
-    <header>
-        <div class="logo-area">
-            <img id="mainLogo" src="https://via.placeholder.com/40" alt="Logo">
-            <div class="shop-name" id="displayShopName" onclick="handleLogoClick()">SF GLORY SHOP</div>
+    <!-- HEADER -->
+    <header class="p-6 flex justify-between items-center bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
+        <div id="brand-container" class="cursor-pointer" onclick="handleLogoClick()">
+            <h1 id="brand-name" class="text-3xl font-black italic tracking-tighter gradient-text no-select uppercase">
+                FF GLORY SHOP
+            </h1>
         </div>
+        <img id="logo-img" src="https://via.placeholder.com/50" class="w-12 h-12 rounded-full border-2 border-pink-500" alt="Logo">
     </header>
 
-    <!-- Banner -->
-    <div class="banner-container">
-        <img id="mainBannerImg" src="https://via.placeholder.com/600x150" alt="Banner">
-        <div class="banner-text" id="displayBannerText">🔥 Verified SF Glory Service</div>
-    </div>
-
-    <!-- Section Title -->
-    <div class="section-title">Select Package & Glory Card</div>
-
-    <!-- Single Main Card Container -->
-    <div class="single-card-container" id="cardContainer"></div>
-
-    <!-- Package & Order Modal -->
-    <div class="modal" id="packageModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h3 id="modalCardTitle" style="margin-bottom: 12px; color: var(--accent-color);">Packages</h3>
-            <p style="font-size: 12px; color: var(--secondary-text); margin-bottom: 10px;">আপনার পছন্দের প্যাকেজটি সিলেক্ট করে অর্ডার করুন:</p>
-            <div id="modalPackagesList"></div>
-        </div>
-    </div>
-
-    <!-- Admin Panel (Hidden until 4 clicks on shop name + password) -->
-    <div id="admin-panel">
-        <div class="admin-header">
-            <h3 style="font-size: 15px; color: var(--accent-color);">Admin Control Panel</h3>
-            <button onclick="toggleAdmin(false)" style="background:transparent; border:none; color:#fff; font-size:18px; cursor:pointer;">✕</button>
-        </div>
-        <div class="admin-body">
-            <div class="admin-sidebar">
-                <button class="sidebar-tab active" onclick="switchAdminTab(event, 'tabGeneral')">জেনারেল</button>
-                <button class="sidebar-tab" onclick="switchAdminTab(event, 'tabCard')">কার্ড এডিট</button>
-                <button class="sidebar-tab" onclick="switchAdminTab(event, 'tabPackages')">প্যাকেজ লিস্ট</button>
-            </div>
-            <div class="admin-content-area">
-                <!-- Tab 1 -->
-                <div id="tabGeneral" class="admin-section active">
-                    <div class="form-group">
-                        <label>ওয়েবসাইটের নাম</label>
-                        <input type="text" id="inputShopName" value="SF GLORY SHOP">
-                    </div>
-                    <div class="form-group">
-                        <label>লোগো ইমেজ লিংক (URL)</label>
-                        <input type="text" id="inputLogoUrl" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>ব্যানার ইমেজ লিংক (URL)</label>
-                        <input type="text" id="inputBannerUrl" placeholder="https://...">
-                    </div>
-                    <button class="save-btn" onclick="saveGeneral()">সেভ করুন</button>
-                </div>
-                <!-- Tab 2 -->
-                <div id="tabCard" class="admin-section">
-                    <div class="form-group">
-                        <label>কার্ডের নাম</label>
-                        <input type="text" id="inputCardTitleEdit" value="FF GUILD GLORY">
-                    </div>
-                    <div class="form-group">
-                        <label>কার্ডের ছবি লিংক (URL)</label>
-                        <input type="text" id="inputCardImgEdit" placeholder="https://...">
-                    </div>
-                    <button class="save-btn" onclick="saveCardInfo()">কার্ড আপডেট করুন</button>
-                </div>
-                <!-- Tab 3 -->
-                <div id="tabPackages" class="admin-section">
-                    <div class="form-group">
-                        <label>প্যাকেজ ম্যানেজ (টেক্সট)</label>
-                        <input type="text" id="inputPkgEditName" value="1 BASIC (4 BOT) - ৳130">
-                    </div>
-                    <button class="save-btn" onclick="showAlert()">প্যাকেজ সেভ করুন</button>
-                </div>
+    <!-- ADMIN MODAL -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-xl border border-pink-500 w-96">
+            <h2 class="text-xl font-bold mb-4">Admin Panel</h2>
+            <input type="password" id="admin-pass" placeholder="Enter Password" class="w-full p-2 mb-4 bg-gray-700 rounded text-white">
+            <button onclick="checkAdmin()" class="w-full bg-pink-600 p-2 rounded font-bold">Login</button>
+            <div id="admin-controls" class="hidden mt-4 space-y-2">
+                <input type="text" id="new-name" placeholder="Change Website Name" class="w-full p-2 bg-gray-700 rounded">
+                <button onclick="updateSettings()" class="w-full bg-blue-600 p-2 rounded">Update Changes</button>
             </div>
         </div>
     </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto p-4">
+        <!-- Banner -->
+        <section id="banner" class="w-full h-64 bg-gray-800 rounded-2xl flex items-center justify-center neon-glow">
+            <h2 class="text-4xl font-bold">Banner Section</h2>
+        </section>
+
+        <!-- Services -->
+        <section class="mt-10 grid grid-cols-2 gap-4">
+            <div class="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-pink-500 transition-all cursor-pointer">
+                <h3 class="text-xl font-bold">FF GUILD GLORY</h3>
+            </div>
+        </section>
+    </main>
 
     <script>
-        let db = {
-            shopName: "SF GLORY SHOP",
-            logo: "https://via.placeholder.com/40",
-            banner: "https://via.placeholder.com/600x150",
-            bannerText: "🔥 Verified SF Glory & Bot Service",
-            card: {
-                title: "FF GUILD GLORY",
-                image: "https://via.placeholder.com/300x180",
-                packages: [
-                    { name: "1 BASIC (4 BOT)", price: "৳130.00", status: "In Stock" },
-                    { name: "2 BASIC (8 BOT)", price: "৳250.00", status: "In Stock" },
-                    { name: "3 BASIC (12 BOT)", price: "৳370.00", status: "In Stock" }
-                ]
-            }
-        };
-
-        // 4 Clicks Security Logic for Admin
+        // State Management
         let clickCount = 0;
-        let clickTimer = null;
-
+        
         function handleLogoClick() {
             clickCount++;
-            clearTimeout(clickTimer);
             if (clickCount === 4) {
+                document.getElementById('admin-modal').classList.remove('hidden');
                 clickCount = 0;
-                let pass = prompt("এডমিন পাসওয়ার্ড দিন:");
-                if (pass === "admin123") {
-                    toggleAdmin(true);
-                } else if(pass !== null) {
-                    alert("ভুল পাসওয়ার্ড!");
-                }
-            } else {
-                clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+            }
+            setTimeout(() => clickCount = 0, 2000);
+        }
+
+        function checkAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === 'mrlala') {
+                document.getElementById('admin-controls').classList.remove('hidden');
+                alert("Authenticated!");
             }
         }
 
-        function render() {
-            document.getElementById('displayShopName').innerText = db.shopName;
-            document.getElementById('inputShopName').value = db.shopName;
-            document.getElementById('mainLogo').src = db.logo;
-            document.getElementById('mainBannerImg').src = db.banner;
-            document.getElementById('displayBannerText').innerText = db.bannerText;
-
-            document.getElementById('inputCardTitleEdit').value = db.card.title;
-
-            // Render single card
-            let html = `
-                <div class="category-card" onclick="openModal()">
-                    <img src="${db.card.image}" alt="${db.card.title}">
-                    <h3>${db.card.title}</h3>
-                </div>
-            `;
-            document.getElementById('cardContainer').innerHTML = html;
+        function updateSettings() {
+            const newName = document.getElementById('new-name').value;
+            if (newName) {
+                document.getElementById('brand-name').innerText = newName;
+                localStorage.setItem('siteName', newName);
+            }
         }
 
-        function openModal() {
-            document.getElementById('modalCardTitle').innerText = db.card.title;
-            let pHtml = '';
-            db.card.packages.forEach(p => {
-                pHtml += `
-                    <div class="package-item">
-                        <div>
-                            <strong>${p.name}</strong><br>
-                            <span style="color: var(--accent-color); font-weight: bold;">${p.price}</span> 
-                            <span style="font-size: 11px; color: #8b949e;">(${p.status})</span>
-                        </div>
-                        <button onclick="alert('আপনার অর্ডারটি গ্রহণ করা হয়েছে। পেমেন্ট সম্পন্ন করতে যোগাযোগ করুন।')">Buy Now</button>
-                    </div>
-                `;
-            });
-            document.getElementById('modalPackagesList').innerHTML = pHtml;
-            document.getElementById('packageModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('packageModal').style.display = 'none';
-        }
-
-        function toggleAdmin(show) {
-            document.getElementById('admin-panel').style.display = show ? 'flex' : 'none';
-        }
-
-        function switchAdminTab(evt, tabId) {
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            evt.currentTarget.classList.add('active');
-        }
-
-        function saveGeneral() {
-            db.shopName = document.getElementById('inputShopName').value;
-            let l = document.getElementById('inputLogoUrl').value;
-            let b = document.getElementById('inputBannerUrl').value;
-            if(l) db.logo = l;
-            if(b) db.banner = b;
-            render();
-            showAlert();
-        }
-
-        function saveCardInfo() {
-            db.card.title = document.getElementById('inputCardTitleEdit').value;
-            let cImg = document.getElementById('inputCardImgEdit').value;
-            if(cImg) db.card.image = cImg;
-            render();
-            showAlert();
-        }
-
-        function showAlert() {
-            let a = document.getElementById('customAlert');
-            a.style.display = 'block';
-            setTimeout(() => a.style.display = 'none', 2000);
-        }
-
-        render();
+        // Persistence Load
+        window.onload = () => {
+            const savedName = localStorage.getItem('siteName');
+            if (savedName) document.getElementById('brand-name').innerText = savedName;
+        };
     </script>
 </body>
 </html>
