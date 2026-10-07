@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FF SHOP - FF GUILD GLORY</title>
+  <title>FF SHOP</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
@@ -16,7 +16,7 @@
     body {
       background-color: #f7f9fa;
       color: #1a1a1a;
-      padding-bottom: 90px;
+      padding-bottom: 80px;
     }
 
     /* Header Styling */
@@ -52,7 +52,7 @@
     }
 
     .wallet-badge {
-      background: #ef4444;
+      background: #8b5cf6;
       color: white;
       padding: 5px 12px;
       border-radius: 20px;
@@ -88,10 +88,158 @@
       font-weight: 600;
     }
 
-    .container {
+    /* Banner Container */
+    .banner-container {
+      padding: 15px;
+    }
+
+    .banner-card {
+      width: 100%;
+      height: 170px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      position: relative;
+      background: #e5e7eb;
+    }
+
+    .banner-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 16px;
+    }
+
+    /* Section Header */
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      padding: 15px 15px 8px 15px;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 18px;
+      background: #00c853;
+      border-radius: 4px;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      padding: 0 15px;
+    }
+
+    .shop-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      border: 1px solid #f0f0f0;
+      transition: all 0.2s ease;
+    }
+
+    .shop-card:active {
+      transform: scale(0.98);
+    }
+
+    .shop-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      background-color: #f3f4f6;
+    }
+
+    .shop-card-title {
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 10px;
+      text-align: center;
+      color: #374151;
+      text-transform: uppercase;
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #6b7280;
+      font-size: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      gap: 3px;
+      width: 20%;
+      cursor: pointer;
+    }
+
+    .nav-item.active { color: #00c853; }
+    .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
+
+    .add-fund-btn {
+      width: 48px;
+      height: 48px;
+      background: #00c853;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 24px;
+      margin-top: -20px;
+      box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
+      border: 3px solid #ffffff;
+    }
+
+    /* ---------------------------------- */
+    /* FF GUILD GLORY DETAIL VIEW STYLES */
+    /* ---------------------------------- */
+    #detailView {
+      display: none;
       max-width: 500px;
       margin: 0 auto;
       padding: 15px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #00c853;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 10px;
     }
 
     .page-main-title {
@@ -102,7 +250,6 @@
       text-transform: uppercase;
     }
 
-    /* Step Headers */
     .step-title {
       display: flex;
       align-items: center;
@@ -135,7 +282,6 @@
       font-weight: 700;
     }
 
-    /* Package Selection Grid */
     .pkg-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -148,7 +294,6 @@
       border: 2px solid #e5e7eb;
       border-radius: 14px;
       padding: 12px;
-      position: relative;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -206,7 +351,6 @@
       margin-top: 4px;
     }
 
-    /* Guild ID Input Area */
     .input-box-container {
       background: #ffffff;
       border-radius: 14px;
@@ -233,9 +377,7 @@
       font-weight: 600;
     }
 
-    .custom-input:focus {
-      border-color: #00c853;
-    }
+    .custom-input:focus { border-color: #00c853; }
 
     .btn-order {
       width: 100%;
@@ -252,17 +394,14 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
     }
 
     .btn-order:disabled {
       background: #9ca3af;
-      box-shadow: none;
       cursor: not-allowed;
     }
 
-    /* Rules & Conditions Section */
-    .rules-card {
+    .rules-card, .yt-card {
       background: #ffffff;
       border-radius: 16px;
       padding: 16px;
@@ -270,11 +409,7 @@
       margin-bottom: 20px;
     }
 
-    .rules-list {
-      list-style: none;
-      margin-top: 10px;
-    }
-
+    .rules-list { list-style: none; margin-top: 10px; }
     .rules-item {
       display: flex;
       align-items: flex-start;
@@ -286,21 +421,6 @@
       line-height: 1.5;
     }
 
-    .rules-icon {
-      color: #00c853;
-      font-size: 16px;
-      line-height: 1;
-    }
-
-    /* YouTube Tutorial Card */
-    .yt-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1px solid #10b98133;
-    }
-
     .yt-header {
       display: flex;
       justify-content: space-between;
@@ -308,18 +428,8 @@
       margin-bottom: 12px;
     }
 
-    .yt-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: #111827;
-      line-height: 1.4;
-    }
-
-    .yt-sub {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 2px;
-    }
+    .yt-title { font-size: 14px; font-weight: 800; color: #111827; }
+    .yt-sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
 
     .btn-yt-click {
       background: #059669;
@@ -329,13 +439,9 @@
       border-radius: 8px;
       font-size: 11px;
       font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
     }
 
     .video-container {
-      position: relative;
       width: 100%;
       border-radius: 12px;
       overflow: hidden;
@@ -343,55 +449,41 @@
       background: #000;
     }
 
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+    .video-container iframe { width: 100%; height: 100%; border: none; }
 
-    /* Bottom Nav Bar */
-    .bottom-nav {
+    /* Custom In-App Popup */
+    .modal-overlay {
+      display: none;
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 65px;
-      background: #ffffff;
-      border-top: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 99;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #6b7280;
-      font-size: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      gap: 3px;
-      width: 20%;
-    }
-
-    .nav-item.active { color: #00c853; }
-    .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
-
-    .add-fund-btn {
-      width: 48px;
-      height: 48px;
-      background: #00c853;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
       justify-content: center;
-      color: #ffffff;
-      font-size: 24px;
-      margin-top: -20px;
-      box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
-      border: 3px solid #ffffff;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .modal-box h3 { font-size: 16px; color: #111827; margin-bottom: 10px; }
+    .modal-box p { font-size: 13px; color: #6b7280; margin-bottom: 15px; }
+
+    .modal-btn {
+      background: #00c853;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
     }
 
     /* VIP Admin Modal Overlay */
@@ -448,7 +540,19 @@
     <span style="cursor: pointer;" onclick="this.parentElement.style.display='none'">✕</span>
   </div>
 
-  <div class="container">
+  <!-- MAIN HOME VIEW (All Cards & Banner) -->
+  <div id="homeView">
+    <div class="banner-container">
+      <div class="banner-card">
+        <img id="bannerImg" src="https://via.placeholder.com/600x260/00c853/ffffff?text=MURUBBI+X+TOPUP" alt="">
+      </div>
+    </div>
+    <div id="mainContent"></div>
+  </div>
+
+  <!-- FF GUILD GLORY DETAIL VIEW -->
+  <div id="detailView">
+    <div class="back-btn" onclick="showHome()">← হোম পেজে ফিরে যান</div>
     <div class="page-main-title">FF GUILD GLORY</div>
 
     <!-- Step 1: Select Package -->
@@ -493,7 +597,7 @@
 
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
-    <a href="#" class="nav-item active">
+    <a onclick="showHome()" class="nav-item active">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Home
     </a>
     <a href="#" class="nav-item">
@@ -508,6 +612,15 @@
     </a>
   </div>
 
+  <!-- Custom In-App Popup -->
+  <div class="modal-overlay" id="customModal">
+    <div class="modal-box">
+      <h3 id="modalTitle">নোটিফিকেশন</h3>
+      <p id="modalMsg">মেসেজ কনটেন্ট...</p>
+      <button class="modal-btn" onclick="closeModal()">ঠিক আছে</button>
+    </div>
+  </div>
+
   <!-- VIP Admin Panel -->
   <div id="adminPanel">
     <div class="admin-header">
@@ -515,43 +628,63 @@
       <button class="close-btn" onclick="closeAdmin()">বন্ধ করুন</button>
     </div>
 
+    <!-- General Settings -->
+    <div class="admin-section">
+      <h3>সাধারণ কাস্টমাইজেশন</h3>
+      <div class="form-group">
+        <label>ওয়েবসাইট প্রথম নাম:</label>
+        <input type="text" id="inputPart1">
+      </div>
+      <div class="form-group">
+        <label>ওয়েবসাইট দ্বিতীয় নাম:</label>
+        <input type="text" id="inputPart2">
+      </div>
+      <div class="form-group">
+        <label>নোটিশ বার টেক্সট:</label>
+        <input type="text" id="inputNotice">
+      </div>
+      <div class="form-group">
+        <label>ব্যানার ছবি (URL):</label>
+        <input type="text" id="inputBannerImg">
+      </div>
+      <button class="btn-submit" onclick="saveGeneralSettings()">সেভ করুন</button>
+    </div>
+
     <!-- WhatsApp & YT Settings -->
     <div class="admin-section">
-      <h3>সাধারণ ও সোশ্যাল সেটিংস</h3>
+      <h3>FF GUILD GLORY কাস্টমাইজেশন</h3>
       <div class="form-group">
-        <label>WhatsApp নম্বর (যেমন: 01903982821):</label>
+        <label>WhatsApp নম্বর:</label>
         <input type="text" id="adminWaPhone">
       </div>
       <div class="form-group">
-        <label>YouTube টিউটোরিয়াল ভিডিও লিংক:</label>
+        <label>YouTube টিউটোরিয়াল লিঙ্ক:</label>
         <input type="text" id="adminYtUrl">
       </div>
       <div class="form-group">
-        <label>কাস্টম WhatsApp মেসেজ টেমপ্লেট:</label>
+        <label>WhatsApp মেসেজ ফরম্যাট:</label>
         <textarea id="adminWaMsg" rows="4"></textarea>
       </div>
-      <button class="btn-submit" onclick="saveGeneralAdmin()">সেভ করুন</button>
+      <div class="form-group">
+        <label>Rules & Conditions (প্রতিটি নতুন লাইনে ১টি নিয়ম):</label>
+        <textarea id="adminRulesInput" rows="5"></textarea>
+      </div>
+      <button class="btn-submit" onclick="saveGlorySettings()">গ্লোরি সেটিংস সেভ করুন</button>
     </div>
 
     <!-- Edit Packages -->
     <div class="admin-section">
-      <h3>প্যাকেজ ম্যানেজমেন্ট</h3>
+      <h3>FF GUILD GLORY প্যাকেজসমূহ</h3>
       <div id="adminPkgList"></div>
-    </div>
-
-    <!-- Edit Rules -->
-    <div class="admin-section">
-      <h3>Rules & Conditions এডিট করুন</h3>
-      <div class="form-group">
-        <label>নিয়মসমূহ (প্রতিটি নতুন লাইনে ১টি নিয়ম লিখুন):</label>
-        <textarea id="adminRulesInput" rows="6"></textarea>
-      </div>
-      <button class="btn-submit" onclick="saveRulesAdmin()">নিয়মাবলি সেভ করুন</button>
     </div>
   </div>
 
   <script>
     const defaultData = {
+      titlePart1: "MURUBBI",
+      titlePart2: "X TOPUP",
+      notice: "Fast & secure topup. Instant delivery 24/7!",
+      bannerImg: "https://via.placeholder.com/600x260/00c853/ffffff?text=MURUBBI+X+TOPUP",
       waPhone: "01903982821",
       ytUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       waMsgTemplate: "হ্যালো এডমিন, আমি FF GUILD GLORY প্যাকেজ কিনতে চাই।\n\n📌 প্যাকেজ: {PACKAGE}\n💰 মূল্য: ৳{PRICE}\n🆔 গিল্ড আইডি: {GUILD_ID}\n\nদয়া করে অর্ডারটি কনফার্ম করুন।",
@@ -565,15 +698,88 @@
         { id: 1, name: "1 BASIC (4 BOT)", price: 130, inStock: true },
         { id: 2, name: "2 BASIC (8 BOT)", price: 250, inStock: true },
         { id: 3, name: "5 BASIC (20 BOT)", price: 600, inStock: true }
+      ],
+      cards: [
+        { id: 1, category: "POPULAR ITEM", name: "FREEFIRE LIKES", img: "https://via.placeholder.com/200/111827/ffffff?text=LIKES" },
+        { id: 2, category: "POPULAR ITEM", name: "FF GUILD GLORY", img: "https://via.placeholder.com/200/111827/ffffff?text=GUILD" },
+        { id: 3, category: "FREEFIRE AUTO TOPUP", name: "FREE FIRE TOPUP [BD]", img: "https://via.placeholder.com/200/00c853/ffffff?text=TOPUP" },
+        { id: 4, category: "FREEFIRE AUTO TOPUP", name: "WEEKLY & MONTHLY", img: "https://via.placeholder.com/200/00c853/ffffff?text=WEEKLY" }
       ]
     };
 
-    let store = JSON.parse(localStorage.getItem('ff_guild_data')) || defaultData;
+    let store = JSON.parse(localStorage.getItem('ff_shop_master_data')) || defaultData;
     let selectedPkg = null;
 
     function saveStore() {
-      localStorage.setItem('ff_guild_data', JSON.stringify(store));
-      renderPage();
+      localStorage.setItem('ff_shop_master_data', JSON.stringify(store));
+      renderSite();
+    }
+
+    function showPopup(title, msg) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalMsg').innerText = msg;
+      document.getElementById('customModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('customModal').style.display = 'none';
+    }
+
+    function showHome() {
+      document.getElementById('homeView').style.display = 'block';
+      document.getElementById('detailView').style.display = 'none';
+      window.scrollTo(0,0);
+    }
+
+    function showGuildGloryDetail() {
+      document.getElementById('homeView').style.display = 'none';
+      document.getElementById('detailView').style.display = 'block';
+      window.scrollTo(0,0);
+      renderGuildGlory();
+    }
+
+    function renderSite() {
+      document.getElementById('siteTitle').innerHTML = `<span class="green">${store.titlePart1 || 'MURUBBI'}</span> <span class="dark">${store.titlePart2 || 'X TOPUP'}</span>`;
+      document.getElementById('noticeText').innerText = '🔔 ' + store.notice;
+      document.getElementById('bannerImg').src = store.bannerImg;
+
+      const mainContent = document.getElementById('mainContent');
+      mainContent.innerHTML = '';
+
+      const categories = {};
+      store.cards.forEach(card => {
+        if (!categories[card.category]) categories[card.category] = [];
+        categories[card.category].push(card);
+      });
+
+      for (let cat in categories) {
+        const secTitle = document.createElement('div');
+        secTitle.className = 'section-title';
+        secTitle.innerText = cat;
+
+        const grid = document.createElement('div');
+        grid.className = 'card-grid';
+
+        categories[cat].forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'shop-card';
+          
+          if (card.name === "FF GUILD GLORY") {
+            cardEl.onclick = () => showGuildGloryDetail();
+          } else {
+            cardEl.onclick = () => showPopup(card.name, "এই কার্ডের প্যাকেজ শীঘ্রই আসছে।");
+          }
+
+          cardEl.innerHTML = `
+            <img src="${card.img}" alt="">
+            <div class="shop-card-title">${card.name}</div>
+          `;
+          grid.appendChild(cardEl);
+        });
+
+        mainContent.appendChild(secTitle);
+        mainContent.appendChild(grid);
+      }
     }
 
     function extractYtId(url) {
@@ -582,8 +788,7 @@
       return (match && match[2].length === 11) ? match[2] : null;
     }
 
-    function renderPage() {
-      // Render Packages
+    function renderGuildGlory() {
       const pkgGrid = document.getElementById('pkgGrid');
       pkgGrid.innerHTML = '';
 
@@ -598,7 +803,7 @@
         card.onclick = () => {
           if (!pkg.inStock) return;
           selectedPkg = pkg;
-          renderPage();
+          renderGuildGlory();
         };
 
         card.innerHTML = `
@@ -614,42 +819,37 @@
       });
 
       document.getElementById('availCount').innerText = `${availableCount} Packages Available`;
-
-      // Enable/Disable Order Button
       document.getElementById('orderBtn').disabled = !selectedPkg;
 
-      // Render Rules
       const rulesList = document.getElementById('rulesList');
       rulesList.innerHTML = '';
       store.rules.forEach(rule => {
         const li = document.createElement('li');
         li.className = 'rules-item';
-        li.innerHTML = `<span class="rules-icon">🔘</span> <span>${rule}</span>`;
+        li.innerHTML = `<span style="color:#00c853;">🔘</span> <span>${rule}</span>`;
         rulesList.appendChild(li);
       });
 
-      // Render YouTube Player
       const ytId = extractYtId(store.ytUrl);
       const ytPlayerBox = document.getElementById('ytPlayerBox');
-      const ytLinkBtn = document.getElementById('ytLinkBtn');
-      ytLinkBtn.href = store.ytUrl;
+      document.getElementById('ytLinkBtn').href = store.ytUrl;
 
       if (ytId) {
         ytPlayerBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}" allowfullscreen></iframe>`;
       } else {
-        ytPlayerBox.innerHTML = `<div style="color:#fff; text-align:center; padding: 40px 10px;">ভিডিও দেখা যাচ্ছে না (সঠিক ইউআরএল দিন)</div>`;
+        ytPlayerBox.innerHTML = `<div style="color:#fff; text-align:center; padding: 40px 10px;">ভিডিও লিঙ্ক পাওয়া যায়নি</div>`;
       }
     }
 
     function sendWhatsAppOrder() {
       const guildId = document.getElementById('guildIdInput').value.trim();
       if (!guildId) {
-        alert("অনুগ্ৰহ করে আপনার Guild ID লিখুন!");
+        showPopup("সতর্কতা", "অনুগ্ৰহ করে আপনার Guild ID লিখুন!");
         return;
       }
 
       if (!selectedPkg) {
-        alert("অনুগ্ৰহ করে একটি প্যাকেজ সিলেক্ট করুন!");
+        showPopup("সতর্কতা", "অনুগ্ৰহ করে একটি প্যাকেজ সিলেক্ট করুন!");
         return;
       }
 
@@ -659,9 +859,7 @@
       msg = msg.replace('{GUILD_ID}', guildId);
 
       let cleanPhone = store.waPhone.replace(/[^0-9]/g, '');
-      if (cleanPhone.startsWith('0')) {
-        cleanPhone = '88' + cleanPhone;
-      }
+      if (cleanPhone.startsWith('0')) cleanPhone = '88' + cleanPhone;
 
       const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
       window.open(waUrl, '_blank');
@@ -682,12 +880,17 @@
         if (pass === "mrlala") {
           openAdmin();
         } else if (pass !== null) {
-          alert("ভুল পাসওয়ার্ড দিয়েছেন!");
+          showPopup("ত্রুটি", "ভুল পাসওয়ার্ড দিয়েছেন!");
         }
       }
     }
 
     function openAdmin() {
+      document.getElementById('inputPart1').value = store.titlePart1 || "MURUBBI";
+      document.getElementById('inputPart2').value = store.titlePart2 || "X TOPUP";
+      document.getElementById('inputNotice').value = store.notice;
+      document.getElementById('inputBannerImg').value = store.bannerImg;
+
       document.getElementById('adminWaPhone').value = store.waPhone;
       document.getElementById('adminYtUrl').value = store.ytUrl;
       document.getElementById('adminWaMsg').value = store.waMsgTemplate;
@@ -699,6 +902,27 @@
 
     function closeAdmin() {
       document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function saveGeneralSettings() {
+      store.titlePart1 = document.getElementById('inputPart1').value;
+      store.titlePart2 = document.getElementById('inputPart2').value;
+      store.notice = document.getElementById('inputNotice').value;
+      store.bannerImg = document.getElementById('inputBannerImg').value;
+      saveStore();
+      showPopup("সফল!", "সাধারণ সেটিংস সেভ হয়েছে।");
+    }
+
+    function saveGlorySettings() {
+      store.waPhone = document.getElementById('adminWaPhone').value.trim();
+      store.ytUrl = document.getElementById('adminYtUrl').value.trim();
+      store.waMsgTemplate = document.getElementById('adminWaMsg').value;
+      
+      const text = document.getElementById('adminRulesInput').value;
+      store.rules = text.split('\n').filter(r => r.trim() !== '');
+
+      saveStore();
+      showPopup("সফল!", "FF GUILD GLORY এর সেটিংস সেভ হয়েছে।");
     }
 
     function renderAdminPkgList() {
@@ -739,22 +963,7 @@
       saveStore();
     }
 
-    function saveGeneralAdmin() {
-      store.waPhone = document.getElementById('adminWaPhone').value.trim();
-      store.ytUrl = document.getElementById('adminYtUrl').value.trim();
-      store.waMsgTemplate = document.getElementById('adminWaMsg').value;
-      saveStore();
-      alert("সাধারণ সেটিংস সফলভাবে আপডেট হয়েছে!");
-    }
-
-    function saveRulesAdmin() {
-      const text = document.getElementById('adminRulesInput').value;
-      store.rules = text.split('\n').filter(r => r.trim() !== '');
-      saveStore();
-      alert("Rules & Conditions সফলভাবে আপডেট হয়েছে!");
-    }
-
-    renderPage();
+    renderSite();
   </script>
 </body>
 </html>
