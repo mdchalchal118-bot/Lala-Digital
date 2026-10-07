@@ -1,90 +1,576 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FF GLORY SHOP</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .no-select { user-select: none; pointer-events: none; }
-        .gradient-text { background: linear-gradient(90deg, #ff00cc, #33ccff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .neon-glow { box-shadow: 0 0 15px rgba(51, 204, 255, 0.5); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FF SHOP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0b130e;
+      color: #ffffff;
+      padding-bottom: 70px;
+    }
+
+    /* Header */
+    header {
+      background-color: #121e16;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e3325;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #00ff66;
+      cursor: pointer;
+      user-select: none;
+      letter-spacing: 1px;
+    }
+
+    .profile-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00ff66;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* Notice Bar */
+    .notice-bar {
+      background-color: #00a843;
+      color: #ffffff;
+      padding: 8px 15px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    /* Banner Container */
+    .banner-container {
+      padding: 15px;
+    }
+
+    .banner-card {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #052c14, #005c25);
+      border: 1px solid #00ff66;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .banner-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .banner-text {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.7);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #00ff66;
+      font-weight: bold;
+    }
+
+    /* Section Styling */
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 15px;
+      color: #00ff66;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: #00ff66;
+      border-radius: 2px;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 0 15px 15px 15px;
+    }
+
+    .shop-card {
+      background: #14241a;
+      border: 1px solid #1e3d29;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .shop-card:hover {
+      transform: translateY(-3px);
+      border-color: #00ff66;
+    }
+
+    .shop-card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .shop-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 10px;
+      text-align: center;
+      color: #e0e0e0;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #121e16;
+      border-top: 1px solid #1e3325;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #888;
+      font-size: 11px;
+      text-decoration: none;
+      gap: 3px;
+    }
+
+    .nav-item.active {
+      color: #00ff66;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* VIP Fullscreen Admin Panel */
+    #adminPanel {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #080d09;
+      z-index: 9999;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #00ff66;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .admin-header h2 {
+      color: #00ff66;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .close-btn {
+      background: #ff3333;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .admin-section {
+      background: #121e16;
+      border: 1px solid #1e3d29;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .admin-section h3 {
+      color: #00ff66;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      background: #0b130e;
+      border: 1px solid #1e3d29;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .btn-submit {
+      background: #00ff66;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .admin-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .admin-card-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0b130e;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #1e3d29;
+    }
+
+    .btn-delete {
+      background: #ff3333;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="bg-gray-950 text-white font-sans selection:bg-pink-500">
+<body>
 
-    <!-- HEADER -->
-    <header class="p-6 flex justify-between items-center bg-gray-900/80 backdrop-blur-md border-b border-gray-800">
-        <div id="brand-container" class="cursor-pointer" onclick="handleLogoClick()">
-            <h1 id="brand-name" class="text-3xl font-black italic tracking-tighter gradient-text no-select uppercase">
-                FF GLORY SHOP
-            </h1>
-        </div>
-        <img id="logo-img" src="https://via.placeholder.com/50" class="w-12 h-12 rounded-full border-2 border-pink-500" alt="Logo">
-    </header>
+  <!-- Header -->
+  <header>
+    <div class="brand-title" id="siteTitle" onclick="handleTitleClick()">FF SHOP</div>
+    <div class="profile-icon">👤</div>
+  </header>
 
-    <!-- ADMIN MODAL -->
-    <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div class="bg-gray-800 p-8 rounded-xl border border-pink-500 w-96">
-            <h2 class="text-xl font-bold mb-4">Admin Panel</h2>
-            <input type="password" id="admin-pass" placeholder="Enter Password" class="w-full p-2 mb-4 bg-gray-700 rounded text-white">
-            <button onclick="checkAdmin()" class="w-full bg-pink-600 p-2 rounded font-bold">Login</button>
-            <div id="admin-controls" class="hidden mt-4 space-y-2">
-                <input type="text" id="new-name" placeholder="Change Website Name" class="w-full p-2 bg-gray-700 rounded">
-                <button onclick="updateSettings()" class="w-full bg-blue-600 p-2 rounded">Update Changes</button>
-            </div>
-        </div>
+  <!-- Notice Bar -->
+  <div class="notice-bar">
+    <span id="noticeText">Fast & secure topup. Instant delivery 24/7!</span>
+    <span style="cursor: pointer;" onclick="this.parentElement.style.display='none'">✕</span>
+  </div>
+
+  <!-- Banner -->
+  <div class="banner-container">
+    <div class="banner-card">
+      <img id="bannerImg" src="https://via.placeholder.com/600x200/052c14/00ff66?text=FF+SHOP+TOPUP" alt="Banner">
+      <div class="banner-text" id="bannerText">অফার: দ্রুততম সময়ে টপআপ করুন!</div>
+    </div>
+  </div>
+
+  <!-- Dynamic Content Sections -->
+  <div id="mainContent"></div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3z"/></svg>
+      My Orders
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10z"/></svg>
+      Account
+    </a>
+  </div>
+
+  <!-- VIP Admin Panel -->
+  <div id="adminPanel">
+    <div class="admin-header">
+      <h2>VIP ADMIN PANEL</h2>
+      <button class="close-btn" onclick="closeAdmin()">বন্ধ করুন</button>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="container mx-auto p-4">
-        <!-- Banner -->
-        <section id="banner" class="w-full h-64 bg-gray-800 rounded-2xl flex items-center justify-center neon-glow">
-            <h2 class="text-4xl font-bold">Banner Section</h2>
-        </section>
+    <!-- General Settings -->
+    <div class="admin-section">
+      <h3>সাধারণ কাস্টমাইজেশন</h3>
+      <div class="form-group">
+        <label>ওয়েবসাইট নাম:</label>
+        <input type="text" id="inputSiteTitle">
+      </div>
+      <div class="form-group">
+        <label>নোটিশ বার টেক্সট:</label>
+        <input type="text" id="inputNotice">
+      </div>
+      <div class="form-group">
+        <label>ব্যানার ছবি (URL):</label>
+        <input type="text" id="inputBannerImg">
+      </div>
+      <div class="form-group">
+        <label>ব্যানার টেক্সট:</label>
+        <input type="text" id="inputBannerText">
+      </div>
+      <button class="btn-submit" onclick="saveGeneralSettings()">সেটিংস সেভ করুন</button>
+    </div>
 
-        <!-- Services -->
-        <section class="mt-10 grid grid-cols-2 gap-4">
-            <div class="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-pink-500 transition-all cursor-pointer">
-                <h3 class="text-xl font-bold">FF GUILD GLORY</h3>
-            </div>
-        </section>
-    </main>
+    <!-- Add New Item Card -->
+    <div class="admin-section">
+      <h3>নতুন প্রোডাক্ট কার্ড যোগ করুন</h3>
+      <div class="form-group">
+        <label>ক্যাটাগরি টাইটেল:</label>
+        <input type="text" id="inputCategory" placeholder="যেমন: FREEFIRE AUTO TOPUP">
+      </div>
+      <div class="form-group">
+        <label>কার্ডের নাম:</label>
+        <input type="text" id="inputCardName" placeholder="যেমন: FREE FIRE TOPUP [BD]">
+      </div>
+      <div class="form-group">
+        <label>কার্ড থাম্বনেইল ছবি (URL):</label>
+        <input type="text" id="inputCardImg" placeholder="https://example.com/image.jpg">
+      </div>
+      <button class="btn-submit" onclick="addNewCard()">নতুন কার্ড সেভ করুন</button>
+    </div>
 
-    <script>
-        // State Management
-        let clickCount = 0;
-        
-        function handleLogoClick() {
-            clickCount++;
-            if (clickCount === 4) {
-                document.getElementById('admin-modal').classList.remove('hidden');
-                clickCount = 0;
-            }
-            setTimeout(() => clickCount = 0, 2000);
+    <!-- Existing Cards List -->
+    <div class="admin-section">
+      <h3>বিদ্যমান প্রোডাক্ট কার্ডসমূহ</h3>
+      <div class="admin-card-list" id="adminCardList"></div>
+    </div>
+  </div>
+
+  <script>
+    // Default Data
+    const defaultData = {
+      title: "FF SHOP",
+      notice: "Fast & secure topup. Instant delivery 24/7!",
+      bannerImg: "https://via.placeholder.com/600x200/052c14/00ff66?text=FF+SHOP+TOPUP",
+      bannerText: "অফার: দ্রুততম সময়ে টপআপ করুন!",
+      cards: [
+        { id: 1, category: "POPULAR ITEM", name: "FREEFIRE LIKES", img: "https://via.placeholder.com/150/052c14/00ff66?text=FF+LIKES" },
+        { id: 2, category: "POPULAR ITEM", name: "FF GUILD GLORY", img: "https://via.placeholder.com/150/052c14/00ff66?text=GUILD+GLORY" },
+        { id: 3, category: "FREEFIRE AUTO TOPUP", name: "FREE FIRE TOPUP [BD]", img: "https://via.placeholder.com/150/052c14/00ff66?text=FF+TOPUP" },
+        { id: 4, category: "FREEFIRE AUTO TOPUP", name: "WEEKLY & MONTHLY", img: "https://via.placeholder.com/150/052c14/00ff66?text=WEEKLY+MONTHLY" },
+        { id: 5, category: "WEEKLY LITE & LEVEL UP PASS", name: "WEEKLY LITE", img: "https://via.placeholder.com/150/052c14/00ff66?text=WEEKLY+LITE" },
+        { id: 6, category: "WEEKLY LITE & LEVEL UP PASS", name: "LEVEL UP PASS", img: "https://via.placeholder.com/150/052c14/00ff66?text=LEVEL+UP" }
+      ]
+    };
+
+    let store = JSON.parse(localStorage.getItem('ff_shop_data')) || defaultData;
+
+    function saveStore() {
+      localStorage.setItem('ff_shop_data', JSON.stringify(store));
+      renderSite();
+    }
+
+    function renderSite() {
+      document.getElementById('siteTitle').innerText = store.title;
+      document.getElementById('noticeText').innerText = store.notice;
+      document.getElementById('bannerImg').src = store.bannerImg;
+      document.getElementById('bannerText').innerText = store.bannerText;
+
+      const mainContent = document.getElementById('mainContent');
+      mainContent.innerHTML = '';
+
+      // Group cards by category
+      const categories = {};
+      store.cards.forEach(card => {
+        if (!categories[card.category]) {
+          categories[card.category] = [];
         }
+        categories[card.category].push(card);
+      });
 
-        function checkAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === 'mrlala') {
-                document.getElementById('admin-controls').classList.remove('hidden');
-                alert("Authenticated!");
-            }
+      for (let cat in categories) {
+        const secTitle = document.createElement('div');
+        secTitle.className = 'section-title';
+        secTitle.innerText = cat;
+
+        const grid = document.createElement('div');
+        grid.className = 'card-grid';
+
+        categories[cat].forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'shop-card';
+          cardEl.onclick = () => alert(card.name + " কার্ডে ক্লিক করা হয়েছে। পরবর্তীতে প্যাকেজ যুক্ত করা হবে।");
+          cardEl.innerHTML = `
+            <img src="${card.img}" alt="${card.name}">
+            <div class="shop-card-title">${card.name}</div>
+          `;
+          grid.appendChild(cardEl);
+        });
+
+        mainContent.appendChild(secTitle);
+        mainContent.appendChild(grid);
+      }
+    }
+
+    // Header 4 Click Secret Trigger
+    let clickCount = 0;
+    let clickTimer;
+
+    function handleTitleClick() {
+      clickCount++;
+      clearTimeout(clickTimer);
+
+      clickTimer = setTimeout(() => {
+        clickCount = 0;
+      }, 1200);
+
+      if (clickCount >= 4) {
+        clickCount = 0;
+        const pass = prompt("VIP Admin Panel-এর পাসওয়ার্ড প্রবেশ করান:");
+        if (pass === "mrlala") {
+          openAdmin();
+        } else if (pass !== null) {
+          alert("ভুল পাসওয়ার্ড!");
         }
+      }
+    }
 
-        function updateSettings() {
-            const newName = document.getElementById('new-name').value;
-            if (newName) {
-                document.getElementById('brand-name').innerText = newName;
-                localStorage.setItem('siteName', newName);
-            }
-        }
+    function openAdmin() {
+      document.getElementById('inputSiteTitle').value = store.title;
+      document.getElementById('inputNotice').value = store.notice;
+      document.getElementById('inputBannerImg').value = store.bannerImg;
+      document.getElementById('inputBannerText').value = store.bannerText;
 
-        // Persistence Load
-        window.onload = () => {
-            const savedName = localStorage.getItem('siteName');
-            if (savedName) document.getElementById('brand-name').innerText = savedName;
-        };
-    </script>
+      renderAdminCardList();
+      document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    function closeAdmin() {
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function saveGeneralSettings() {
+      store.title = document.getElementById('inputSiteTitle').value;
+      store.notice = document.getElementById('inputNotice').value;
+      store.bannerImg = document.getElementById('inputBannerImg').value;
+      store.bannerText = document.getElementById('inputBannerText').value;
+
+      saveStore();
+      alert("সাধারণ সেটিংস সংরক্ষিত হয়েছে!");
+    }
+
+    function addNewCard() {
+      const category = document.getElementById('inputCategory').value.trim();
+      const name = document.getElementById('inputCardName').value.trim();
+      const img = document.getElementById('inputCardImg').value.trim();
+
+      if (!category || !name || !img) {
+        alert("সবগুলো তথ্য সঠিকভাবে ফিলআপ করুন!");
+        return;
+      }
+
+      const newCard = {
+        id: Date.now(),
+        category: category,
+        name: name,
+        img: img
+      };
+
+      store.cards.push(newCard);
+      saveStore();
+      renderAdminCardList();
+
+      document.getElementById('inputCategory').value = '';
+      document.getElementById('inputCardName').value = '';
+      document.getElementById('inputCardImg').value = '';
+      alert("নতুন কার্ড সফলভাবে যুক্ত করা হয়েছে!");
+    }
+
+    function deleteCard(id) {
+      if (confirm("আপনি কি নিশ্চিত এই কার্ডটি ডিলিট করতে চান?")) {
+        store.cards = store.cards.filter(c => c.id !== id);
+        saveStore();
+        renderAdminCardList();
+      }
+    }
+
+    function renderAdminCardList() {
+      const listContainer = document.getElementById('adminCardList');
+      listContainer.innerHTML = '';
+
+      store.cards.forEach(card => {
+        const item = document.createElement('div');
+        item.className = 'admin-card-item';
+        item.innerHTML = `
+          <div>
+            <strong>[${card.category}]</strong> ${card.name}
+          </div>
+          <button class="btn-delete" onclick="deleteCard(${card.id})">ডিলিট</button>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    // Initial Load
+    renderSite();
+  </script>
 </body>
 </html>
