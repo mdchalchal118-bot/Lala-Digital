@@ -81,7 +81,7 @@
       gap: 6px;
     }
 
-    /* Banner Container (Updated) */
+    /* Banner Container */
     .banner-container {
       padding: 15px;
     }
@@ -126,7 +126,7 @@
       border-radius: 4px;
     }
 
-    /* Card Grid (Updated) */
+    /* Card Grid */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -222,7 +222,7 @@
       border: 3px solid #ffffff;
     }
 
-    /* Custom In-App Popup Modal */
+    /* Custom In-App Popup Modal (কাস্টম মোডাল - কোনো ব্রাউজার টাইটেল দেখাবে না) */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -231,7 +231,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
+      z-index: 10000;
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -375,9 +375,7 @@
       cursor: pointer;
     }
 
-    /* ------------------------------------------- */
-    /* FF GUILD GLORY DETAIL PAGE STYLES           */
-    /* ------------------------------------------- */
+    /* FF GUILD GLORY DETAIL PAGE STYLES */
     #detailView {
       display: none;
       padding: 15px;
@@ -622,7 +620,7 @@
     <div id="mainContent"></div>
   </div>
 
-  <!-- FF GUILD GLORY DETAIL VIEW (হাইড থাকবে) -->
+  <!-- FF GUILD GLORY DETAIL VIEW -->
   <div id="detailView">
     <div class="back-btn" onclick="showHome()">← হোম পেজে ফিরে যান</div>
     <div class="page-main-title">FF GUILD GLORY</div>
@@ -631,7 +629,7 @@
     <div class="step-title">
       <span class="step-num">1</span>
       <span>⚡ Select Package</span>
-      <span class="avail-badge" id="availCount">3 Packages Available</span>
+      <span class="avail-badge" id="availCount">0 Packages Available</span>
     </div>
 
     <div class="pkg-grid" id="pkgGrid"></div>
@@ -688,7 +686,7 @@
     </a>
   </div>
 
-  <!-- Custom In-App Popup -->
+  <!-- Custom In-App Popup (সম্পূর্ণ কাস্টম মোডাল - কোনো পপআপ হেডার বা গিটহাব নাম দেখাবে না) -->
   <div class="modal-overlay" id="customModal">
     <div class="modal-box">
       <h3 id="modalTitle">নোটিফিকেশন</h3>
@@ -728,7 +726,7 @@
 
     <!-- FF GUILD GLORY Settings -->
     <div class="admin-section">
-      <h3>FF GUILD GLORY কাস্টমাইজেশন</h3>
+      <h3>FF GUILD GLORY সেটিংস</h3>
       <div class="form-group">
         <label>WhatsApp নম্বর:</label>
         <input type="text" id="adminWaPhone">
@@ -746,6 +744,25 @@
         <textarea id="adminRulesInput" rows="4"></textarea>
       </div>
       <button class="btn-submit" onclick="saveGlorySettings()">গ্লোরি সেটিংস সেভ করুন</button>
+    </div>
+
+    <!-- FF GUILD GLORY Packages Management (নতুন প্যাকেজ কাস্টমাইজেশন ফিচারের জন্য) -->
+    <div class="admin-section">
+      <h3>FF GUILD GLORY প্যাকেজ ম্যানেজমেন্ট</h3>
+      <div class="form-group">
+        <label>প্যাকেজের নাম (যেমন: 1 BASIC (4 BOT)):</label>
+        <input type="text" id="inputPkgName" placeholder="প্যাকেজের নাম লিখুন">
+      </div>
+      <div class="form-group">
+        <label>প্যাকেজের দাম (টাকায়, যেমন: 130):</label>
+        <input type="number" id="inputPkgPrice" placeholder="দাম লিখুন">
+      </div>
+      <button class="btn-submit" onclick="addGloryPackage()">প্যাকেজ যুক্ত করুন</button>
+
+      <div style="margin-top: 15px;">
+        <label style="font-size: 12px; color: #9ca3af; display: block; margin-bottom: 8px;">বিদ্যমান গ্লোরি প্যাকেজসমূহ:</label>
+        <div id="adminPkgList"></div>
+      </div>
     </div>
 
     <!-- Add Card -->
@@ -862,7 +879,6 @@
           const cardEl = document.createElement('div');
           cardEl.className = 'shop-card';
           
-          // FF GUILD GLORY কার্ডে ক্লিক করলে আলাদা ভিউ খুলবে
           if (card.name === "FF GUILD GLORY") {
             cardEl.onclick = () => showGuildGloryDetail();
           } else {
@@ -943,7 +959,7 @@
     function sendWhatsAppOrder() {
       const guildId = document.getElementById('guildIdInput').value.trim();
       if (!guildId) {
-        showPopup("অনুগ্ৰহ করে আপনার Guild ID লিখুন!", "অর্ডার সম্পন্ন করতে গিল্ড আইডি প্রয়োজন।");
+        showPopup("সতর্কতা", "অনুগ্ৰহ করে আপনার Guild ID লিখুন!");
         return;
       }
 
@@ -996,6 +1012,7 @@
       document.getElementById('adminWaMsg').value = store.waMsgTemplate || defaultData.waMsgTemplate;
       document.getElementById('adminRulesInput').value = (store.rules || defaultData.rules).join('\n');
 
+      renderAdminPkgList();
       renderAdminCardList();
       document.getElementById('adminPanel').style.display = 'block';
     }
@@ -1024,6 +1041,58 @@
 
       saveStore();
       showPopup("সফল!", "FF GUILD GLORY এর সেটিংস সেভ হয়েছে।");
+    }
+
+    /* গ্লোরি প্যাকেজ যুক্ত করা ও ডিলিট করা সংক্রান্ত ফাংশনসমূহ */
+    function addGloryPackage() {
+      const name = document.getElementById('inputPkgName').value.trim();
+      const price = parseFloat(document.getElementById('inputPkgPrice').value);
+
+      if (!name || isNaN(price)) {
+        showPopup("ত্রুটি", "প্যাকেজের নাম ও সঠিক দাম টাইপ করুন।");
+        return;
+      }
+
+      if (!store.gloryPackages) store.gloryPackages = [];
+
+      store.gloryPackages.push({
+        id: Date.now(),
+        name: name,
+        price: price
+      });
+
+      saveStore();
+      renderAdminPkgList();
+
+      document.getElementById('inputPkgName').value = '';
+      document.getElementById('inputPkgPrice').value = '';
+      showPopup("সফল!", "নতুন গ্লোরি প্যাকেজ যুক্ত করা হয়েছে।");
+    }
+
+    function deleteGloryPackage(id) {
+      if (confirm("প্যাকেজটি ডিলিট করতে চান?")) {
+        store.gloryPackages = store.gloryPackages.filter(p => p.id !== id);
+        if (selectedPkg && selectedPkg.id === id) selectedPkg = null;
+        saveStore();
+        renderAdminPkgList();
+      }
+    }
+
+    function renderAdminPkgList() {
+      const pkgListContainer = document.getElementById('adminPkgList');
+      pkgListContainer.innerHTML = '';
+
+      const pkgs = store.gloryPackages || defaultData.gloryPackages;
+
+      pkgs.forEach(pkg => {
+        const item = document.createElement('div');
+        item.className = 'admin-card-item';
+        item.innerHTML = `
+          <div><strong>${pkg.name}</strong> - ৳${pkg.price}</div>
+          <button class="btn-delete" onclick="deleteGloryPackage(${pkg.id})">ডিলিট</button>
+        `;
+        pkgListContainer.appendChild(item);
+      });
     }
 
     function addNewCard() {
