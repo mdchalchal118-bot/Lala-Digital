@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF SHOP</title>
+    <!-- Google Fonts for Clean Bold Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            padding-bottom: 40px;
+        }
+
+        /* Top Scrolling Notice */
+        .notice-container {
+            background: #006633;
+            border-bottom: 1px solid #00ff8844;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .notice-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 22s linear infinite;
+            color: #00ff88;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        /* Header Navbar - Logo with 4-Click Admin Event */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 14px 20px;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif !important;
+            font-weight: 900 !important;
+            font-style: normal !important;
+            font-size: 30px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        .logo .ff-text {
+            color: #00c853;
+            margin-right: 6px;
+        }
+
+        .logo .shop-text {
+            color: #0d1527;
+        }
+
+        /* Banner Slider Container */
+        .banner-wrapper {
+            padding: 15px;
+            width: 100%;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            touch-action: pan-y;
+            user-select: none;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            width: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: #00ff88;
+            width: 18px;
+            border-radius: 4px;
+        }
+
+        /* Category Section */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 15px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 15px;
+        }
+
+        .card {
+            background-color: #111827;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
+            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #00ff88;
+        }
+
+        .vip-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #00ff88;
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .card-sub {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        /* Full Screen Package Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #0b0f19;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px 15px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #00ff88;
+        }
+
+        .close-btn {
+            background: #1f2937;
+            color: #fff;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Packages Grid */
+        .pkg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pkg-item {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .pkg-item.selected {
+            border-color: #00c853;
+            background: #f0fdf4;
+            box-shadow: 0 0 10px rgba(0,200,83,0.3);
+        }
+
+        .pkg-item.out-of-stock {
+            opacity: 0.6;
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .instant-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #e8f5e9;
+            color: #00c853;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        .stock-badge {
+            background: #ef4444;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 8px;
+            float: right;
+        }
+
+        .pkg-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .pkg-price-val {
+            font-size: 15px;
+            font-weight: 800;
+            color: #00c853;
+        }
+
+        /* Rules Box */
+        .rules-box {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .rules-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 800;
+            color: #00c853;
+            margin-bottom: 10px;
+        }
+
+        .rules-list {
+            list-style: none;
+        }
+
+        .rules-list li {
+            font-size: 12px;
+            color: #334155;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        /* Payment Box */
+        .bkash-payment-box {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bkash-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bkash-tag {
+            background: #e2136e;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .number-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0b0f19;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            cursor: pointer;
+            border: 1px dashed #e2136e;
+        }
+
+        .copy-tag {
+            background: #e2136e;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .warning-text {
+            font-size: 12px;
+            color: #ef4444;
+            line-height: 1.4;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #00ff88;
+            color: #000;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* VIP Admin Panel Styles */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .admin-box {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #111827;
+            border: 1px solid #00ff88;
+            border-radius: 14px;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .admin-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #00ff88;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-sec {
+            background: #1f2937;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .admin-sec h4 {
+            font-size: 13px;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+
+        .admin-sec label {
+            font-size: 11px;
+            color: #9ca3af;
+            display: block;
+            margin-top: 6px;
+        }
+
+        .admin-sec input, .admin-sec textarea, .admin-sec select {
+            width: 100%;
+            padding: 8px 10px;
+            background: #0b0f19;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .btn-save {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .pkg-manage-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .btn-stock {
+            background: #eab308;
+            color: #000;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 220px;
+            background-color: #e2136e;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 3000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop autoplay></audio>
+
+    <!-- Top Scrolling Notice -->
+    <div class="notice-container">
+        <div class="notice-text" id="topNoticeText">
+            📢 আমাদের যেকোনো সার্ভিস নিতে বিকাশ থেকে সঠিক টাকা সেন্ড মানি করুন। ভুল নাম্বারে টাকা পাঠালে তারা কোনো দায়ী থাকবে না।
+        </div>
+    </div>
+
+    <!-- Header Navbar (4 Clicks for Admin) -->
+    <div class="navbar" id="siteLogo">
+        <div class="logo">
+            <span class="ff-text">FF</span><span class="shop-text">SHOP</span>
+        </div>
+    </div>
+
+    <!-- Banner Slider -->
+    <div class="banner-wrapper">
+        <div class="slider-container" id="sliderContainer">
+            <div class="slides" id="slides"></div>
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+    </div>
+
+    <!-- Category Section -->
+    <div class="section-title">
+        <span>🎮</span> সার্ভিস ক্যাটাগরি
+    </div>
+
+    <div class="cards-grid" id="categoryGrid"></div>
+
+    <!-- Package Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-header">
+            <div id="modalTitle" class="modal-title">প্যাকেজ সমূহ</div>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+
+        <div id="packageContainer" class="pkg-grid"></div>
+
+        <div id="rulesBox" class="rules-box" style="display: none;">
+            <div class="rules-header">Rules & Conditions</div>
+            <ul class="rules-list" id="rulesListUI"></ul>
+        </div>
+
+        <div class="bkash-payment-box">
+            <div class="bkash-header">
+                <span class="bkash-tag">bKash Send Money</span>
+                <span style="font-size: 12px; color: #cbd5e1;">পেমেন্ট করুন:</span>
+            </div>
+            <div class="number-box" onclick="copyNumber()">
+                <span id="adminNumber" style="font-weight: 800; color: #00ff88; font-size: 16px;">01794327542</span>
+                <span class="copy-tag">কপি করুন</span>
+            </div>
+            <div class="warning-text" id="bkashNoticeUI">
+                ⚠️ <b>বিশেষ নির্দেশাবলি:</b> শুধুমাত্র <b>বিকাশ থেকে সেন্ড মানি (Send Money)</b> করুন। ক্যাশ আউট বা রিচার্জ গ্রহণ করা হবে না।
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label id="idLabel">গিল্ড আইডি (Guild ID):</label>
+            <input type="number" id="targetId" placeholder="এখানে আইডি দিন">
+        </div>
+
+        <div class="input-group">
+            <label>যে বিকাশ নাম্বার থেকে টাকা পাঠিয়েছেন:</label>
+            <input type="number" id="senderNumber" placeholder="বিকাশ নাম্বার">
+        </div>
+
+        <div class="input-group">
+            <label>বিকাশ ট্রানজেকশন আইডি (TrxID):</label>
+            <input type="text" id="trxId" placeholder="TrxID">
+        </div>
+
+        <button class="submit-btn" onclick="submitOrder()">অর্ডার কনফার্ম করুন (WhatsApp)</button>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-box">
+            <div class="admin-title">
+                <span>VIP এডমিন প্যানেল</span>
+                <button class="close-btn" onclick="closeAdmin()">✕</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>হেডার রানিং নোটিশ</h4>
+                <textarea id="adminTopNoticeInput" rows="2"></textarea>
+                <button class="btn-save" onclick="saveNoticeAdmin()">নোটিশ সেভ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>ব্যাকগ্রাউন্ড মিউজিক (MP3 Audio URL)</h4>
+                <input type="text" id="adminMusicInput" placeholder="অডিও লিংক দিন (e.g. https://domain.com/song.mp3)">
+                <button class="btn-save" onclick="saveMusicAdmin()">মিউজিক সেভ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>৩টি স্লাইডার ব্যানার URL</h4>
+                <label>ব্যানার ১:</label><input type="text" id="b1Input">
+                <label>ব্যানার ২:</label><input type="text" id="b2Input">
+                <label>ব্যানার ৩:</label><input type="text" id="b3Input">
+                <button class="btn-save" onclick="saveBannersAdmin()">ব্যানার সেভ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>ক্যাটাগরি কার্ড ১ ও ২ এর তথ্য</h4>
+                <label>কার্ড ১ নাম:</label><input type="text" id="c1TitleInput">
+                <label>কার্ড ১ ছবি URL:</label><input type="text" id="c1ImgInput">
+                <label>কার্ড ২ নাম:</label><input type="text" id="c2TitleInput">
+                <label>কার্ড ২ ছবি URL:</label><input type="text" id="c2ImgInput">
+                <button class="btn-save" onclick="saveCategoryAdmin()">ক্যাটাগরি সেভ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>প্যাকেজ এডিট ও আপডেট</h4>
+                <select id="adminCatSelect" onchange="renderAdminPackageList()">
+                    <option value="0">১ম কার্ড (FF GUILD GLORY)</option>
+                    <option value="1">২য় কার্ড (WEEKLY/MONTHLY)</option>
+                </select>
+
+                <div id="adminPkgContainer" style="margin-top: 10px;"></div>
+
+                <hr style="border-color:#374151; margin: 12px 0;">
+                <h4>নতুন প্যাকেজ যোগ করুন</h4>
+                <input type="text" id="newPkgName" placeholder="প্যাকেজ নাম (যেমন: WEEKLY)">
+                <input type="text" id="newPkgPrice" placeholder="দাম (যেমন: 158)">
+                <button class="btn-save" onclick="addNewPackageAdmin()">প্যাকেজ যোগ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>১ম কার্ডের Rules & Conditions (প্রতি লাইনে ১টি)</h4>
+                <textarea id="adminRulesInput" rows="4"></textarea>
+                <button class="btn-save" onclick="saveRulesAdmin()">রুলস সেভ করুন</button>
+            </div>
+
+            <div class="admin-sec">
+                <h4>বিকাশ পেমেন্ট তথ্য</h4>
+                <label>বিকাশ নাম্বার:</label><input type="text" id="adminBkashNumInput">
+                <label>সতর্কবার্তা নোটিশ:</label><textarea id="adminBkashNoticeInput" rows="2"></textarea>
+                <button class="btn-save" onclick="saveBkashAdmin()">বিকাশ তথ্য সেভ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">বিকাশ নাম্বার কপি করা হয়েছে!</div>
+
+    <script>
+        const adminWhatsapp = "8801794327542";
+        let currentCardType = 1;
+        let selectedPackage = null;
+
+        // Default Data Structure
+        const defaultAppData = {
+            topNotice: "📢 আমাদের যেকোনো সার্ভিস নিতে বিকাশ থেকে সঠিক টাকা সেন্ড মানি করুন। ভুল নাম্বারে টাকা পাঠালে তারা কোনো দায়ী থাকবে না।",
+            bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            banners: [
+                "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1000&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop"
+            ],
+            bkashNum: "01794327542",
+            bkashNotice: "⚠️ <b>বিশেষ নির্দেশাবলি:</b> শুধুমাত্র <b>বিকাশ থেকে সেন্ড মানি (Send Money)</b> করুন। ক্যাশ আউট বা রিচার্জ গ্রহণ করা হবে না।",
+            categories: [
+                {
+                    title: "FF GUILD GLORY",
+                    sub: "গিল্ড গ্লোরি বট প্যাকেজসমূহ",
+                    img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=600&auto=format&fit=crop",
+                    rules: [
+                        "1 Basic কিনলে 8টা Bot গিল্ডে ঢুকাতে পারবেন।",
+                        "সঠিক Guild ID এবং গিল্ডের Rank/Level Default রেখে অর্ডার করবেন।",
+                        "৩০ মিনিটের মধ্যে Glory দেওয়া শুরু না করলে Refund এর সুযোগ থাকবে।",
+                        "Guild Bot কত Glory দিবে তার কোনো গ্যারান্টি নেই (Luck dependent)।"
+                    ],
+                    packages: [
+                        { name: "1 BASIC (4 BOT)", price: "130", inStock: true },
+                        { name: "2 BASIC (8 BOT)", price: "250", inStock: true },
+                        { name: "5 BASIC (20 BOT)", price: "600", inStock: true }
+                    ]
+                },
+                {
+                    title: "WEEKLY/MONTHLY",
+                    sub: "উইকলি ও মান্থলি মেম্বারশিপ",
+                    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+                    rules: [],
+                    packages: [
+                        { name: "WEEKLY", price: "158", inStock: true },
+                        { name: "2X WEEKLY", price: "316", inStock: true },
+                        { name: "3X WEEKLY", price: "474", inStock: true },
+                        { name: "MONTHLY", price: "790", inStock: true },
+                        { name: "2X MONTHLY", price: "1580", inStock: true },
+                        { name: "1X WEEKLY+1X MONTHLY", price: "948", inStock: true },
+                        { name: "3X WEEKLY+1X MONTHLY", price: "1265", inStock: true }
+                    ]
+                }
+            ]
+        };
+
+        // Load or Save LocalStorage Data
+        let appData = JSON.parse(localStorage.getItem("ff_shop_v3_data")) || defaultAppData;
+
+        function saveAppData() {
+            localStorage.setItem("ff_shop_v3_data", JSON.stringify(appData));
+            initApp();
+        }
+
+        function initApp() {
+            // Notice & Payments
+            document.getElementById("topNoticeText").innerText = appData.topNotice;
+            document.getElementById("adminNumber").innerText = appData.bkashNum;
+            document.getElementById("bkashNoticeUI").innerHTML = appData.bkashNotice;
+
+            // Audio Setup
+            const musicAudio = document.getElementById("bgMusic");
+            if (musicAudio && appData.bgMusicUrl) {
+                musicAudio.src = appData.bgMusicUrl;
+            }
+
+            // Banners
+            const slidesDiv = document.getElementById("slides");
+            const dotsDiv = document.getElementById("sliderDots");
+            slidesDiv.innerHTML = "";
+            dotsDiv.innerHTML = "";
+
+            appData.banners.forEach((bUrl, idx) => {
+                slidesDiv.innerHTML += `<div class="slide"><img src="${bUrl}" alt="Banner ${idx+1}"></div>`;
+                dotsDiv.innerHTML += `<span class="dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></span>`;
+            });
+
+            // Categories Grid
+            const catGrid = document.getElementById("categoryGrid");
+            catGrid.innerHTML = "";
+            appData.categories.forEach((cat, idx) => {
+                catGrid.innerHTML += `
+                    <div class="card" onclick="openModal(${idx+1})">
+                        <span class="vip-badge">VIP</span>
+                        <img class="card-img" src="${cat.img}" alt="${cat.title}">
+                        <div class="card-content">
+                            <div class="card-title">${cat.title}</div>
+                            <div class="card-sub">${cat.sub}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        /* Banner Slider Scripts */
+        let currentSlide = 0;
+        function updateSlider() {
+            const slides = document.getElementById("slides");
+            const dots = document.querySelectorAll(".dot");
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle("active", index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            if (!appData.banners.length) return;
+            currentSlide = (currentSlide + 1) % appData.banners.length;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        let slideInterval = setInterval(nextSlide, 3000);
+
+        /* Touch Swipe Support */
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const sliderContainer = document.getElementById("sliderContainer");
+
+        sliderContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            clearInterval(slideInterval);
+        });
+
+        sliderContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 40) nextSlide();
+            if (touchEndX - touchStartX > 40) {
+                currentSlide = (currentSlide - 1 + appData.banners.length) % appData.banners.length;
+                updateSlider();
+            }
+            slideInterval = setInterval(nextSlide, 3000);
+        });
+
+        /* Music Auto Play */
+        window.addEventListener('click', function() {
+            const music = document.getElementById("bgMusic");
+            if (music) {
+                music.volume = 0.3;
+                music.play();
+            }
+        }, { once: true });
+
+        /* Modal Scripts */
+        function openModal(cardType) {
+            currentCardType = cardType;
+            selectedPackage = null;
+            const cat = appData.categories[cardType - 1];
+
+            document.getElementById("modalTitle").innerText = `${cat.title} প্যাকেজসমূহ`;
+            document.getElementById("idLabel").innerText = cardType === 1 ? "গিল্ড আইডি (Guild ID):" : "প্লেয়ার ইউআইডি (Player UID):";
+            document.getElementById("targetId").placeholder = cardType === 1 ? "এখানে গিল্ড আইডি দিন" : "এখানে প্লেয়ার UID দিন";
+
+            // Render Rules
+            const rulesBox = document.getElementById("rulesBox");
+            const rulesListUI = document.getElementById("rulesListUI");
+            rulesListUI.innerHTML = "";
+
+            if (cardType === 1 && cat.rules && cat.rules.length > 0) {
+                rulesBox.style.display = "block";
+                cat.rules.forEach((rText, i) => {
+                    rulesListUI.innerHTML += `<li><b>${i+1}.</b> ${rText}</li>`;
+                });
+            } else {
+                rulesBox.style.display = "none";
+            }
+
+            // Render Packages
+            const pkgContainer = document.getElementById("packageContainer");
+            pkgContainer.innerHTML = "";
+
+            cat.packages.forEach((pkg, idx) => {
+                const item = document.createElement("div");
+                item.className = `pkg-item ${pkg.inStock ? '' : 'out-of-stock'}`;
+                item.innerHTML = `
+                    ${pkg.inStock ? '<div class="instant-badge">⚡ INSTANT</div>' : '<div class="stock-badge">STOCK OUT</div>'}
+                    <div class="pkg-name">${pkg.name}</div>
+                    <div class="pkg-price-val">৳${pkg.price}.00</div>
+                `;
+                item.onclick = () => selectPkg(item, pkg);
+                pkgContainer.appendChild(item);
+            });
+
+            document.getElementById("orderModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("orderModal").style.display = "none";
+        }
+
+        function selectPkg(element, pkg) {
+            if (!pkg.inStock) {
+                alert("দুঃখিত! এই প্যাকেজটি বর্তমানে স্টক আউট।");
+                return;
+            }
+            document.querySelectorAll(".pkg-item").forEach(el => el.classList.remove("selected"));
+            element.classList.add("selected");
+            selectedPackage = pkg;
+        }
+
+        function copyNumber() {
+            navigator.clipboard.writeText(appData.bkashNum);
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function submitOrder() {
+            if (!selectedPackage) {
+                alert("দয়া করে একটি প্যাকেজ সিলেক্ট করুন!");
+                return;
+            }
+
+            const targetId = document.getElementById("targetId").value.trim();
+            const senderNumber = document.getElementById("senderNumber").value.trim();
+            const trxId = document.getElementById("trxId").value.trim();
+
+            const idTypeName = currentCardType === 1 ? "গিল্ড আইডি" : "প্লেয়ার ইউআইডি";
+
+            if (!targetId || !senderNumber || !trxId) {
+                alert("দয়া করে সবকটি তথ্য সঠিকভাবে পূরণ করুন!");
+                return;
+            }
+
+            const cat = appData.categories[currentCardType - 1];
+            const message = `🛒 *নতুন অর্ডার এসেছে (FF SHOP)* 🛒\n\n` +
+                `📌 *সার্ভিস:* ${cat.title}\n` +
+                `📦 *প্যাকেজ:* ${selectedPackage.name}\n` +
+                `💵 *মূল্য:* ৳${selectedPackage.price}\n\n` +
+                `🎮 *${idTypeName}:* ${targetId}\n` +
+                `📱 *বিকাশ নাম্বার:* ${senderNumber}\n` +
+                `🧾 *TrxID:* ${trxId}\n\n` +
+                `💳 *মেথড:* bKash Send Money`;
+
+            window.open(`https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        /* 4-Click Admin Trigger */
+        let logoClickCount = 0;
+        let clickTimer;
+        document.getElementById("siteLogo").addEventListener("click", function() {
+            logoClickCount++;
+            clearTimeout(clickTimer);
+            if (logoClickCount === 4) {
+                logoClickCount = 0;
+                const pass = prompt("গোপন এডমিন পাসওয়ার্ড দিন:");
+                if (pass === "lala") {
+                    openAdminPanel();
+                } else {
+                    alert("ভুল পাসওয়ার্ড!");
+                }
+            }
+            clickTimer = setTimeout(() => { logoClickCount = 0; }, 2000);
+        });
+
+        function openAdminPanel() {
+            document.getElementById("adminTopNoticeInput").value = appData.topNotice;
+            document.getElementById("adminMusicInput").value = appData.bgMusicUrl || "";
+            document.getElementById("b1Input").value = appData.banners[0] || "";
+            document.getElementById("b2Input").value = appData.banners[1] || "";
+            document.getElementById("b3Input").value = appData.banners[2] || "";
+
+            document.getElementById("c1TitleInput").value = appData.categories[0].title;
+            document.getElementById("c1ImgInput").value = appData.categories[0].img;
+            document.getElementById("c2TitleInput").value = appData.categories[1].title;
+            document.getElementById("c2ImgInput").value = appData.categories[1].img;
+
+            document.getElementById("adminRulesInput").value = (appData.categories[0].rules || []).join("\n");
+            document.getElementById("adminBkashNumInput").value = appData.bkashNum;
+            document.getElementById("adminBkashNoticeInput").value = appData.bkashNotice;
+
+            renderAdminPackageList();
+            document.getElementById("adminModal").style.display = "block";
+        }
+
+        function closeAdmin() {
+            document.getElementById("adminModal").style.display = "none";
+        }
+
+        function saveNoticeAdmin() {
+            appData.topNotice = document.getElementById("adminTopNoticeInput").value;
+            saveAppData();
+            alert("নোটিশ সেভ করা হয়েছে!");
+        }
+
+        function saveMusicAdmin() {
+            appData.bgMusicUrl = document.getElementById("adminMusicInput").value;
+            saveAppData();
+            alert("ব্যাকগ্রাউন্ড মিউজিক সেভ করা হয়েছে!");
+        }
+
+        function saveBannersAdmin() {
+            appData.banners[0] = document.getElementById("b1Input").value;
+            appData.banners[1] = document.getElementById("b2Input").value;
+            appData.banners[2] = document.getElementById("b3Input").value;
+            saveAppData();
+            alert("ব্যানার সেভ করা হয়েছে!");
+        }
+
+        function saveCategoryAdmin() {
+            appData.categories[0].title = document.getElementById("c1TitleInput").value;
+            appData.categories[0].img = document.getElementById("c1ImgInput").value;
+            appData.categories[1].title = document.getElementById("c2TitleInput").value;
+            appData.categories[1].img = document.getElementById("c2ImgInput").value;
+            saveAppData();
+            alert("ক্যাটাগরি সেভ করা হয়েছে!");
+        }
+
+        function saveRulesAdmin() {
+            const text = document.getElementById("adminRulesInput").value;
+            appData.categories[0].rules = text.split("\n").filter(t => t.trim() !== "");
+            saveAppData();
+            alert("রুলস সেভ করা হয়েছে!");
+        }
+
+        function saveBkashAdmin() {
+            appData.bkashNum = document.getElementById("adminBkashNumInput").value;
+            appData.bkashNotice = document.getElementById("adminBkashNoticeInput").value;
+            saveAppData();
+            alert("বিকাশ তথ্য সেভ হয়েছে!");
+        }
+
+        function renderAdminPackageList() {
+            const catIdx = document.getElementById("adminCatSelect").value;
+            const container = document.getElementById("adminPkgContainer");
+            container.innerHTML = "";
+
+            appData.categories[catIdx].packages.forEach((pkg, pIdx) => {
+                container.innerHTML += `
+                    <div class="pkg-manage-row">
+                        <input type="text" value="${pkg.name}" onchange="updatePkgDetail(${catIdx}, ${pIdx}, 'name', this.value)" style="flex:2;">
+                        <input type="text" value="${pkg.price}" onchange="updatePkgDetail(${catIdx}, ${pIdx}, 'price', this.value)" style="flex:1;">
+                        <button class="btn-stock" onclick="toggleStockAdmin(${catIdx}, ${pIdx})">${pkg.inStock ? 'In Stock' : 'Out Stock'}</button>
+                        <button class="btn-danger" onclick="deletePkgAdmin(${catIdx}, ${pIdx})">✕</button>
+                    </div>
+                `;
+            });
+        }
+
+        function updatePkgDetail(catIdx, pIdx, field, val) {
+            appData.categories[catIdx].packages[pIdx][field] = val;
+            saveAppData();
+        }
+
+        function toggleStockAdmin(catIdx, pIdx) {
+            appData.categories[catIdx].packages[pIdx].inStock = !appData.categories[catIdx].packages[pIdx].inStock;
+            saveAppData();
+            renderAdminPackageList();
+        }
+
+        function deletePkgAdmin(catIdx, pIdx) {
+            appData.categories[catIdx].packages.splice(pIdx, 1);
+            saveAppData();
+            renderAdminPackageList();
+        }
+
+        function addNewPackageAdmin() {
+            const catIdx = document.getElementById("adminCatSelect").value;
+            const pName = document.getElementById("newPkgName").value.trim();
+            const pPrice = document.getElementById("newPkgPrice").value.trim();
+
+            if (!pName || !pPrice) {
+                alert("দয়া করে নাম ও দাম উভয়ই লিখুন!");
+                return;
+            }
+
+            appData.categories[catIdx].packages.push({ name: pName, price: pPrice, inStock: true });
+            document.getElementById("newPkgName").value = "";
+            document.getElementById("newPkgPrice").value = "";
+            saveAppData();
+            renderAdminPackageList();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
